@@ -182,15 +182,33 @@ h1, h2, h3, h4, h5, h6 {
 .news-banner {
     margin-top: 80px;
     background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 100%);
-    padding: 1rem 2rem;
-    text-align: center;
+    padding: 1rem 0;
+    overflow: hidden;
+    position: relative;
+}
+
+.news-ticker {
+    width: 100%;
     overflow: hidden;
 }
 
 .news-content {
+    display: inline-block;
+    white-space: nowrap;
     font-size: 0.9rem;
     color: var(--cream);
     letter-spacing: 1px;
+    animation: ticker 30s linear infinite;
+    padding-left: 100%;
+}
+
+@keyframes ticker {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
 }
 
 .news-label {
@@ -201,6 +219,12 @@ h1, h2, h3, h4, h5, h6 {
 
 .news-text {
     font-weight: 300;
+    margin-right: 2rem;
+}
+
+.news-separator {
+    color: var(--gold);
+    margin: 0 2rem;
 }
 
 /* ===========================
@@ -314,38 +338,6 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--gold-light);
 }
 
-.scroll-indicator {
-    position: absolute;
-    bottom: 3rem;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    color: var(--cream);
-    font-size: 0.85rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    animation: fadeIn 1.5s ease-out 0.8s both;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.scroll-arrow {
-    width: 1px;
-    height: 40px;
-    background: linear-gradient(to bottom, transparent, var(--gold));
-    animation: scrollDown 2s ease-in-out infinite;
-}
-
-@keyframes scrollDown {
-    0%, 100% { transform: translateY(0); opacity: 0.3; }
-    50% { transform: translateY(10px); opacity: 1; }
-}
 
 /* ===========================
    BUTTONS

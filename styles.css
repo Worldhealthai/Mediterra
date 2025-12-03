@@ -214,9 +214,33 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     justify-content: center;
     text-align: center;
-    background: linear-gradient(135deg, #0a1128 0%, #1c2541 50%, #2d3e5f 100%);
     color: var(--white);
     overflow: hidden;
+}
+
+.hero-bg-image {
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    width: 120%;
+    height: 120%;
+    background-image: url('https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1920&q=80');
+    background-size: cover;
+    background-position: center;
+    animation: slowZoom 60s ease-in-out infinite alternate;
+    z-index: 0;
+}
+
+@keyframes slowZoom {
+    0% {
+        transform: scale(1) translateX(0);
+    }
+    50% {
+        transform: scale(1.1) translateX(-2%);
+    }
+    100% {
+        transform: scale(1.05) translateX(2%);
+    }
 }
 
 .hero::before {
@@ -230,6 +254,7 @@ h1, h2, h3, h4, h5, h6 {
         radial-gradient(circle at 20% 50%, rgba(201, 169, 97, 0.1) 0%, transparent 50%),
         radial-gradient(circle at 80% 80%, rgba(201, 169, 97, 0.08) 0%, transparent 50%);
     animation: shimmer 15s ease-in-out infinite;
+    z-index: 1;
 }
 
 @keyframes shimmer {
@@ -243,7 +268,8 @@ h1, h2, h3, h4, h5, h6 {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(10, 17, 40, 0.3);
+    background: rgba(10, 17, 40, 0.5);
+    z-index: 1;
 }
 
 .hero-content {
@@ -496,12 +522,25 @@ section {
     text-transform: uppercase;
 }
 
-.location-img {
-    background: linear-gradient(135deg, #0a1128 0%, #1c2541 50%, #2d3e5f 100%);
+.location-img,
+.method-img {
+    width: 100%;
+    height: 100%;
+    min-height: 400px;
+    object-fit: cover;
+    border-radius: 2px;
+    transition: var(--transition);
 }
 
-.method-img {
-    background: linear-gradient(135deg, #2d3e5f 0%, #1c2541 50%, #0a1128 100%);
+.location-visual,
+.method-visual {
+    overflow: hidden;
+    border-radius: 2px;
+}
+
+.location-img:hover,
+.method-img:hover {
+    transform: scale(1.05);
 }
 
 /* ===========================
@@ -695,14 +734,20 @@ section {
 
 .gallery-item:hover {
     transform: scale(1.05);
+    box-shadow: 0 10px 40px rgba(201, 169, 97, 0.3);
 }
 
-.gallery-img-1 { background: linear-gradient(135deg, #1c2541 0%, #0a1128 100%); }
-.gallery-img-2 { background: linear-gradient(135deg, #2d3e5f 0%, #1c2541 100%); }
-.gallery-img-3 { background: linear-gradient(135deg, #0a1128 0%, #2d3e5f 100%); }
-.gallery-img-4 { background: linear-gradient(135deg, #1c2541 0%, #2d3e5f 100%); }
-.gallery-img-5 { background: linear-gradient(135deg, #2d3e5f 0%, #0a1128 100%); }
-.gallery-img-6 { background: linear-gradient(135deg, #0a1128 0%, #1c2541 100%); }
+.gallery-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: var(--transition);
+}
+
+.gallery-item:hover .gallery-img {
+    filter: brightness(1.1);
+}
 
 /* ===========================
    CONTACT SECTION

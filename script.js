@@ -1,4 +1,106 @@
 // ===========================
+// LOAD ADMIN PANEL DATA
+// ===========================
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadAdminData();
+});
+
+function loadAdminData() {
+    const savedData = localStorage.getItem('mediterraData');
+
+    if (savedData) {
+        try {
+            const data = JSON.parse(savedData);
+
+            // Update images
+            if (data.images) {
+                // Hero background
+                if (data.images.hero) {
+                    const heroBg = document.querySelector('.hero-bg-image');
+                    if (heroBg) {
+                        heroBg.style.backgroundImage = `url('${data.images.hero}')`;
+                    }
+                }
+
+                // Location image
+                if (data.images.location) {
+                    const locationImg = document.querySelector('.location-img');
+                    if (locationImg) {
+                        locationImg.src = data.images.location;
+                    }
+                }
+
+                // Method image
+                if (data.images.method) {
+                    const methodImg = document.querySelector('.method-img');
+                    if (methodImg) {
+                        methodImg.src = data.images.method;
+                    }
+                }
+
+                // Gallery images
+                if (data.images.gallery) {
+                    const galleryImgs = document.querySelectorAll('.gallery-img');
+                    data.images.gallery.forEach((img, index) => {
+                        if (galleryImgs[index]) {
+                            galleryImgs[index].src = img.url;
+                            galleryImgs[index].alt = img.alt;
+                        }
+                    });
+                }
+            }
+
+            // Update content
+            if (data.content) {
+                // News banner
+                if (data.content.news) {
+                    const newsText = document.querySelector('.news-text');
+                    if (newsText) {
+                        newsText.textContent = data.content.news;
+                    }
+                }
+
+                // Hero title
+                if (data.content.heroTitle) {
+                    const heroTitle = document.querySelector('.hero-title');
+                    if (heroTitle) {
+                        heroTitle.textContent = data.content.heroTitle;
+                    }
+                }
+
+                // Hero subtitle
+                if (data.content.heroSubtitle) {
+                    const heroSubtitle = document.querySelector('.hero-subtitle');
+                    if (heroSubtitle) {
+                        heroSubtitle.textContent = data.content.heroSubtitle;
+                    }
+                }
+
+                // Contact info
+                if (data.content.contactPhone) {
+                    const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
+                    phoneLinks.forEach(link => {
+                        link.href = `tel:${data.content.contactPhone}`;
+                        link.textContent = data.content.contactPhone;
+                    });
+                }
+
+                if (data.content.contactEmail) {
+                    const emailLinks = document.querySelectorAll('a[href^="mailto:"]');
+                    emailLinks.forEach(link => {
+                        link.href = `mailto:${data.content.contactEmail}`;
+                        link.textContent = data.content.contactEmail;
+                    });
+                }
+            }
+        } catch (error) {
+            console.error('Error loading admin data:', error);
+        }
+    }
+}
+
+// ===========================
 // NAVIGATION FUNCTIONALITY
 // ===========================
 

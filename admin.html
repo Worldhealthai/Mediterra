@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mediterra Admin Panel</title>
+    <link rel="stylesheet" href="admin-styles.css">
+</head>
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <h1>Mediterra Admin Panel</h1>
+            <div class="header-actions">
+                <button onclick="window.open('index.html', '_blank')" class="btn-preview">Preview Site</button>
+                <button onclick="saveChanges()" class="btn-save">Save Changes</button>
+            </div>
+        </header>
+
+        <nav class="admin-nav">
+            <button class="nav-item active" onclick="showSection('images')">Images</button>
+            <button class="nav-item" onclick="showSection('content')">Content</button>
+            <button class="nav-item" onclick="showSection('settings')">Settings</button>
+        </nav>
+
+        <main class="admin-main">
+            <!-- Images Section -->
+            <section id="images-section" class="admin-section active">
+                <h2>Manage Images</h2>
+
+                <!-- Hero Image -->
+                <div class="image-manager">
+                    <h3>Hero Background Image</h3>
+                    <div class="image-input-group">
+                        <img id="hero-preview" src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1920&q=80" alt="Hero preview">
+                        <input type="text" id="hero-img" placeholder="Enter image URL" value="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1920&q=80">
+                        <button onclick="updatePreview('hero')">Update Preview</button>
+                    </div>
+                </div>
+
+                <!-- Location Image -->
+                <div class="image-manager">
+                    <h3>Location Section Image</h3>
+                    <div class="image-input-group">
+                        <img id="location-preview" src="https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=800&q=80" alt="Location preview">
+                        <input type="text" id="location-img" placeholder="Enter image URL" value="https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=800&q=80">
+                        <button onclick="updatePreview('location')">Update Preview</button>
+                    </div>
+                </div>
+
+                <!-- Method Image -->
+                <div class="image-manager">
+                    <h3>Method Section Image</h3>
+                    <div class="image-input-group">
+                        <img id="method-preview" src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80" alt="Method preview">
+                        <input type="text" id="method-img" placeholder="Enter image URL" value="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80">
+                        <button onclick="updatePreview('method')">Update Preview</button>
+                    </div>
+                </div>
+
+                <!-- Gallery Images -->
+                <div class="image-manager">
+                    <h3>Gallery Images (6 images)</h3>
+                    <div class="gallery-manager">
+                        <div class="gallery-item-manager">
+                            <label>Image 1</label>
+                            <img id="gallery1-preview" src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80" alt="Gallery 1">
+                            <input type="text" id="gallery1-img" placeholder="Enter image URL" value="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80">
+                            <input type="text" id="gallery1-alt" placeholder="Alt text" value="Fresh mussels in pristine waters">
+                            <button onclick="updatePreview('gallery1')">Update</button>
+                        </div>
+
+                        <div class="gallery-item-manager">
+                            <label>Image 2</label>
+                            <img id="gallery2-preview" src="https://images.unsplash.com/photo-1583506897994-c2de2a2b5b27?w=600&q=80" alt="Gallery 2">
+                            <input type="text" id="gallery2-img" placeholder="Enter image URL" value="https://images.unsplash.com/photo-1583506897994-c2de2a2b5b27?w=600&q=80">
+                            <input type="text" id="gallery2-alt" placeholder="Alt text" value="Greek coastal landscape at dawn">
+                            <button onclick="updatePreview('gallery2')">Update</button>
+                        </div>
+
+                        <div class="gallery-item-manager">
+                            <label>Image 3</label>
+                            <img id="gallery3-preview" src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=80" alt="Gallery 3">
+                            <input type="text" id="gallery3-img" placeholder="Enter image URL" value="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=80">
+                            <input type="text" id="gallery3-alt" placeholder="Alt text" value="Fresh mussels close-up">
+                            <button onclick="updatePreview('gallery3')">Update</button>
+                        </div>
+
+                        <div class="gallery-item-manager">
+                            <label>Image 4</label>
+                            <img id="gallery4-preview" src="https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=600&q=80" alt="Gallery 4">
+                            <input type="text" id="gallery4-img" placeholder="Enter image URL" value="https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=600&q=80">
+                            <input type="text" id="gallery4-alt" placeholder="Alt text" value="Greek sea aerial view">
+                            <button onclick="updatePreview('gallery4')">Update</button>
+                        </div>
+
+                        <div class="gallery-item-manager">
+                            <label>Image 5</label>
+                            <img id="gallery5-preview" src="https://images.unsplash.com/photo-1580541631950-7282082b53ce?w=600&q=80" alt="Gallery 5">
+                            <input type="text" id="gallery5-img" placeholder="Enter image URL" value="https://images.unsplash.com/photo-1580541631950-7282082b53ce?w=600&q=80">
+                            <input type="text" id="gallery5-alt" placeholder="Alt text" value="Greek strait and coastal waters">
+                            <button onclick="updatePreview('gallery5')">Update</button>
+                        </div>
+
+                        <div class="gallery-item-manager">
+                            <label>Image 6</label>
+                            <img id="gallery6-preview" src="https://images.unsplash.com/photo-1566024287286-457247b70310?w=600&q=80" alt="Gallery 6">
+                            <input type="text" id="gallery6-img" placeholder="Enter image URL" value="https://images.unsplash.com/photo-1566024287286-457247b70310?w=600&q=80">
+                            <input type="text" id="gallery6-alt" placeholder="Alt text" value="Sunset over Mediterranean waters">
+                            <button onclick="updatePreview('gallery6')">Update</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <h4>Tips for finding images:</h4>
+                    <ul>
+                        <li>Use <a href="https://unsplash.com" target="_blank">Unsplash</a> for free high-quality images</li>
+                        <li>Search for: "greek sea", "mediterranean", "mussels", "aquaculture", "greek coastline"</li>
+                        <li>Right-click on any image and select "Copy image address"</li>
+                        <li>For Unsplash, add ?w=800&q=80 to the end of the URL for optimized loading</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Content Section -->
+            <section id="content-section" class="admin-section">
+                <h2>Manage Content</h2>
+
+                <div class="content-editor">
+                    <h3>News Banner</h3>
+                    <input type="text" id="news-text" placeholder="News text" value="Precision in Motion — Our New Dispatch Center Is Underway.">
+                </div>
+
+                <div class="content-editor">
+                    <h3>Hero Section</h3>
+                    <input type="text" id="hero-title" placeholder="Hero title" value="Where the Sea Crafts Its Own Masterpiece">
+                    <textarea id="hero-subtitle" rows="3" placeholder="Hero subtitle">In the moving depths of the Artemisium Strait, we cultivate Mediterranean mussels shaped by pure waters, natural forces, and a heritage refined through generations.</textarea>
+                </div>
+
+                <div class="content-editor">
+                    <h3>Contact Information</h3>
+                    <input type="text" id="contact-phone" placeholder="Phone" value="+30 6984092007">
+                    <input type="text" id="contact-email" placeholder="Email" value="mediterramf@gmail.com">
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings-section" class="admin-section">
+                <h2>Settings</h2>
+
+                <div class="settings-group">
+                    <h3>Data Management</h3>
+                    <button onclick="exportData()" class="btn-export">Export All Settings</button>
+                    <button onclick="resetToDefaults()" class="btn-reset">Reset to Defaults</button>
+                </div>
+
+                <div class="settings-group">
+                    <h3>Instructions</h3>
+                    <ol>
+                        <li>Make changes in the Images or Content sections</li>
+                        <li>Click "Update Preview" to see changes</li>
+                        <li>Click "Save Changes" at the top to apply to your website</li>
+                        <li>Your changes are saved in your browser's storage</li>
+                    </ol>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script src="admin-script.js"></script>
+</body>
+</html>

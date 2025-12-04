@@ -190,6 +190,25 @@
                 </div>
 
                 <div class="settings-group">
+                    <h3>🚀 Production Deployment Workflow</h3>
+                    <div style="background: #f0f9ff; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #3b82f6; margin-bottom: 1.5rem;">
+                        <h4 style="margin-top: 0; color: #1e40af;">How to Update Production:</h4>
+                        <ol style="margin: 1rem 0; padding-left: 1.5rem; line-height: 1.8;">
+                            <li><strong>Edit:</strong> Make changes in the Images or Content tabs</li>
+                            <li><strong>Preview:</strong> Click "Update Preview" to see changes</li>
+                            <li><strong>Save:</strong> Click "Save Changes" button at the top</li>
+                            <li><strong>Download:</strong> site-data.json will automatically download</li>
+                            <li><strong>Deploy:</strong> Move the file to your project folder and run:
+                                <pre style="background: #1e293b; color: #e2e8f0; padding: 0.75rem; border-radius: 4px; margin: 0.5rem 0; overflow-x: auto;">git add site-data.json
+git commit -m "Update site content"
+git push</pre>
+                            </li>
+                            <li><strong>Live:</strong> Your changes will be live after deployment! 🎉</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="settings-group">
                     <h3>Instructions</h3>
                     <ol>
                         <li>Make changes in the Images or Content sections</li>

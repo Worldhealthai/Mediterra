@@ -2,21 +2,36 @@
 // SPLASH SCREEN
 // ===========================
 
-// Add splash-active class to body initially
-document.body.classList.add('splash-active');
+// Check if splash has been shown in this session
+const splashShown = sessionStorage.getItem('splashShown');
 
-// Remove splash screen after animation completes
-window.addEventListener('load', () => {
-    setTimeout(() => {
-        document.body.classList.remove('splash-active');
-        const splashScreen = document.getElementById('splashScreen');
-        if (splashScreen) {
-            setTimeout(() => {
-                splashScreen.remove();
-            }, 800);
-        }
-    }, 2500);
-});
+if (!splashShown) {
+    // First page load in this session - show splash
+    document.body.classList.add('splash-active');
+
+    // Mark splash as shown for this session
+    sessionStorage.setItem('splashShown', 'true');
+
+    // Remove splash screen after animation completes
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            document.body.classList.remove('splash-active');
+            const splashScreen = document.getElementById('splashScreen');
+            if (splashScreen) {
+                setTimeout(() => {
+                    splashScreen.remove();
+                }, 800);
+            }
+        }, 2500);
+    });
+} else {
+    // Already shown in this session - hide immediately
+    const splashScreen = document.getElementById('splashScreen');
+    if (splashScreen) {
+        splashScreen.style.display = 'none';
+        splashScreen.remove();
+    }
+}
 
 // ===========================
 // LOAD ADMIN PANEL DATA
@@ -205,17 +220,22 @@ document.addEventListener('click', (e) => {
 
 navLinks.forEach(link => {
     link.addEventListener('click', (e) => {
-        e.preventDefault();
         const targetId = link.getAttribute('href');
-        const targetSection = document.querySelector(targetId);
 
-        if (targetSection) {
-            const offsetTop = targetSection.offsetTop - 80; // Account for fixed navbar
-            window.scrollTo({
-                top: offsetTop,
-                behavior: 'smooth'
-            });
+        // Only handle internal anchor links (starting with #)
+        if (targetId.startsWith('#')) {
+            e.preventDefault();
+            const targetSection = document.querySelector(targetId);
+
+            if (targetSection) {
+                const offsetTop = targetSection.offsetTop - 80; // Account for fixed navbar
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
+            }
         }
+        // For external links (like insights.html), let default navigation happen
     });
 });
 
@@ -300,10 +320,29 @@ window.addEventListener('scroll', () => {
     const hero = document.querySelector('.hero');
 
     if (hero) {
+        // Parallax for content (subtle fade)
         const heroContent = hero.querySelector('.hero-content');
         if (scrolled < hero.offsetHeight) {
-            heroContent.style.transform = `translateY(${scrolled * 0.5}px)`;
-            heroContent.style.opacity = 1 - (scrolled / hero.offsetHeight);
+            // Subtle parallax - only slight fade, no transform to keep button accessible
+            const fadeAmount = Math.min(scrolled / (hero.offsetHeight * 1.5), 0.3);
+            heroContent.style.opacity = 1 - fadeAmount;
+        }
+
+        // Parallax for video/background (scrolls down slower for depth effect)
+        const heroVideo = hero.querySelector('.hero-video');
+        const heroBgImage = hero.querySelector('.hero-bg-image');
+
+        if (scrolled < hero.offsetHeight) {
+            // Move background down at 40% of scroll speed for parallax effect
+            const parallaxOffset = scrolled * 0.4;
+
+            if (heroVideo) {
+                heroVideo.style.transform = `translate(-50%, calc(-50% + ${parallaxOffset}px))`;
+            }
+
+            if (heroBgImage) {
+                heroBgImage.style.transform = `translateY(${parallaxOffset}px)`;
+            }
         }
     }
 });
@@ -417,3 +456,26 @@ document.body.insertBefore(skipLink, document.body.firstChild);
 console.log('%cMediterra Mussel Farm', 'font-size: 24px; font-weight: bold; color: #c9a961;');
 console.log('%cPremium Mediterranean Mussels from Greece', 'font-size: 14px; color: #1c2541;');
 console.log('%cWebsite crafted with precision and care', 'font-size: 12px; color: #666;');
+
+// ===========================
+// FLOATING CTA BUTTON
+// ===========================
+
+const floatingCta = document.getElementById('floatingCta');
+
+if (floatingCta) {
+    // Hide floating CTA initially
+    floatingCta.classList.add('hidden');
+
+    window.addEventListener('scroll', () => {
+        const scrollPosition = window.pageYOffset;
+        const heroHeight = document.querySelector('.hero')?.offsetHeight || 600;
+
+        // Show floating CTA after scrolling past hero section
+        if (scrollPosition > heroHeight) {
+            floatingCta.classList.remove('hidden');
+        } else {
+            floatingCta.classList.add('hidden');
+        }
+    });
+}

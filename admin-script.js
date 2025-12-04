@@ -135,7 +135,54 @@ function saveChanges() {
     // Apply changes to main website
     applyChangesToWebsite(data);
 
-    showNotification('Changes saved successfully!', 'success');
+    // Automatically export site-data.json for production
+    autoExportForProduction(data);
+
+    showNotification('Changes saved! site-data.json downloaded - commit this file to update production!', 'success');
+}
+
+// Automatically export data file for production deployment
+function autoExportForProduction(data) {
+    const jsonString = JSON.stringify(data, null, 2); // Pretty print with 2 space indentation
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'site-data.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    // Show deployment instructions
+    setTimeout(() => {
+        showDeploymentInstructions();
+    }, 1000);
+}
+
+// Show instructions for deploying to production
+function showDeploymentInstructions() {
+    const instructions = `
+📦 To update your production website:
+
+1. Save the downloaded 'site-data.json' file to your project folder
+2. Run these commands in your terminal:
+
+   git add site-data.json
+   git commit -m "Update site images and content"
+   git push
+
+3. Your changes will be live on production after deployment!
+
+💡 The file is already saved to your Downloads folder.
+    `.trim();
+
+    console.log(instructions);
+
+    // You could also show this in a modal if you add one to the UI
+    if (confirm('site-data.json downloaded!\n\nWould you like to see deployment instructions?')) {
+        alert(instructions);
+    }
 }
 
 // Apply changes to the main website

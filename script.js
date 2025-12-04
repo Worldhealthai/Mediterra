@@ -320,11 +320,29 @@ window.addEventListener('scroll', () => {
     const hero = document.querySelector('.hero');
 
     if (hero) {
+        // Parallax for content (subtle fade)
         const heroContent = hero.querySelector('.hero-content');
         if (scrolled < hero.offsetHeight) {
             // Subtle parallax - only slight fade, no transform to keep button accessible
             const fadeAmount = Math.min(scrolled / (hero.offsetHeight * 1.5), 0.3);
             heroContent.style.opacity = 1 - fadeAmount;
+        }
+
+        // Parallax for video/background (scrolls down slower for depth effect)
+        const heroVideo = hero.querySelector('.hero-video');
+        const heroBgImage = hero.querySelector('.hero-bg-image');
+
+        if (scrolled < hero.offsetHeight) {
+            // Move background down at 40% of scroll speed for parallax effect
+            const parallaxOffset = scrolled * 0.4;
+
+            if (heroVideo) {
+                heroVideo.style.transform = `translate(-50%, calc(-50% + ${parallaxOffset}px))`;
+            }
+
+            if (heroBgImage) {
+                heroBgImage.style.transform = `translateY(${parallaxOffset}px)`;
+            }
         }
     }
 });

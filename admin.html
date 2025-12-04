@@ -183,8 +183,10 @@
 
                 <div class="settings-group">
                     <h3>Data Management</h3>
-                    <button onclick="exportData()" class="btn-export">Export All Settings</button>
+                    <button onclick="exportData()" class="btn-export">Export Settings (Download JSON)</button>
+                    <button onclick="importData()" class="btn-import">Import Settings (Upload JSON)</button>
                     <button onclick="resetToDefaults()" class="btn-reset">Reset to Defaults</button>
+                    <p class="settings-note">💡 <strong>To sync across devices:</strong> Export your settings, commit the site-data.json file to your repository, and deploy to Vercel.</p>
                 </div>
 
                 <div class="settings-group">

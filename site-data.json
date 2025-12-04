@@ -1,0 +1,40 @@
+{
+  "images": {
+    "hero": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1920&q=80",
+    "location": "https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=800&q=80",
+    "method": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80",
+    "gallery": [
+      {
+        "url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80",
+        "alt": "Fresh mussels in pristine waters"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1583506897994-c2de2a2b5b27?w=600&q=80",
+        "alt": "Greek coastal landscape at dawn"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=80",
+        "alt": "Fresh mussels close-up"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=600&q=80",
+        "alt": "Greek sea aerial view"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1580541631950-7282082b53ce?w=600&q=80",
+        "alt": "Greek strait and coastal waters"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1566024287286-457247b70310?w=600&q=80",
+        "alt": "Sunset over Mediterranean waters"
+      }
+    ]
+  },
+  "content": {
+    "news": "Precision in Motion — Our New Dispatch Center Is Underway.",
+    "heroTitle": "Premium Mediterranean Mussels from the Artemisium Strait",
+    "heroSubtitle": "Sustainably farmed in the pristine waters of North Evia, Greece. Wholesale supply to Athens and throughout Greece.",
+    "contactPhone": "+30 123 456 7890",
+    "contactEmail": "info@mediterramussel.com"
+  }
+}

@@ -417,3 +417,26 @@ document.body.insertBefore(skipLink, document.body.firstChild);
 console.log('%cMediterra Mussel Farm', 'font-size: 24px; font-weight: bold; color: #c9a961;');
 console.log('%cPremium Mediterranean Mussels from Greece', 'font-size: 14px; color: #1c2541;');
 console.log('%cWebsite crafted with precision and care', 'font-size: 12px; color: #666;');
+
+// ===========================
+// FLOATING CTA BUTTON
+// ===========================
+
+const floatingCta = document.getElementById('floatingCta');
+
+if (floatingCta) {
+    // Hide floating CTA initially
+    floatingCta.classList.add('hidden');
+
+    window.addEventListener('scroll', () => {
+        const scrollPosition = window.pageYOffset;
+        const heroHeight = document.querySelector('.hero')?.offsetHeight || 600;
+
+        // Show floating CTA after scrolling past hero section
+        if (scrollPosition > heroHeight) {
+            floatingCta.classList.remove('hidden');
+        } else {
+            floatingCta.classList.add('hidden');
+        }
+    });
+}

@@ -322,8 +322,9 @@ window.addEventListener('scroll', () => {
     if (hero) {
         const heroContent = hero.querySelector('.hero-content');
         if (scrolled < hero.offsetHeight) {
-            heroContent.style.transform = `translateY(${scrolled * 0.5}px)`;
-            heroContent.style.opacity = 1 - (scrolled / hero.offsetHeight);
+            // Subtle parallax - only slight fade, no transform to keep button accessible
+            const fadeAmount = Math.min(scrolled / (hero.offsetHeight * 1.5), 0.3);
+            heroContent.style.opacity = 1 - fadeAmount;
         }
     }
 });

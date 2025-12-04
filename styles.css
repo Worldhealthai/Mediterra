@@ -58,7 +58,7 @@ body.splash-active {
     left: 0;
     width: 100%;
     height: 100vh;
-    background: linear-gradient(135deg, #d4dde8 0%, #e8eef5 30%, #f0f4f8 70%, #d4dde8 100%);
+    background: linear-gradient(135deg, #a8b8d0 0%, #c5d4e6 30%, #d4e0f0 50%, #c5d4e6 70%, #a8b8d0 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -73,7 +73,7 @@ body.splash-active {
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle at center, rgba(201, 169, 97, 0.12) 0%, rgba(28, 37, 65, 0.03) 50%, transparent 70%);
+    background: radial-gradient(circle at center, rgba(201, 169, 97, 0.15) 0%, rgba(28, 37, 65, 0.05) 50%, transparent 70%);
     animation: pulse 2s ease-in-out infinite;
 }
 

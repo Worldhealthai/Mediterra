@@ -204,7 +204,7 @@ function loadSavedData() {
     }
 }
 
-// Export data as JSON file
+// Export data as JSON file that can be committed to repo
 function exportData() {
     const savedData = localStorage.getItem('mediterraData');
 
@@ -213,16 +213,43 @@ function exportData() {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'mediterra-backup.json';
+        a.download = 'site-data.json';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
 
-        showNotification('Data exported successfully!', 'success');
+        showNotification('Data exported as site-data.json! Upload this file to your repository to sync across devices.', 'success');
     } else {
         showNotification('No data to export', 'error');
     }
+}
+
+// Import data from JSON file
+function importData() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'application/json';
+
+    input.onchange = function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                try {
+                    const data = JSON.parse(event.target.result);
+                    localStorage.setItem('mediterraData', JSON.stringify(data));
+                    location.reload();
+                    showNotification('Data imported successfully!', 'success');
+                } catch (error) {
+                    showNotification('Error importing data: Invalid JSON file', 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+    };
+
+    input.click();
 }
 
 // Reset to defaults

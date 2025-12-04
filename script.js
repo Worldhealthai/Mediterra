@@ -26,12 +26,35 @@ document.addEventListener('DOMContentLoaded', () => {
     loadAdminData();
 });
 
-function loadAdminData() {
-    const savedData = localStorage.getItem('mediterraData');
+async function loadAdminData() {
+    // Try to load from site-data.json first (for Vercel deployment)
+    try {
+        const response = await fetch('site-data.json');
+        if (response.ok) {
+            const data = await response.json();
+            applyAdminData(data);
+            return;
+        }
+    } catch (error) {
+        // site-data.json doesn't exist, fall back to localStorage
+        console.log('No site-data.json found, using localStorage');
+    }
 
+    // Fallback to localStorage
+    const savedData = localStorage.getItem('mediterraData');
     if (savedData) {
         try {
             const data = JSON.parse(savedData);
+            applyAdminData(data);
+        } catch (error) {
+            console.error('Error loading saved data:', error);
+        }
+    }
+}
+
+function applyAdminData(data) {
+    if (data) {
+        try {
 
             // Update images
             if (data.images) {

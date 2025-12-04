@@ -1,4 +1,24 @@
 // ===========================
+// SPLASH SCREEN
+// ===========================
+
+// Add splash-active class to body initially
+document.body.classList.add('splash-active');
+
+// Remove splash screen after animation completes
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        document.body.classList.remove('splash-active');
+        const splashScreen = document.getElementById('splashScreen');
+        if (splashScreen) {
+            setTimeout(() => {
+                splashScreen.remove();
+            }, 800);
+        }
+    }, 2500);
+});
+
+// ===========================
 // LOAD ADMIN PANEL DATA
 // ===========================
 

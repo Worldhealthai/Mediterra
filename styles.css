@@ -1719,7 +1719,6 @@ section {
     text-align: center;
     color: var(--white);
     overflow: hidden;
-    margin-top: 80px;
 }
 
 .insights-hero-bg {
@@ -1770,12 +1769,13 @@ section {
     font-weight: 300;
     margin-bottom: 1.5rem;
     letter-spacing: -1px;
+    color: var(--white);
 }
 
 .page-subtitle {
     font-size: clamp(1.1rem, 2vw, 1.3rem);
     line-height: 1.8;
-    color: var(--cream);
+    color: rgba(250, 250, 250, 0.9);
     max-width: 600px;
     margin: 0 auto;
 }

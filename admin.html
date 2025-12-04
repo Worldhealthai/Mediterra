@@ -32,8 +32,17 @@
                     <h3>Hero Background Image</h3>
                     <div class="image-input-group">
                         <img id="hero-preview" src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1920&q=80" alt="Hero preview">
-                        <input type="text" id="hero-img" placeholder="Enter image URL" value="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1920&q=80">
-                        <button onclick="updatePreview('hero')">Update Preview</button>
+                        <div class="upload-options">
+                            <div class="upload-method">
+                                <label>📁 Upload from computer:</label>
+                                <input type="file" id="hero-file" accept="image/*" onchange="handleImageUpload('hero', this)">
+                            </div>
+                            <div class="upload-method">
+                                <label>🔗 Or paste URL:</label>
+                                <input type="text" id="hero-img" placeholder="Enter image URL" value="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1920&q=80">
+                                <button onclick="updatePreview('hero')">Update Preview</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -42,8 +51,17 @@
                     <h3>Location Section Image</h3>
                     <div class="image-input-group">
                         <img id="location-preview" src="https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=800&q=80" alt="Location preview">
-                        <input type="text" id="location-img" placeholder="Enter image URL" value="https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=800&q=80">
-                        <button onclick="updatePreview('location')">Update Preview</button>
+                        <div class="upload-options">
+                            <div class="upload-method">
+                                <label>📁 Upload from computer:</label>
+                                <input type="file" id="location-file" accept="image/*" onchange="handleImageUpload('location', this)">
+                            </div>
+                            <div class="upload-method">
+                                <label>🔗 Or paste URL:</label>
+                                <input type="text" id="location-img" placeholder="Enter image URL" value="https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=800&q=80">
+                                <button onclick="updatePreview('location')">Update Preview</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -52,8 +70,17 @@
                     <h3>Method Section Image</h3>
                     <div class="image-input-group">
                         <img id="method-preview" src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80" alt="Method preview">
-                        <input type="text" id="method-img" placeholder="Enter image URL" value="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80">
-                        <button onclick="updatePreview('method')">Update Preview</button>
+                        <div class="upload-options">
+                            <div class="upload-method">
+                                <label>📁 Upload from computer:</label>
+                                <input type="file" id="method-file" accept="image/*" onchange="handleImageUpload('method', this)">
+                            </div>
+                            <div class="upload-method">
+                                <label>🔗 Or paste URL:</label>
+                                <input type="text" id="method-img" placeholder="Enter image URL" value="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80">
+                                <button onclick="updatePreview('method')">Update Preview</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -64,7 +91,8 @@
                         <div class="gallery-item-manager">
                             <label>Image 1</label>
                             <img id="gallery1-preview" src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80" alt="Gallery 1">
-                            <input type="text" id="gallery1-img" placeholder="Enter image URL" value="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80">
+                            <input type="file" id="gallery1-file" accept="image/*" onchange="handleImageUpload('gallery1', this)">
+                            <input type="text" id="gallery1-img" placeholder="Or paste URL" value="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80">
                             <input type="text" id="gallery1-alt" placeholder="Alt text" value="Fresh mussels in pristine waters">
                             <button onclick="updatePreview('gallery1')">Update</button>
                         </div>
@@ -72,7 +100,8 @@
                         <div class="gallery-item-manager">
                             <label>Image 2</label>
                             <img id="gallery2-preview" src="https://images.unsplash.com/photo-1583506897994-c2de2a2b5b27?w=600&q=80" alt="Gallery 2">
-                            <input type="text" id="gallery2-img" placeholder="Enter image URL" value="https://images.unsplash.com/photo-1583506897994-c2de2a2b5b27?w=600&q=80">
+                            <input type="file" id="gallery2-file" accept="image/*" onchange="handleImageUpload('gallery2', this)">
+                            <input type="text" id="gallery2-img" placeholder="Or paste URL" value="https://images.unsplash.com/photo-1583506897994-c2de2a2b5b27?w=600&q=80">
                             <input type="text" id="gallery2-alt" placeholder="Alt text" value="Greek coastal landscape at dawn">
                             <button onclick="updatePreview('gallery2')">Update</button>
                         </div>
@@ -80,7 +109,8 @@
                         <div class="gallery-item-manager">
                             <label>Image 3</label>
                             <img id="gallery3-preview" src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=80" alt="Gallery 3">
-                            <input type="text" id="gallery3-img" placeholder="Enter image URL" value="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=80">
+                            <input type="file" id="gallery3-file" accept="image/*" onchange="handleImageUpload('gallery3', this)">
+                            <input type="text" id="gallery3-img" placeholder="Or paste URL" value="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=80">
                             <input type="text" id="gallery3-alt" placeholder="Alt text" value="Fresh mussels close-up">
                             <button onclick="updatePreview('gallery3')">Update</button>
                         </div>
@@ -88,7 +118,8 @@
                         <div class="gallery-item-manager">
                             <label>Image 4</label>
                             <img id="gallery4-preview" src="https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=600&q=80" alt="Gallery 4">
-                            <input type="text" id="gallery4-img" placeholder="Enter image URL" value="https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=600&q=80">
+                            <input type="file" id="gallery4-file" accept="image/*" onchange="handleImageUpload('gallery4', this)">
+                            <input type="text" id="gallery4-img" placeholder="Or paste URL" value="https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=600&q=80">
                             <input type="text" id="gallery4-alt" placeholder="Alt text" value="Greek sea aerial view">
                             <button onclick="updatePreview('gallery4')">Update</button>
                         </div>
@@ -96,7 +127,8 @@
                         <div class="gallery-item-manager">
                             <label>Image 5</label>
                             <img id="gallery5-preview" src="https://images.unsplash.com/photo-1580541631950-7282082b53ce?w=600&q=80" alt="Gallery 5">
-                            <input type="text" id="gallery5-img" placeholder="Enter image URL" value="https://images.unsplash.com/photo-1580541631950-7282082b53ce?w=600&q=80">
+                            <input type="file" id="gallery5-file" accept="image/*" onchange="handleImageUpload('gallery5', this)">
+                            <input type="text" id="gallery5-img" placeholder="Or paste URL" value="https://images.unsplash.com/photo-1580541631950-7282082b53ce?w=600&q=80">
                             <input type="text" id="gallery5-alt" placeholder="Alt text" value="Greek strait and coastal waters">
                             <button onclick="updatePreview('gallery5')">Update</button>
                         </div>
@@ -104,7 +136,8 @@
                         <div class="gallery-item-manager">
                             <label>Image 6</label>
                             <img id="gallery6-preview" src="https://images.unsplash.com/photo-1566024287286-457247b70310?w=600&q=80" alt="Gallery 6">
-                            <input type="text" id="gallery6-img" placeholder="Enter image URL" value="https://images.unsplash.com/photo-1566024287286-457247b70310?w=600&q=80">
+                            <input type="file" id="gallery6-file" accept="image/*" onchange="handleImageUpload('gallery6', this)">
+                            <input type="text" id="gallery6-img" placeholder="Or paste URL" value="https://images.unsplash.com/photo-1566024287286-457247b70310?w=600&q=80">
                             <input type="text" id="gallery6-alt" placeholder="Alt text" value="Sunset over Mediterranean waters">
                             <button onclick="updatePreview('gallery6')">Update</button>
                         </div>

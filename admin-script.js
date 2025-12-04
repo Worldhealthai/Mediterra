@@ -22,6 +22,54 @@ function showSection(sectionName) {
     event.target.classList.add('active');
 }
 
+// Handle image file upload
+function handleImageUpload(imageType, fileInput) {
+    const file = fileInput.files[0];
+
+    if (file) {
+        // Check if file is an image
+        if (!file.type.startsWith('image/')) {
+            showNotification('Please select an image file', 'error');
+            fileInput.value = '';
+            return;
+        }
+
+        // Check file size (limit to 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            showNotification('Image size should be less than 5MB', 'error');
+            fileInput.value = '';
+            return;
+        }
+
+        // Read and convert to base64
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            const base64Image = e.target.result;
+
+            // Update preview
+            const preview = document.getElementById(`${imageType}-preview`);
+            if (preview) {
+                preview.src = base64Image;
+            }
+
+            // Update the URL input with base64 data
+            const urlInput = document.getElementById(`${imageType}-img`);
+            if (urlInput) {
+                urlInput.value = base64Image;
+            }
+
+            showNotification(`Image uploaded successfully! (${(file.size / 1024).toFixed(0)}KB)`, 'success');
+        };
+
+        reader.onerror = function() {
+            showNotification('Error reading image file', 'error');
+        };
+
+        reader.readAsDataURL(file);
+    }
+}
+
 // Update image preview
 function updatePreview(imageType) {
     const input = document.getElementById(`${imageType}-img`);

@@ -129,13 +129,29 @@ const menuToggle = document.getElementById('menuToggle');
 const navMenu = document.getElementById('navMenu');
 const navLinks = document.querySelectorAll('.nav-menu a');
 
-// Navbar scroll effect
+// Navbar scroll effect with fade on scroll down
+let lastScroll = 0;
+
 window.addEventListener('scroll', () => {
-    if (window.scrollY > 100) {
+    const currentScroll = window.pageYOffset;
+
+    // Add scrolled class for background effect
+    if (currentScroll > 100) {
         navbar.classList.add('scrolled');
     } else {
         navbar.classList.remove('scrolled');
     }
+
+    // Hide navbar when scrolling down, show when scrolling up
+    if (currentScroll > lastScroll && currentScroll > 150) {
+        // Scrolling down & past threshold
+        navbar.classList.add('hidden');
+    } else if (currentScroll < lastScroll) {
+        // Scrolling up
+        navbar.classList.remove('hidden');
+    }
+
+    lastScroll = currentScroll;
 });
 
 // Mobile menu toggle

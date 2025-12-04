@@ -16,6 +16,8 @@
     --gold-light: #d4af37;
     --cream: #fafafa;
     --white: #ffffff;
+    --bg-light: #f5f7fa;
+    --bg-lighter: #faf8f5;
     --text-dark: #1a1a1a;
     --text-light: #666666;
 
@@ -34,7 +36,8 @@ body {
     font-size: 16px;
     line-height: 1.7;
     color: var(--text-dark);
-    background: var(--white);
+    background: linear-gradient(180deg, #faf8f5 0%, #f5f7fa 50%, #faf8f5 100%);
+    background-attachment: fixed;
     overflow-x: hidden;
 }
 
@@ -576,7 +579,7 @@ section {
    =========================== */
 
 .about {
-    background: linear-gradient(180deg, var(--white) 0%, var(--cream) 50%, var(--white) 100%);
+    background: linear-gradient(180deg, rgba(250, 248, 245, 0.5) 0%, rgba(245, 247, 250, 0.8) 50%, rgba(250, 248, 245, 0.5) 100%);
     position: relative;
     overflow: hidden;
 }
@@ -781,7 +784,7 @@ section {
    =========================== */
 
 .method {
-    background: linear-gradient(180deg, var(--white) 0%, #e8eef3 50%, var(--white) 100%);
+    background: linear-gradient(180deg, rgba(245, 247, 250, 0.6) 0%, rgba(232, 238, 243, 0.8) 50%, rgba(245, 247, 250, 0.6) 100%);
     position: relative;
 }
 
@@ -806,10 +809,11 @@ section {
 }
 
 .method-text {
-    background: var(--white);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(250, 248, 245, 0.95) 100%);
     padding: 3rem;
     border-radius: 12px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(10px);
 }
 
 .method-text .features-list {
@@ -1087,7 +1091,7 @@ section {
 }
 
 .guide-card {
-    background: var(--white);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.98) 100%);
     border-radius: 12px;
     padding: 2.5rem;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
@@ -1095,6 +1099,7 @@ section {
     position: relative;
     overflow: hidden;
     border: 1px solid rgba(201, 169, 97, 0.1);
+    backdrop-filter: blur(10px);
 }
 
 .guide-card::before {
@@ -1211,7 +1216,7 @@ section {
    =========================== */
 
 .eco-hub {
-    background: linear-gradient(180deg, #e8eef3 0%, var(--cream) 50%, #e8eef3 100%);
+    background: linear-gradient(180deg, rgba(232, 238, 243, 0.7) 0%, rgba(250, 250, 250, 0.8) 50%, rgba(232, 238, 243, 0.7) 100%);
     position: relative;
     overflow: hidden;
 }
@@ -1235,10 +1240,11 @@ section {
     text-align: center;
     position: relative;
     z-index: 1;
-    background: var(--white);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(245, 247, 250, 0.95) 100%);
     padding: 3rem;
     border-radius: 12px;
     box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
 }
 
 .eco-hub-content .section-label {
@@ -1832,10 +1838,11 @@ section {
     display: flex;
     gap: 1.5rem;
     padding: 2rem;
-    background: var(--white);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.93) 0%, rgba(250, 248, 245, 0.96) 100%);
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
 }
 
 .point:hover {
@@ -1951,10 +1958,11 @@ section {
 .highlight-item {
     text-align: center;
     padding: 1.5rem;
-    background: var(--white);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(250, 248, 245, 0.94) 100%);
     border-radius: 12px;
     transition: all 0.3s ease;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(8px);
 }
 
 .highlight-item:hover {
@@ -2016,10 +2024,11 @@ section {
 }
 
 .preview-card {
-    background: var(--white);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(250, 248, 245, 0.95) 100%);
     padding: 2.5rem;
     border-radius: 16px;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(10px);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     border-left: 4px solid var(--gold);
 }
@@ -2351,7 +2360,7 @@ section {
 }
 
 .stat-card {
-    background: var(--white);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.98) 100%);
     padding: 2.5rem 2rem;
     border-radius: 16px;
     text-align: center;
@@ -2360,6 +2369,7 @@ section {
     border-top: 4px solid var(--gold);
     position: relative;
     overflow: hidden;
+    backdrop-filter: blur(10px);
 }
 
 .stat-card::before {
@@ -2419,7 +2429,7 @@ section {
 
 /* Featured Insights Section */
 .featured-insights {
-    background: var(--white);
+    background: linear-gradient(180deg, rgba(250, 248, 245, 0.4) 0%, rgba(245, 247, 250, 0.6) 50%, rgba(250, 248, 245, 0.4) 100%);
     padding: 6rem 0;
 }
 
@@ -2435,7 +2445,7 @@ section {
 }
 
 .insight-card {
-    background: var(--cream);
+    background: linear-gradient(135deg, rgba(250, 250, 250, 0.9) 0%, rgba(250, 248, 245, 0.92) 100%);
     border-radius: 16px;
     padding: 2rem;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -2443,11 +2453,12 @@ section {
     border: 1px solid rgba(28, 37, 65, 0.08);
     display: flex;
     flex-direction: column;
+    backdrop-filter: blur(10px);
 }
 
 .insight-card.featured {
     grid-column: span 2;
-    background: linear-gradient(135deg, #f8f9fa 0%, var(--cream) 100%);
+    background: linear-gradient(135deg, rgba(248, 249, 250, 0.93) 0%, rgba(250, 248, 245, 0.95) 100%);
     border: 2px solid var(--gold);
 }
 
@@ -2551,13 +2562,14 @@ section {
 }
 
 .visual-card {
-    background: var(--white);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(250, 248, 245, 0.95) 100%);
     padding: 2.5rem;
     border-radius: 16px;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
     border-left: 4px solid var(--gold);
     position: sticky;
     top: 120px;
+    backdrop-filter: blur(10px);
 }
 
 .visual-card h4 {
@@ -2593,7 +2605,7 @@ section {
 
 /* Technology Innovation Section */
 .tech-innovation {
-    background: var(--white);
+    background: linear-gradient(180deg, rgba(250, 248, 245, 0.5) 0%, rgba(245, 247, 250, 0.7) 50%, rgba(250, 248, 245, 0.5) 100%);
     padding: 6rem 0;
     text-align: center;
 }
@@ -2612,10 +2624,11 @@ section {
 }
 
 .tech-card {
-    background: linear-gradient(135deg, var(--cream) 0%, #f8f9fa 100%);
+    background: linear-gradient(135deg, rgba(250, 250, 250, 0.88) 0%, rgba(248, 249, 250, 0.92) 100%);
     padding: 2.5rem 2rem;
     border-radius: 16px;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(8px);
     border: 1px solid rgba(28, 37, 65, 0.05);
 }
 

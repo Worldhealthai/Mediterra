@@ -1780,8 +1780,8 @@ section {
 
 @media (max-width: 768px) {
     .news-banner {
-        margin-top: 80px;
-        padding: 1.1rem 0;
+        margin-top: 70px;
+        padding: 1rem 0;
     }
 
     .logo-img {
@@ -1962,8 +1962,8 @@ section {
     }
 
     .news-banner {
-        margin-top: 70px;
-        padding: 1rem 0;
+        margin-top: 60px;
+        padding: 0.9rem 0;
         font-size: 0.85rem;
     }
 

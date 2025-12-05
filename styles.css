@@ -1299,9 +1299,10 @@ section {
    =========================== */
 
 .eco-hub {
-    background: linear-gradient(180deg, rgba(232, 238, 243, 0.7) 0%, rgba(250, 250, 250, 0.8) 50%, rgba(232, 238, 243, 0.7) 100%);
+    background: linear-gradient(135deg, #0a1128 0%, #1a2744 25%, #0d1b2a 50%, #1b263b 75%, #0a1128 100%);
     position: relative;
     overflow: hidden;
+    padding: 6rem 0;
 }
 
 .eco-hub::before {
@@ -1312,37 +1313,103 @@ section {
     width: 100%;
     height: 100%;
     background:
-        linear-gradient(135deg, transparent 0%, rgba(28, 37, 65, 0.02) 50%, transparent 100%),
-        radial-gradient(circle at 70% 30%, rgba(201, 169, 97, 0.08) 0%, transparent 50%);
+        radial-gradient(circle at 20% 50%, rgba(201, 169, 97, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 80% 50%, rgba(96, 165, 250, 0.08) 0%, transparent 40%),
+        linear-gradient(to bottom, transparent 0%, rgba(201, 169, 97, 0.05) 50%, transparent 100%);
     pointer-events: none;
+    animation: ecoGlow 8s ease-in-out infinite;
+}
+
+.eco-hub::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--gold) 50%, transparent 100%);
+    opacity: 0.3;
 }
 
 .eco-hub-content {
-    max-width: 900px;
+    max-width: 1000px;
     margin: 0 auto;
     text-align: center;
     position: relative;
     z-index: 1;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(245, 247, 250, 0.95) 100%);
-    padding: 3rem;
-    border-radius: 12px;
-    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
+    padding: 4rem 3rem;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(28, 37, 65, 0.6) 0%, rgba(15, 27, 42, 0.7) 100%);
+    backdrop-filter: blur(20px) saturate(150%);
+    border: 2px solid rgba(201, 169, 97, 0.3);
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        0 0 80px rgba(201, 169, 97, 0.1);
+    position: relative;
+}
+
+.eco-hub-content::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(135deg, var(--gold), transparent, var(--gold));
+    border-radius: 20px;
+    opacity: 0.3;
+    z-index: -1;
+    filter: blur(10px);
 }
 
 .eco-hub-content .section-label {
-    color: var(--navy);
+    color: var(--gold);
     font-weight: 600;
-}
-
-.eco-hub-content p {
-    color: var(--text-light);
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    background: rgba(201, 169, 97, 0.1);
+    border-radius: 20px;
+    border: 1px solid rgba(201, 169, 97, 0.3);
     margin-bottom: 1.5rem;
 }
 
+.eco-hub-content .section-title {
+    color: var(--white);
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin-bottom: 2rem;
+    text-shadow: 0 2px 20px rgba(201, 169, 97, 0.3);
+}
+
+.eco-hub-content .lead-text {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.2rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+}
+
+.eco-hub-content p {
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 1.5rem;
+    line-height: 1.8;
+}
+
 .eco-hub-content .emphasis {
-    color: var(--navy-dark);
+    color: var(--gold);
     font-weight: 500;
+    font-size: 1.1rem;
+    display: block;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(201, 169, 97, 0.2);
+}
+
+@keyframes ecoGlow {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
 }
 
 /* ===========================

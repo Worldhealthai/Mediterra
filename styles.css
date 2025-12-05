@@ -1779,6 +1779,11 @@ section {
 }
 
 @media (max-width: 768px) {
+    .news-banner {
+        margin-top: 80px;
+        padding: 1.1rem 0;
+    }
+
     .logo-img {
         height: 50px;
     }
@@ -1957,6 +1962,12 @@ section {
     }
 
     .news-banner {
+        margin-top: 70px;
+        padding: 1rem 0;
+        font-size: 0.85rem;
+    }
+
+    .news-content {
         font-size: 0.85rem;
     }
 

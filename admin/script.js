@@ -30,7 +30,7 @@ function showSection(id) {
 
 // Image Previews
 function setupImagePreviews() {
-    const inputs = ['location-img', 'method-img',
+    const inputs = ['logo-img', 'location-img', 'method-img',
         'gallery1-img', 'gallery2-img', 'gallery3-img',
         'gallery4-img', 'gallery5-img', 'gallery6-img'];
 
@@ -67,6 +67,7 @@ async function saveChanges() {
 // Collect Data
 function collectData() {
     return {
+        logo: val('logo-img'),
         hero: {
             title: val('hero-title'),
             subtitle: val('hero-subtitle'),
@@ -127,6 +128,7 @@ async function deployToGitHub(data, token, repo) {
     try {
         const siteData = {
             images: {
+                logo: data.logo,
                 hero: data.hero.fallback,
                 location: data.location.image,
                 method: data.method.image,
@@ -231,6 +233,10 @@ function loadData() {
 }
 
 function populateForm(data) {
+    if (data.logo) {
+        set('logo-img', data.logo);
+        updatePreview('logo');
+    }
     if (data.hero) {
         set('hero-title', data.hero.title);
         set('hero-subtitle', data.hero.subtitle);
@@ -287,6 +293,7 @@ function populateForm(data) {
 }
 
 function loadDefaults() {
+    set('logo-img', 'logo-transparent.png');
     set('hero-title', 'Where the Sea Crafts Its Own Masterpiece');
     set('hero-subtitle', 'In the moving depths of the Artemisium Strait, we cultivate Mediterranean mussels shaped by pure waters, natural forces, and a heritage refined through generations.');
     set('hero-description', 'A craft elevated by precision, guided by instinct, and grounded in a place with its own memory.');
@@ -296,6 +303,7 @@ function loadDefaults() {
     set('news-text', 'Precision in Motion — Our New Dispatch Center Is Underway.');
     set('contact-phone', '+30 123 456 7890');
     set('contact-email', 'info@mediterramussel.com');
+    updatePreview('logo');
 }
 
 // Utilities

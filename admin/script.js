@@ -302,7 +302,7 @@ function loadDefaults() {
     set('hero-fallback', 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1920&q=80');
     set('news-text', 'Precision in Motion — Our New Dispatch Center Is Underway.');
     set('contact-phone', '+30 123 456 7890');
-    set('contact-email', 'info@mediterramussel.com');
+    set('contact-email', 'mediterramf@gmail.com');
     updatePreview('logo');
 }
 

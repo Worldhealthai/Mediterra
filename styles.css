@@ -2166,8 +2166,56 @@ section {
 }
 
 .highlight-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(201, 169, 97, 0.1) 0%, rgba(201, 169, 97, 0.05) 100%);
+    border: 2px solid var(--gold);
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.highlight-icon::before {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: var(--gold);
+    opacity: 0.2;
+    border-radius: 50%;
+}
+
+.highlight-item:hover .highlight-icon {
+    background: linear-gradient(135deg, rgba(201, 169, 97, 0.15) 0%, rgba(201, 169, 97, 0.08) 100%);
+    border-color: var(--gold-light);
+    transform: rotate(360deg);
+}
+
+/* Specific icon designs */
+.highlight-item:nth-child(1) .highlight-icon::after {
+    content: '⚡';
+    font-size: 2rem;
+    position: absolute;
+    color: var(--gold);
+}
+
+.highlight-item:nth-child(2) .highlight-icon::after {
+    content: '❤';
+    font-size: 2rem;
+    position: absolute;
+    color: var(--gold);
+}
+
+.highlight-item:nth-child(3) .highlight-icon::after {
+    content: '◈';
     font-size: 2.5rem;
-    margin-bottom: 1rem;
+    position: absolute;
+    color: var(--gold);
 }
 
 .highlight-item h4 {
@@ -2234,8 +2282,50 @@ section {
 }
 
 .preview-icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
+    width: 70px;
+    height: 70px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+    position: relative;
+    box-shadow: 0 4px 15px rgba(201, 169, 97, 0.25);
+    transition: all 0.3s ease;
+}
+
+.preview-icon::before {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    top: 10px;
+    right: 10px;
+}
+
+.preview-card:hover .preview-icon {
+    transform: scale(1.1);
+    box-shadow: 0 8px 25px rgba(201, 169, 97, 0.35);
+}
+
+/* Preview icon symbols */
+.preview-card:nth-child(1) .preview-icon::after {
+    content: '◆';
+    font-size: 2.5rem;
+    position: absolute;
+    color: var(--navy-dark);
+}
+
+.preview-card:nth-child(2) .preview-icon::after {
+    content: '○';
+    font-size: 2.5rem;
+    position: absolute;
+    color: var(--navy-dark);
+    font-weight: bold;
 }
 
 .preview-card h3 {

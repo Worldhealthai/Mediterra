@@ -190,9 +190,60 @@
                 </div>
 
                 <div class="settings-group">
-                    <h3>🚀 Production Deployment Workflow</h3>
+                    <h3>⚡ Auto-Deploy to Production (Recommended)</h3>
+                    <div style="background: #f0fdf4; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #10b981; margin-bottom: 1.5rem;">
+                        <h4 style="margin-top: 0; color: #059669;">🚀 One-Click Deploy Setup</h4>
+                        <p style="margin: 0.5rem 0; color: #374151;">Configure GitHub API to automatically deploy changes when you click "Save Changes". No manual git commands needed!</p>
+
+                        <div style="margin: 1.5rem 0;">
+                            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">GitHub Repository:</label>
+                            <input type="text" id="github-repo" placeholder="username/repository-name"
+                                   style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-family: monospace;" />
+                            <small style="color: #6b7280;">Example: Worldhealthai/Mediterra</small>
+                        </div>
+
+                        <div style="margin: 1.5rem 0;">
+                            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">GitHub Branch:</label>
+                            <input type="text" id="github-branch" placeholder="main" value="main"
+                                   style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-family: monospace;" />
+                            <small style="color: #6b7280;">Usually "main" or "master"</small>
+                        </div>
+
+                        <div style="margin: 1.5rem 0;">
+                            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">GitHub Personal Access Token:</label>
+                            <input type="password" id="github-token" placeholder="ghp_xxxxxxxxxxxx"
+                                   style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-family: monospace;" />
+                            <small style="color: #6b7280;">
+                                <a href="https://github.com/settings/tokens/new?description=Mediterra%20Admin%20Panel&scopes=repo" target="_blank" style="color: #2563eb; text-decoration: underline;">
+                                    Click here to create a token
+                                </a> (needs "repo" permission)
+                            </small>
+                        </div>
+
+                        <button onclick="saveGitHubConfig()" style="background: #10b981; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%;">
+                            💾 Save Auto-Deploy Configuration
+                        </button>
+
+                        <div id="github-status" style="margin-top: 1rem; padding: 0.75rem; border-radius: 6px; display: none;"></div>
+
+                        <details style="margin-top: 1.5rem;">
+                            <summary style="cursor: pointer; font-weight: 600; color: #374151;">📖 How to get a GitHub token (click to expand)</summary>
+                            <ol style="margin: 1rem 0; padding-left: 1.5rem; line-height: 1.8; color: #4b5563;">
+                                <li>Click the link above to create a token</li>
+                                <li>Give it a name like "Mediterra Admin Panel"</li>
+                                <li>Select "repo" permission (full repository access)</li>
+                                <li>Click "Generate token" at the bottom</li>
+                                <li>Copy the token (you won't see it again!)</li>
+                                <li>Paste it in the field above and click Save</li>
+                            </ol>
+                        </details>
+                    </div>
+                </div>
+
+                <div class="settings-group">
+                    <h3>📋 Manual Deployment (Alternative)</h3>
                     <div style="background: #f0f9ff; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #3b82f6; margin-bottom: 1.5rem;">
-                        <h4 style="margin-top: 0; color: #1e40af;">How to Update Production:</h4>
+                        <h4 style="margin-top: 0; color: #1e40af;">If you prefer manual git commands:</h4>
                         <ol style="margin: 1rem 0; padding-left: 1.5rem; line-height: 1.8;">
                             <li><strong>Edit:</strong> Make changes in the Images or Content tabs</li>
                             <li><strong>Preview:</strong> Click "Update Preview" to see changes</li>

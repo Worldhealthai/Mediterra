@@ -69,12 +69,13 @@ body.splash-active {
     left: 0;
     width: 100%;
     height: 100vh;
-    background: linear-gradient(135deg, #a8b8d0 0%, #c5d4e6 30%, #d4e0f0 50%, #c5d4e6 70%, #a8b8d0 100%);
+    background: linear-gradient(135deg, #0a1128 0%, #1a1f3a 25%, #0d1b2a 50%, #1b263b 75%, #0a1128 100%);
+    background-size: 400% 400%;
+    animation: splashGradient 8s ease infinite, splashFadeOut 0.8s ease-in-out 2.5s forwards;
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 10000;
-    animation: splashFadeOut 0.8s ease-in-out 2.5s forwards;
 }
 
 .splash-screen::before {
@@ -84,8 +85,15 @@ body.splash-active {
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle at center, rgba(201, 169, 97, 0.15) 0%, rgba(28, 37, 65, 0.05) 50%, transparent 70%);
-    animation: pulse 2s ease-in-out infinite;
+    background:
+        radial-gradient(circle at 30% 40%, rgba(212, 175, 55, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 70% 60%, rgba(96, 165, 250, 0.1) 0%, transparent 50%);
+    animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes splashGradient {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
 }
 
 .splash-content {
@@ -99,23 +107,33 @@ body.splash-active {
     width: 280px;
     max-width: 80vw;
     height: auto;
-    filter: drop-shadow(0 10px 30px rgba(28, 37, 65, 0.15));
-    animation: logoScale 1.2s ease-out;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.15) 40%, transparent 70%);
+    filter: drop-shadow(0 10px 40px rgba(212, 175, 55, 0.3));
+    animation: logoScale 1.2s ease-out, logoGlow 3s ease-in-out infinite;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(212, 175, 55, 0.2) 40%, transparent 70%);
     padding: 2rem;
     border-radius: 50%;
 }
 
+@keyframes logoGlow {
+    0%, 100% {
+        filter: drop-shadow(0 10px 40px rgba(212, 175, 55, 0.3));
+    }
+    50% {
+        filter: drop-shadow(0 10px 60px rgba(212, 175, 55, 0.6));
+    }
+}
+
 .splash-loader {
     margin-top: 2rem;
-    width: 60px;
-    height: 3px;
-    background: rgba(28, 37, 65, 0.15);
-    border-radius: 3px;
+    width: 200px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
     margin-left: auto;
     margin-right: auto;
     overflow: hidden;
     position: relative;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .splash-loader::after {
@@ -125,8 +143,15 @@ body.splash-active {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: var(--gold);
-    animation: loaderSlide 1.5s ease-in-out infinite;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(212, 175, 55, 0.5) 20%,
+        var(--gold-light) 50%,
+        rgba(212, 175, 55, 0.5) 80%,
+        transparent 100%);
+    animation: loaderSlide 1.8s ease-in-out infinite;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.8), 0 0 40px rgba(212, 175, 55, 0.4);
+    border-radius: 10px;
 }
 
 @keyframes splashFadeOut {
@@ -265,7 +290,7 @@ h1, h2, h3, h4, h5, h6 {
 .nav-container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 1.5rem 2rem;
+    padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -279,17 +304,17 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .logo-img {
-    height: 65px;
+    height: 110px;
     width: auto;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.2));
     background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.2) 50%, transparent 70%);
-    padding: 0.75rem;
+    padding: 1rem;
     border-radius: 50%;
 }
 
 .logo-text {
     font-family: var(--font-serif);
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     font-weight: 600;
     letter-spacing: 3px;
     background: linear-gradient(135deg, #ffffff 0%, var(--gold-light) 100%);

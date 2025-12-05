@@ -70,6 +70,60 @@ function handleFileSelect(e, section) {
     }
 }
 
+// Compress image before storing
+function compressImage(file, section) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+
+                // Set max dimensions based on section
+                let maxWidth, maxHeight;
+                if (section === 'hero') {
+                    maxWidth = 1920;
+                    maxHeight = 1080;
+                } else if (section === 'logo') {
+                    maxWidth = 500;
+                    maxHeight = 500;
+                } else if (section === 'gallery') {
+                    maxWidth = 800;
+                    maxHeight = 600;
+                } else {
+                    maxWidth = 1200;
+                    maxHeight = 900;
+                }
+
+                // Calculate new dimensions
+                let width = img.width;
+                let height = img.height;
+
+                if (width > maxWidth || height > maxHeight) {
+                    const ratio = Math.min(maxWidth / width, maxHeight / height);
+                    width = width * ratio;
+                    height = height * ratio;
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+
+                // Draw and compress
+                ctx.drawImage(img, 0, 0, width, height);
+
+                // Convert to JPEG with 0.8 quality for better compression
+                const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+                resolve(compressedDataUrl);
+            };
+            img.onerror = reject;
+            img.src = e.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+}
+
 // Process uploaded files
 function processFiles(files, section) {
     if (section === 'gallery') {
@@ -82,10 +136,9 @@ function processFiles(files, section) {
 
         filesToProcess.forEach((file, index) => {
             if (file.type.match(/image\/(jpeg|jpg|png)/)) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
+                compressImage(file, 'gallery').then(compressedDataUrl => {
                     imageData.gallery.push({
-                        data: e.target.result,
+                        data: compressedDataUrl,
                         name: file.name,
                         alt: `Gallery image ${index + 1}`
                     });
@@ -95,24 +148,27 @@ function processFiles(files, section) {
                         updateGalleryPreviews();
                         showSaveButton();
                     }
-                };
-                reader.readAsDataURL(file);
+                }).catch(error => {
+                    console.error('Error compressing image:', error);
+                    alert('Error processing image. Please try a different file.');
+                });
             }
         });
     } else {
         // Handle single images
         const file = files[0];
         if (file.type.match(/image\/(jpeg|jpg|png)/)) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
+            compressImage(file, section).then(compressedDataUrl => {
                 imageData[section] = {
-                    data: e.target.result,
+                    data: compressedDataUrl,
                     name: file.name
                 };
-                updatePreview(section, e.target.result);
+                updatePreview(section, compressedDataUrl);
                 showSaveButton();
-            };
-            reader.readAsDataURL(file);
+            }).catch(error => {
+                console.error('Error compressing image:', error);
+                alert('Error processing image. Please try a different file.');
+            });
         } else {
             alert('Please upload a JPG or PNG image file.');
         }
@@ -191,25 +247,34 @@ function showSaveButton() {
 
 // Save all changes
 function saveAllChanges() {
-    // Save to localStorage
-    localStorage.setItem('mediterra_images', JSON.stringify(imageData));
+    try {
+        // Save to localStorage
+        localStorage.setItem('mediterra_images', JSON.stringify(imageData));
 
-    // Update the actual website by modifying the DOM
-    updateWebsiteImages();
+        // Update the actual website by modifying the DOM
+        updateWebsiteImages();
 
-    // Show success message
-    const successMsg = document.getElementById('successMessage');
-    successMsg.classList.add('show');
+        // Show success message
+        const successMsg = document.getElementById('successMessage');
+        successMsg.classList.add('show');
 
-    // Hide save button
-    document.getElementById('saveBtn').classList.remove('show');
+        // Hide save button
+        document.getElementById('saveBtn').classList.remove('show');
 
-    // Update status indicators
-    updateAllPreviews();
+        // Update status indicators
+        updateAllPreviews();
 
-    setTimeout(() => {
-        successMsg.classList.remove('show');
-    }, 5000);
+        setTimeout(() => {
+            successMsg.classList.remove('show');
+        }, 5000);
+    } catch (error) {
+        console.error('Error saving images:', error);
+        if (error.name === 'QuotaExceededError') {
+            alert('Images are too large to save. Please try uploading smaller images or fewer gallery images. The admin panel automatically compresses images, but your current selection exceeds storage limits.');
+        } else {
+            alert('Error saving images: ' + error.message);
+        }
+    }
 }
 
 // Update website images (this writes to a JSON file that the main site will read)

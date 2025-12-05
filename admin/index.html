@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mediterra Control Center</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="admin-header">
+        <div class="header-content">
+            <div class="header-left">
+                <div class="logo-section">
+                    <div class="logo-icon">🌊</div>
+                    <div class="logo-text">
+                        <h1>MEDITERRA</h1>
+                        <span>Control Center</span>
+                    </div>
+                </div>
+            </div>
+            <div class="header-right">
+                <button onclick="previewSite()" class="btn-preview">
+                    <span class="icon">👁️</span>
+                    <span>Preview</span>
+                </button>
+                <button onclick="saveChanges()" class="btn-save">
+                    <span class="icon">💾</span>
+                    <span>Save & Deploy</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="admin-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <button class="nav-item active" onclick="showSection('deployment')" data-section="deployment">
+                    <span class="nav-icon">🚀</span>
+                    <span class="nav-text">Deployment</span>
+                </button>
+                <button class="nav-item" onclick="showSection('hero')" data-section="hero">
+                    <span class="nav-icon">🎬</span>
+                    <span class="nav-text">Hero Section</span>
+                </button>
+                <button class="nav-item" onclick="showSection('news')" data-section="news">
+                    <span class="nav-icon">📰</span>
+                    <span class="nav-text">News Banner</span>
+                </button>
+                <button class="nav-item" onclick="showSection('about')" data-section="about">
+                    <span class="nav-icon">ℹ️</span>
+                    <span class="nav-text">About</span>
+                </button>
+                <button class="nav-item" onclick="showSection('location')" data-section="location">
+                    <span class="nav-icon">📍</span>
+                    <span class="nav-text">Location</span>
+                </button>
+                <button class="nav-item" onclick="showSection('method')" data-section="method">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-text">Method</span>
+                </button>
+                <button class="nav-item" onclick="showSection('wholesale')" data-section="wholesale">
+                    <span class="nav-icon">📦</span>
+                    <span class="nav-text">Wholesale</span>
+                </button>
+                <button class="nav-item" onclick="showSection('story')" data-section="story">
+                    <span class="nav-icon">📖</span>
+                    <span class="nav-text">Story</span>
+                </button>
+                <button class="nav-item" onclick="showSection('eco')" data-section="eco">
+                    <span class="nav-icon">🌱</span>
+                    <span class="nav-text">Eco Hub</span>
+                </button>
+                <button class="nav-item" onclick="showSection('gallery')" data-section="gallery">
+                    <span class="nav-icon">🖼️</span>
+                    <span class="nav-text">Gallery</span>
+                </button>
+                <button class="nav-item" onclick="showSection('contact')" data-section="contact">
+                    <span class="nav-icon">📧</span>
+                    <span class="nav-text">Contact</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="status-indicator">
+                    <div class="status-dot"></div>
+                    <span>System Online</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="content-area">
+            <!-- Deployment Section -->
+            <section id="deployment-section" class="content-section active">
+                <div class="section-header">
+                    <h2>🚀 Auto-Deploy Configuration</h2>
+                    <p>Set up one-click deployment to production</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>GitHub Integration</h3>
+                        <span class="badge" id="deploy-status">Not Configured</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Repository</label>
+                            <input type="text" id="github-repo" placeholder="username/repository" class="input-field">
+                            <small>Example: Worldhealthai/Mediterra</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Branch</label>
+                            <input type="text" id="github-branch" value="main" class="input-field">
+                            <small>Usually "main" or "master"</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Personal Access Token</label>
+                            <input type="password" id="github-token" placeholder="ghp_xxxxxxxxxxxx" class="input-field">
+                            <small>
+                                <a href="https://github.com/settings/tokens/new?description=Mediterra%20Admin&scopes=repo" target="_blank">
+                                    Create token here
+                                </a> (requires "repo" permission)
+                            </small>
+                        </div>
+
+                        <button onclick="saveGitHubConfig()" class="btn-primary full-width">
+                            Save Configuration
+                        </button>
+
+                        <div id="deploy-message" class="alert" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>How It Works</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="info-steps">
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <h4>Edit Content</h4>
+                                    <p>Make changes in any section</p>
+                                </div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <h4>Save & Deploy</h4>
+                                    <p>Click the button - auto-commits to GitHub</p>
+                                </div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <h4>Live</h4>
+                                    <p>Vercel deploys in ~30 seconds</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Hero Section -->
+            <section id="hero-section" class="content-section">
+                <div class="section-header">
+                    <h2>🎬 Hero Section</h2>
+                    <p>Main landing area - first thing visitors see</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Hero Content</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Main Title</label>
+                            <input type="text" id="hero-title" class="input-field" placeholder="Your main headline">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Subtitle</label>
+                            <textarea id="hero-subtitle" class="input-field" rows="2" placeholder="Supporting text"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea id="hero-description" class="input-field" rows="3" placeholder="Additional description"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Button Text</label>
+                            <input type="text" id="hero-button" class="input-field" placeholder="Request Wholesale">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Background Video</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Video URL</label>
+                            <input type="url" id="hero-video" class="input-field" placeholder="https://...">
+                            <small>MP4 video URL for background</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Fallback Image URL</label>
+                            <input type="url" id="hero-fallback" class="input-field" placeholder="https://...">
+                            <small>Shown if video fails to load</small>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- News Banner Section -->
+            <section id="news-section" class="content-section">
+                <div class="section-header">
+                    <h2>📰 News Banner</h2>
+                    <p>Scrolling announcement at the top</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>News Text</label>
+                            <input type="text" id="news-text" class="input-field" placeholder="Your announcement">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- About Section -->
+            <section id="about-section" class="content-section">
+                <div class="section-header">
+                    <h2>ℹ️ About Section</h2>
+                    <p>Tell your story</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Section Title</label>
+                            <input type="text" id="about-title" class="input-field">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Lead Paragraph (Bold)</label>
+                            <textarea id="about-lead" class="input-field" rows="2"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Paragraph 1</label>
+                            <textarea id="about-p1" class="input-field" rows="3"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Paragraph 2</label>
+                            <textarea id="about-p2" class="input-field" rows="3"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Philosophy Title</label>
+                            <input type="text" id="about-philosophy-title" class="input-field">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Philosophy Text</label>
+                            <textarea id="about-philosophy" class="input-field" rows="4"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Location Section -->
+            <section id="location-section" class="content-section">
+                <div class="section-header">
+                    <h2>📍 Location Section</h2>
+                    <p>Where you're located</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Section Title</label>
+                            <input type="text" id="location-title" class="input-field">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Location Text</label>
+                            <textarea id="location-text" class="input-field" rows="5"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Location Image URL</label>
+                            <input type="url" id="location-img" class="input-field">
+                            <div class="image-preview">
+                                <img id="location-preview" src="" alt="Preview">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Method Section -->
+            <section id="method-section" class="content-section">
+                <div class="section-header">
+                    <h2>⚙️ Method Section</h2>
+                    <p>Your farming methods</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Section Title</label>
+                            <input type="text" id="method-title" class="input-field">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Method Text</label>
+                            <textarea id="method-text" class="input-field" rows="5"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Method Image URL</label>
+                            <input type="url" id="method-img" class="input-field">
+                            <div class="image-preview">
+                                <img id="method-preview" src="" alt="Preview">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Wholesale Section -->
+            <section id="wholesale-section" class="content-section">
+                <div class="section-header">
+                    <h2>📦 Wholesale Section</h2>
+                    <p>B2B information</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Section Title</label>
+                            <input type="text" id="wholesale-title" class="input-field">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Wholesale Text</label>
+                            <textarea id="wholesale-text" class="input-field" rows="5"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Story Section -->
+            <section id="story-section" class="content-section">
+                <div class="section-header">
+                    <h2>📖 Story Section</h2>
+                    <p>Your heritage and journey</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Section Title</label>
+                            <input type="text" id="story-title" class="input-field">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Story Text</label>
+                            <textarea id="story-text" class="input-field" rows="8"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Eco Hub Section -->
+            <section id="eco-section" class="content-section">
+                <div class="section-header">
+                    <h2>🌱 Eco Hub Section</h2>
+                    <p>Environmental commitment</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Section Title</label>
+                            <input type="text" id="eco-title" class="input-field">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Eco Text</label>
+                            <textarea id="eco-text" class="input-field" rows="6"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Gallery Section -->
+            <section id="gallery-section" class="content-section">
+                <div class="section-header">
+                    <h2>🖼️ Gallery</h2>
+                    <p>Showcase images (6 images)</p>
+                </div>
+
+                <div class="gallery-grid">
+                    <div class="gallery-card card">
+                        <div class="card-header">
+                            <h4>Image 1</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Image URL</label>
+                                <input type="url" id="gallery1-img" class="input-field">
+                            </div>
+                            <div class="form-group">
+                                <label>Alt Text</label>
+                                <input type="text" id="gallery1-alt" class="input-field">
+                            </div>
+                            <div class="image-preview">
+                                <img id="gallery1-preview" src="" alt="Preview">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-card card">
+                        <div class="card-header">
+                            <h4>Image 2</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Image URL</label>
+                                <input type="url" id="gallery2-img" class="input-field">
+                            </div>
+                            <div class="form-group">
+                                <label>Alt Text</label>
+                                <input type="text" id="gallery2-alt" class="input-field">
+                            </div>
+                            <div class="image-preview">
+                                <img id="gallery2-preview" src="" alt="Preview">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-card card">
+                        <div class="card-header">
+                            <h4>Image 3</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Image URL</label>
+                                <input type="url" id="gallery3-img" class="input-field">
+                            </div>
+                            <div class="form-group">
+                                <label>Alt Text</label>
+                                <input type="text" id="gallery3-alt" class="input-field">
+                            </div>
+                            <div class="image-preview">
+                                <img id="gallery3-preview" src="" alt="Preview">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-card card">
+                        <div class="card-header">
+                            <h4>Image 4</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Image URL</label>
+                                <input type="url" id="gallery4-img" class="input-field">
+                            </div>
+                            <div class="form-group">
+                                <label>Alt Text</label>
+                                <input type="text" id="gallery4-alt" class="input-field">
+                            </div>
+                            <div class="image-preview">
+                                <img id="gallery4-preview" src="" alt="Preview">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-card card">
+                        <div class="card-header">
+                            <h4>Image 5</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Image URL</label>
+                                <input type="url" id="gallery5-img" class="input-field">
+                            </div>
+                            <div class="form-group">
+                                <label>Alt Text</label>
+                                <input type="text" id="gallery5-alt" class="input-field">
+                            </div>
+                            <div class="image-preview">
+                                <img id="gallery5-preview" src="" alt="Preview">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-card card">
+                        <div class="card-header">
+                            <h4>Image 6</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Image URL</label>
+                                <input type="url" id="gallery6-img" class="input-field">
+                            </div>
+                            <div class="form-group">
+                                <label>Alt Text</label>
+                                <input type="text" id="gallery6-alt" class="input-field">
+                            </div>
+                            <div class="image-preview">
+                                <img id="gallery6-preview" src="" alt="Preview">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact Section -->
+            <section id="contact-section" class="content-section">
+                <div class="section-header">
+                    <h2>📧 Contact Information</h2>
+                    <p>How to reach you</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" id="contact-phone" class="input-field">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" id="contact-email" class="input-field">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Address</label>
+                            <textarea id="contact-address" class="input-field" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <p>Deploying to production...</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

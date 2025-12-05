@@ -42,7 +42,19 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function loadAdminData() {
-    // Try to load from site-data.json first (for Vercel deployment)
+    // Try to load from new admin panel data first
+    const newAdminData = localStorage.getItem('mediterra_site_config');
+    if (newAdminData) {
+        try {
+            const data = JSON.parse(newAdminData);
+            applyNewAdminData(data);
+            return;
+        } catch (error) {
+            console.error('Error loading new admin data:', error);
+        }
+    }
+
+    // Try to load from site-data.json (for Vercel deployment)
     try {
         const response = await fetch('site-data.json');
         if (response.ok) {
@@ -51,11 +63,11 @@ async function loadAdminData() {
             return;
         }
     } catch (error) {
-        // site-data.json doesn't exist, fall back to localStorage
+        // site-data.json doesn't exist, fall back to old localStorage
         console.log('No site-data.json found, using localStorage');
     }
 
-    // Fallback to localStorage
+    // Fallback to old localStorage format
     const savedData = localStorage.getItem('mediterraData');
     if (savedData) {
         try {
@@ -63,6 +75,63 @@ async function loadAdminData() {
             applyAdminData(data);
         } catch (error) {
             console.error('Error loading saved data:', error);
+        }
+    }
+}
+
+// Apply data from new admin panel
+function applyNewAdminData(config) {
+    if (config && config.images) {
+        try {
+            // Hero background
+            if (config.images.hero) {
+                const heroBg = document.querySelector('.hero-bg-image');
+                if (heroBg) {
+                    heroBg.style.backgroundImage = `url('${config.images.hero}')`;
+                    heroBg.style.opacity = '1';
+                }
+            }
+
+            // Logo
+            if (config.images.logo) {
+                const logoImgs = document.querySelectorAll('.logo-img, .splash-logo');
+                logoImgs.forEach(img => {
+                    if (img) img.src = config.images.logo;
+                });
+            }
+
+            // Location image
+            if (config.images.location) {
+                const locationImg = document.querySelector('.location-img');
+                if (locationImg) {
+                    locationImg.src = config.images.location;
+                }
+            }
+
+            // Method image
+            if (config.images.method) {
+                const methodImg = document.querySelector('.method-img');
+                if (methodImg) {
+                    methodImg.src = config.images.method;
+                }
+            }
+
+            // Gallery images
+            if (config.images.gallery && config.images.gallery.length > 0) {
+                const galleryImgs = document.querySelectorAll('.gallery-img');
+                config.images.gallery.forEach((img, index) => {
+                    if (galleryImgs[index] && img.src) {
+                        galleryImgs[index].src = img.src;
+                        if (img.alt) {
+                            galleryImgs[index].alt = img.alt;
+                        }
+                    }
+                });
+            }
+
+            console.log('✅ Admin images loaded successfully');
+        } catch (error) {
+            console.error('Error applying new admin data:', error);
         }
     }
 }

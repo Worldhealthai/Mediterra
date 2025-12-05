@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mediterra Admin</title>
-    <link rel="stylesheet" href="styles.css?v=2">
+    <link rel="stylesheet" href="styles.css?v=3">
 </head>
 <body>
     <!-- Top Bar -->
@@ -23,6 +23,7 @@
         <aside class="sidebar">
             <nav>
                 <a href="#deployment" class="nav-link active">Deploy</a>
+                <a href="#logo" class="nav-link">Logo</a>
                 <a href="#hero" class="nav-link">Hero</a>
                 <a href="#news" class="nav-link">News</a>
                 <a href="#about" class="nav-link">About</a>
@@ -65,6 +66,19 @@
 
                     <button onclick="saveGitHubConfig()" class="btn btn-primary">Save Configuration</button>
                     <div id="deploy-status"></div>
+                </div>
+            </section>
+
+            <!-- Logo -->
+            <section id="logo" class="section">
+                <h2>Logo & Branding</h2>
+                <p>Upload your company logo (used in navbar and splash screen)</p>
+                <div class="card">
+                    <label>Logo Image URL</label>
+                    <input type="url" id="logo-img" placeholder="Enter logo image URL">
+
+                    <label>Logo Preview</label>
+                    <img id="logo-preview" class="preview" style="max-width: 200px;">
                 </div>
             </section>
 
@@ -270,6 +284,6 @@
     <!-- Toast -->
     <div id="toast"></div>
 
-    <script src="script.js?v=2"></script>
+    <script src="script.js?v=3"></script>
 </body>
 </html>

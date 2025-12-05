@@ -101,6 +101,9 @@ body.splash-active {
     height: auto;
     filter: drop-shadow(0 10px 30px rgba(28, 37, 65, 0.15));
     animation: logoScale 1.2s ease-out;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.15) 40%, transparent 70%);
+    padding: 2rem;
+    border-radius: 50%;
 }
 
 .splash-loader {
@@ -279,6 +282,9 @@ h1, h2, h3, h4, h5, h6 {
     height: 65px;
     width: auto;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.2) 50%, transparent 70%);
+    padding: 0.75rem;
+    border-radius: 50%;
 }
 
 .logo-text {
@@ -1843,14 +1849,14 @@ section {
     font-size: 0.85rem;
     font-weight: 600;
     letter-spacing: 3px;
-    color: #60a5fa;
+    color: #ffffff;
     margin-bottom: 1rem;
     padding: 0.5rem 1.5rem;
-    background: rgba(59, 130, 246, 0.15);
+    background: rgba(59, 130, 246, 0.25);
     border-radius: 30px;
-    border: 1px solid rgba(96, 165, 250, 0.4);
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
-    text-shadow: 0 0 10px rgba(96, 165, 250, 0.3);
+    border: 1px solid rgba(96, 165, 250, 0.5);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+    text-shadow: 0 0 10px rgba(96, 165, 250, 0.5);
 }
 
 .page-title {
@@ -2600,15 +2606,15 @@ section {
 .insight-category {
     display: inline-block;
     padding: 0.4rem 1rem;
-    background: rgba(59, 130, 246, 0.2);
-    color: #60a5fa;
+    background: rgba(59, 130, 246, 0.3);
+    color: #ffffff;
     border-radius: 20px;
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
     margin-bottom: 1rem;
-    border: 1px solid rgba(96, 165, 250, 0.3);
+    border: 1px solid rgba(96, 165, 250, 0.5);
 }
 
 .insight-card h3 {
@@ -2636,9 +2642,9 @@ section {
 }
 
 .insight-date {
-    color: #60a5fa;
+    color: #d4af37;
     font-weight: 600;
-    text-shadow: 0 0 10px rgba(96, 165, 250, 0.3);
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
 }
 
 .insight-source {

@@ -1,478 +1,261 @@
-// Initialize admin panel
-document.addEventListener('DOMContentLoaded', () => {
-    loadSavedData();
-    loadGitHubConfig();
+// Admin Panel Script for Image Management
+// Simple password-based authentication
+const ADMIN_PASSWORD = 'mediterra2024'; // Change this to your desired password
+
+// Storage for uploaded images
+let imageData = {
+    hero: null,
+    logo: null,
+    location: null,
+    method: null,
+    gallery: []
+};
+
+// Load existing images from localStorage on page load
+function loadExistingImages() {
+    const stored = localStorage.getItem('mediterra_images');
+    if (stored) {
+        imageData = JSON.parse(stored);
+        updateAllPreviews();
+    }
+}
+
+// Login handling
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const password = document.getElementById('password').value;
+
+    if (password === ADMIN_PASSWORD) {
+        document.getElementById('loginContainer').style.display = 'none';
+        document.getElementById('adminPanel').classList.add('active');
+        loadExistingImages();
+    } else {
+        document.getElementById('loginError').classList.add('show');
+        setTimeout(() => {
+            document.getElementById('loginError').classList.remove('show');
+        }, 3000);
+    }
 });
 
-// Section navigation
-function showSection(sectionName) {
-    // Hide all sections
-    document.querySelectorAll('.admin-section').forEach(section => {
-        section.classList.remove('active');
-    });
-
-    // Remove active class from all nav items
-    document.querySelectorAll('.nav-item').forEach(item => {
-        item.classList.remove('active');
-    });
-
-    // Show selected section
-    document.getElementById(`${sectionName}-section`).classList.add('active');
-
-    // Add active class to clicked nav item
-    event.target.classList.add('active');
+// Logout function
+function logout() {
+    document.getElementById('loginContainer').style.display = 'flex';
+    document.getElementById('adminPanel').classList.remove('active');
+    document.getElementById('password').value = '';
 }
 
-// Handle image file upload
-function handleImageUpload(imageType, fileInput) {
-    const file = fileInput.files[0];
+// Drag and drop handlers
+function handleDragOver(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    e.currentTarget.classList.add('dragover');
+}
 
-    if (file) {
-        // Check if file is an image
-        if (!file.type.startsWith('image/')) {
-            showNotification('Please select an image file', 'error');
-            fileInput.value = '';
-            return;
-        }
+function handleDrop(e, section) {
+    e.preventDefault();
+    e.stopPropagation();
+    e.currentTarget.classList.remove('dragover');
 
-        // Check file size (limit to 5MB)
-        if (file.size > 5 * 1024 * 1024) {
-            showNotification('Image size should be less than 5MB', 'error');
-            fileInput.value = '';
-            return;
-        }
-
-        // Read and convert to base64
-        const reader = new FileReader();
-
-        reader.onload = function(e) {
-            const base64Image = e.target.result;
-
-            // Update preview
-            const preview = document.getElementById(`${imageType}-preview`);
-            if (preview) {
-                preview.src = base64Image;
-            }
-
-            // Update the URL input with base64 data
-            const urlInput = document.getElementById(`${imageType}-img`);
-            if (urlInput) {
-                urlInput.value = base64Image;
-            }
-
-            showNotification(`Image uploaded successfully! (${(file.size / 1024).toFixed(0)}KB)`, 'success');
-        };
-
-        reader.onerror = function() {
-            showNotification('Error reading image file', 'error');
-        };
-
-        reader.readAsDataURL(file);
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+        processFiles(files, section);
     }
 }
 
-// Update image preview
-function updatePreview(imageType) {
-    const input = document.getElementById(`${imageType}-img`);
-    const preview = document.getElementById(`${imageType}-preview`);
+// File selection handler
+function handleFileSelect(e, section) {
+    const files = e.target.files;
+    if (files.length > 0) {
+        processFiles(files, section);
+    }
+}
 
-    if (input && preview) {
-        const imageUrl = input.value.trim();
-        if (imageUrl) {
-            preview.src = imageUrl;
-            showNotification('Preview updated!', 'success');
+// Process uploaded files
+function processFiles(files, section) {
+    if (section === 'gallery') {
+        // Handle multiple gallery images
+        const maxImages = 6;
+        const filesToProcess = Array.from(files).slice(0, maxImages);
+
+        imageData.gallery = [];
+        let processedCount = 0;
+
+        filesToProcess.forEach((file, index) => {
+            if (file.type.match(/image\/(jpeg|jpg|png)/)) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imageData.gallery.push({
+                        data: e.target.result,
+                        name: file.name,
+                        alt: `Gallery image ${index + 1}`
+                    });
+
+                    processedCount++;
+                    if (processedCount === filesToProcess.length) {
+                        updateGalleryPreviews();
+                        showSaveButton();
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    } else {
+        // Handle single images
+        const file = files[0];
+        if (file.type.match(/image\/(jpeg|jpg|png)/)) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imageData[section] = {
+                    data: e.target.result,
+                    name: file.name
+                };
+                updatePreview(section, e.target.result);
+                showSaveButton();
+            };
+            reader.readAsDataURL(file);
         } else {
-            showNotification('Please enter a valid image URL', 'error');
+            alert('Please upload a JPG or PNG image file.');
         }
     }
+}
+
+// Update preview for single image
+function updatePreview(section, dataUrl) {
+    const preview = document.getElementById(`${section}Preview`);
+    const status = document.getElementById(`${section}Status`);
+
+    if (preview) {
+        preview.src = dataUrl;
+        preview.style.display = 'block';
+    }
+
+    if (status) {
+        status.textContent = 'New image uploaded (not saved yet)';
+        status.style.color = '#856404';
+        status.style.fontWeight = 'bold';
+    }
+}
+
+// Update gallery previews
+function updateGalleryPreviews() {
+    const container = document.getElementById('galleryPreviews');
+    container.innerHTML = '';
+
+    imageData.gallery.forEach((img, index) => {
+        const div = document.createElement('div');
+        div.className = 'gallery-item';
+
+        const imgEl = document.createElement('img');
+        imgEl.src = img.data;
+        imgEl.alt = img.alt;
+
+        const label = document.createElement('div');
+        label.className = 'gallery-item-label';
+        label.textContent = `Image ${index + 1}`;
+
+        div.appendChild(imgEl);
+        div.appendChild(label);
+        container.appendChild(div);
+    });
+}
+
+// Update all previews when loading from storage
+function updateAllPreviews() {
+    ['hero', 'logo', 'location', 'method'].forEach(section => {
+        if (imageData[section] && imageData[section].data) {
+            const preview = document.getElementById(`${section}Preview`);
+            const status = document.getElementById(`${section}Status`);
+
+            if (preview) {
+                preview.src = imageData[section].data;
+                preview.style.display = 'block';
+            }
+
+            if (status) {
+                status.textContent = imageData[section].name;
+                status.style.color = '#28a745';
+                status.style.fontWeight = 'normal';
+            }
+        }
+    });
+
+    if (imageData.gallery && imageData.gallery.length > 0) {
+        updateGalleryPreviews();
+    }
+}
+
+// Show save button
+function showSaveButton() {
+    document.getElementById('saveBtn').classList.add('show');
 }
 
 // Save all changes
-async function saveChanges() {
-    const data = {
-        images: {
-            hero: document.getElementById('hero-img').value,
-            location: document.getElementById('location-img').value,
-            method: document.getElementById('method-img').value,
-            gallery: [
-                {
-                    url: document.getElementById('gallery1-img').value,
-                    alt: document.getElementById('gallery1-alt').value
-                },
-                {
-                    url: document.getElementById('gallery2-img').value,
-                    alt: document.getElementById('gallery2-alt').value
-                },
-                {
-                    url: document.getElementById('gallery3-img').value,
-                    alt: document.getElementById('gallery3-alt').value
-                },
-                {
-                    url: document.getElementById('gallery4-img').value,
-                    alt: document.getElementById('gallery4-alt').value
-                },
-                {
-                    url: document.getElementById('gallery5-img').value,
-                    alt: document.getElementById('gallery5-alt').value
-                },
-                {
-                    url: document.getElementById('gallery6-img').value,
-                    alt: document.getElementById('gallery6-alt').value
-                }
-            ]
-        },
-        content: {
-            news: document.getElementById('news-text').value,
-            heroTitle: document.getElementById('hero-title').value,
-            heroSubtitle: document.getElementById('hero-subtitle').value,
-            contactPhone: document.getElementById('contact-phone').value,
-            contactEmail: document.getElementById('contact-email').value
-        }
-    };
-
-    // Save to localStorage for local preview
-    localStorage.setItem('mediterraData', JSON.stringify(data));
-
-    // Apply changes to main website (local)
-    applyChangesToWebsite(data);
-
-    // Check if GitHub auto-deploy is configured
-    const githubToken = localStorage.getItem('githubToken');
-    const githubRepo = localStorage.getItem('githubRepo');
-
-    if (githubToken && githubRepo) {
-        // Auto-deploy to production
-        showNotification('Saving and deploying to production...', 'info');
-        const success = await deployToGitHub(data, githubToken, githubRepo);
-
-        if (success) {
-            showNotification('✅ Changes saved and deployed! Vercel will update in ~30 seconds.', 'success');
-        } else {
-            showNotification('⚠️ Saved locally, but auto-deploy failed. Download and commit manually.', 'warning');
-            autoExportForProduction(data);
-        }
-    } else {
-        // No auto-deploy configured, download file
-        showNotification('Changes saved! Download site-data.json to deploy manually.', 'success');
-        autoExportForProduction(data);
-    }
-}
-
-// Deploy changes directly to GitHub
-async function deployToGitHub(data, token, repo) {
-    try {
-        const jsonContent = JSON.stringify(data, null, 2);
-        const base64Content = btoa(unescape(encodeURIComponent(jsonContent)));
-
-        // Get current file SHA (needed to update existing file)
-        const getResponse = await fetch(`https://api.github.com/repos/${repo}/contents/site-data.json`, {
-            headers: {
-                'Authorization': `token ${token}`,
-                'Accept': 'application/vnd.github.v3+json'
-            }
-        });
-
-        let sha = null;
-        if (getResponse.ok) {
-            const fileData = await getResponse.json();
-            sha = fileData.sha;
-        }
-
-        // Update or create file
-        const updateResponse = await fetch(`https://api.github.com/repos/${repo}/contents/site-data.json`, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `token ${token}`,
-                'Content-Type': 'application/json',
-                'Accept': 'application/vnd.github.v3+json'
-            },
-            body: JSON.stringify({
-                message: `Update site images and content via admin panel`,
-                content: base64Content,
-                sha: sha,
-                branch: getBranchName()
-            })
-        });
-
-        if (updateResponse.ok) {
-            console.log('✅ Successfully deployed to GitHub');
-            return true;
-        } else {
-            const error = await updateResponse.json();
-            console.error('GitHub API error:', error);
-            return false;
-        }
-    } catch (error) {
-        console.error('Deploy error:', error);
-        return false;
-    }
-}
-
-// Get the current branch name from localStorage or use main
-function getBranchName() {
-    return localStorage.getItem('githubBranch') || 'main';
-}
-
-// Automatically export data file for production deployment
-function autoExportForProduction(data) {
-    const jsonString = JSON.stringify(data, null, 2); // Pretty print with 2 space indentation
-    const blob = new Blob([jsonString], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'site-data.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-
-    // Show deployment instructions
-    setTimeout(() => {
-        showDeploymentInstructions();
-    }, 1000);
-}
-
-// Show instructions for deploying to production
-function showDeploymentInstructions() {
-    const instructions = `
-📦 To update your production website:
-
-1. Save the downloaded 'site-data.json' file to your project folder
-2. Run these commands in your terminal:
-
-   git add site-data.json
-   git commit -m "Update site images and content"
-   git push
-
-3. Your changes will be live on production after deployment!
-
-💡 The file is already saved to your Downloads folder.
-    `.trim();
-
-    console.log(instructions);
-
-    // You could also show this in a modal if you add one to the UI
-    if (confirm('site-data.json downloaded!\n\nWould you like to see deployment instructions?')) {
-        alert(instructions);
-    }
-}
-
-// Apply changes to the main website
-function applyChangesToWebsite(data) {
-    // This function will update the main index.html file
-    // Since we're using localStorage, the main website will read from it on load
-    console.log('Applying changes:', data);
-}
-
-// Load saved data from localStorage
-function loadSavedData() {
-    const savedData = localStorage.getItem('mediterraData');
-
-    if (savedData) {
-        try {
-            const data = JSON.parse(savedData);
-
-            // Load images
-            if (data.images) {
-                if (data.images.hero) {
-                    document.getElementById('hero-img').value = data.images.hero;
-                    document.getElementById('hero-preview').src = data.images.hero;
-                }
-                if (data.images.location) {
-                    document.getElementById('location-img').value = data.images.location;
-                    document.getElementById('location-preview').src = data.images.location;
-                }
-                if (data.images.method) {
-                    document.getElementById('method-img').value = data.images.method;
-                    document.getElementById('method-preview').src = data.images.method;
-                }
-                if (data.images.gallery) {
-                    data.images.gallery.forEach((img, index) => {
-                        const num = index + 1;
-                        document.getElementById(`gallery${num}-img`).value = img.url;
-                        document.getElementById(`gallery${num}-alt`).value = img.alt;
-                        document.getElementById(`gallery${num}-preview`).src = img.url;
-                    });
-                }
-            }
-
-            // Load content
-            if (data.content) {
-                if (data.content.news) {
-                    document.getElementById('news-text').value = data.content.news;
-                }
-                if (data.content.heroTitle) {
-                    document.getElementById('hero-title').value = data.content.heroTitle;
-                }
-                if (data.content.heroSubtitle) {
-                    document.getElementById('hero-subtitle').value = data.content.heroSubtitle;
-                }
-                if (data.content.contactPhone) {
-                    document.getElementById('contact-phone').value = data.content.contactPhone;
-                }
-                if (data.content.contactEmail) {
-                    document.getElementById('contact-email').value = data.content.contactEmail;
-                }
-            }
-
-            showNotification('Loaded saved data', 'success');
-        } catch (error) {
-            console.error('Error loading saved data:', error);
-            showNotification('Error loading saved data', 'error');
-        }
-    }
-}
-
-// Export data as JSON file that can be committed to repo
-function exportData() {
-    const savedData = localStorage.getItem('mediterraData');
-
-    if (savedData) {
-        const blob = new Blob([savedData], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'site-data.json';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-
-        showNotification('Data exported as site-data.json! Upload this file to your repository to sync across devices.', 'success');
-    } else {
-        showNotification('No data to export', 'error');
-    }
-}
-
-// Import data from JSON file
-function importData() {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'application/json';
-
-    input.onchange = function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                try {
-                    const data = JSON.parse(event.target.result);
-                    localStorage.setItem('mediterraData', JSON.stringify(data));
-                    location.reload();
-                    showNotification('Data imported successfully!', 'success');
-                } catch (error) {
-                    showNotification('Error importing data: Invalid JSON file', 'error');
-                }
-            };
-            reader.readAsText(file);
-        }
-    };
-
-    input.click();
-}
-
-// Reset to defaults
-function resetToDefaults() {
-    if (confirm('Are you sure you want to reset all settings to defaults? This cannot be undone.')) {
-        localStorage.removeItem('mediterraData');
-        location.reload();
-        showNotification('Reset to defaults', 'success');
-    }
-}
-
-// Show notification
-function showNotification(message, type = 'success') {
-    const notification = document.getElementById('notification');
-    notification.textContent = message;
-    notification.className = `notification ${type} show`;
-
-    setTimeout(() => {
-        notification.classList.remove('show');
-    }, 3000);
-}
-
-// Generate HTML for main website
-function generateHTML() {
-    const data = JSON.parse(localStorage.getItem('mediterraData') || '{}');
-
-    // This function would generate the updated HTML
-    // For now, we'll just provide the data structure
-    return data;
-}
-
-// ===========================
-// GITHUB AUTO-DEPLOY CONFIG
-// ===========================
-
-// Save GitHub configuration
-function saveGitHubConfig() {
-    const repo = document.getElementById('github-repo').value.trim();
-    const branch = document.getElementById('github-branch').value.trim() || 'main';
-    const token = document.getElementById('github-token').value.trim();
-
-    if (!repo) {
-        showGitHubStatus('Please enter your GitHub repository (e.g., username/repo-name)', 'error');
-        return;
-    }
-
-    if (!token) {
-        showGitHubStatus('Please enter your GitHub personal access token', 'error');
-        return;
-    }
-
-    // Validate repo format
-    if (!repo.includes('/')) {
-        showGitHubStatus('Repository must be in format: username/repository-name', 'error');
-        return;
-    }
-
+function saveAllChanges() {
     // Save to localStorage
-    localStorage.setItem('githubRepo', repo);
-    localStorage.setItem('githubBranch', branch);
-    localStorage.setItem('githubToken', token);
+    localStorage.setItem('mediterra_images', JSON.stringify(imageData));
 
-    showGitHubStatus('✅ Auto-deploy configured! Click "Save Changes" to test it.', 'success');
-    showNotification('GitHub auto-deploy enabled! 🚀', 'success');
+    // Update the actual website by modifying the DOM
+    updateWebsiteImages();
+
+    // Show success message
+    const successMsg = document.getElementById('successMessage');
+    successMsg.classList.add('show');
+
+    // Hide save button
+    document.getElementById('saveBtn').classList.remove('show');
+
+    // Update status indicators
+    updateAllPreviews();
+
+    setTimeout(() => {
+        successMsg.classList.remove('show');
+    }, 5000);
 }
 
-// Load GitHub configuration
-function loadGitHubConfig() {
-    const repo = localStorage.getItem('githubRepo');
-    const branch = localStorage.getItem('githubBranch');
-    const token = localStorage.getItem('githubToken');
-
-    const repoInput = document.getElementById('github-repo');
-    const branchInput = document.getElementById('github-branch');
-    const tokenInput = document.getElementById('github-token');
-
-    if (repoInput && repo) {
-        repoInput.value = repo;
-    }
-    if (branchInput && branch) {
-        branchInput.value = branch;
-    }
-    if (tokenInput && token) {
-        tokenInput.value = token;
-        showGitHubStatus('✅ Auto-deploy is configured and ready!', 'success');
-    }
-}
-
-// Show GitHub status message
-function showGitHubStatus(message, type) {
-    const statusDiv = document.getElementById('github-status');
-    if (!statusDiv) return;
-
-    const colors = {
-        success: { bg: '#d1fae5', border: '#10b981', text: '#065f46' },
-        error: { bg: '#fee2e2', border: '#ef4444', text: '#991b1b' },
-        info: { bg: '#dbeafe', border: '#3b82f6', text: '#1e40af' }
+// Update website images (this writes to a JSON file that the main site will read)
+function updateWebsiteImages() {
+    // Create a configuration object that the main website will load
+    const config = {
+        images: {
+            hero: imageData.hero ? imageData.hero.data : null,
+            logo: imageData.logo ? imageData.logo.data : null,
+            location: imageData.location ? imageData.location.data : null,
+            method: imageData.method ? imageData.method.data : null,
+            gallery: imageData.gallery.map(img => ({
+                src: img.data,
+                alt: img.alt
+            }))
+        },
+        lastUpdated: new Date().toISOString()
     };
 
-    const color = colors[type] || colors.info;
+    // Save to localStorage for the main site to read
+    localStorage.setItem('mediterra_site_config', JSON.stringify(config));
 
-    statusDiv.style.display = 'block';
-    statusDiv.style.background = color.bg;
-    statusDiv.style.borderLeft = `4px solid ${color.border}`;
-    statusDiv.style.color = color.text;
-    statusDiv.textContent = message;
+    // Also create a downloadable JSON file
+    const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+
+    // Create a hidden download link
+    const downloadLink = document.createElement('a');
+    downloadLink.href = url;
+    downloadLink.download = 'site-images.json';
+    downloadLink.style.display = 'none';
+    document.body.appendChild(downloadLink);
+
+    // Optional: Uncomment to auto-download the JSON file
+    // downloadLink.click();
+
+    document.body.removeChild(downloadLink);
+    URL.revokeObjectURL(url);
 }
+
+// Add drag leave handler to remove dragover class
+document.addEventListener('DOMContentLoaded', function() {
+    const uploadAreas = document.querySelectorAll('.upload-area');
+    uploadAreas.forEach(area => {
+        area.addEventListener('dragleave', function(e) {
+            e.currentTarget.classList.remove('dragover');
+        });
+    });
+});

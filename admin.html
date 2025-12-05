@@ -3,276 +3,445 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mediterra Admin Panel</title>
-    <link rel="stylesheet" href="admin-styles.css">
+    <title>Mediterra Admin - Image Manager</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #1c2541 0%, #0b132b 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Login Screen */
+        .login-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .login-box h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .login-box p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #c9a961;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: #c9a961;
+            color: #1c2541;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #d4b76f;
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        /* Admin Panel */
+        .admin-panel {
+            display: none;
+        }
+
+        .admin-panel.active {
+            display: block;
+        }
+
+        .header {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 24px;
+        }
+
+        .logout-btn {
+            padding: 10px 20px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .logout-btn:hover {
+            background: #c82333;
+        }
+
+        .image-sections {
+            display: grid;
+            gap: 20px;
+        }
+
+        .image-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .image-card h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .image-card h2::before {
+            content: '🖼️';
+            font-size: 24px;
+        }
+
+        .image-preview {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .upload-area {
+            border: 2px dashed #c9a961;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+        }
+
+        .upload-area:hover {
+            background: #fffbf0;
+            border-color: #d4b76f;
+        }
+
+        .upload-area.dragover {
+            background: #fff8e6;
+            border-color: #d4b76f;
+        }
+
+        .upload-area p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .upload-area .browse {
+            color: #c9a961;
+            font-weight: 600;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .current-image-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .current-image-info p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .save-btn {
+            padding: 12px 30px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: none;
+        }
+
+        .save-btn:hover {
+            background: #218838;
+        }
+
+        .save-btn.show {
+            display: inline-block;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .gallery-item {
+            position: relative;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .gallery-item-label {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .instructions {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .instructions h3 {
+            color: #856404;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .instructions ul {
+            color: #856404;
+            padding-left: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 5px;
+        }
+    </style>
 </head>
 <body>
-    <div class="admin-container">
-        <header class="admin-header">
-            <h1>Mediterra Admin Panel</h1>
-            <div class="header-actions">
-                <button onclick="window.open('index.html', '_blank')" class="btn-preview">Preview Site</button>
-                <button onclick="saveChanges()" class="btn-save">Save Changes</button>
+    <!-- Login Screen -->
+    <div class="login-container" id="loginContainer">
+        <div class="login-box">
+            <h1>🔐 Admin Login</h1>
+            <p>Enter password to manage website images</p>
+            <div class="error-message" id="loginError">Incorrect password</div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter admin password" required>
+                </div>
+                <button type="submit" class="btn">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div class="admin-panel" id="adminPanel">
+        <div class="container">
+            <div class="header">
+                <h1>🖼️ Mediterra Image Manager</h1>
+                <button class="logout-btn" onclick="logout()">Logout</button>
             </div>
-        </header>
 
-        <nav class="admin-nav">
-            <button class="nav-item active" onclick="showSection('images')">Images</button>
-            <button class="nav-item" onclick="showSection('content')">Content</button>
-            <button class="nav-item" onclick="showSection('settings')">Settings</button>
-        </nav>
+            <div class="instructions">
+                <h3>📋 Instructions</h3>
+                <ul>
+                    <li>Upload JPG or PNG images for each section</li>
+                    <li>Click "Save All Changes" after uploading to update the website</li>
+                    <li>Images are automatically resized and optimized</li>
+                    <li>Changes take effect immediately on the live website</li>
+                </ul>
+            </div>
 
-        <main class="admin-main">
-            <!-- Images Section -->
-            <section id="images-section" class="admin-section active">
-                <h2>Manage Images</h2>
+            <div class="success-message" id="successMessage">✅ All images saved successfully! Your website has been updated.</div>
 
-                <!-- Hero Image -->
-                <div class="image-manager">
-                    <h3>Hero Background Image</h3>
-                    <div class="image-input-group">
-                        <img id="hero-preview" src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1920&q=80" alt="Hero preview">
-                        <div class="upload-options">
-                            <div class="upload-method">
-                                <label>📁 Upload from computer:</label>
-                                <input type="file" id="hero-file" accept="image/*" onchange="handleImageUpload('hero', this)">
-                            </div>
-                            <div class="upload-method">
-                                <label>🔗 Or paste URL:</label>
-                                <input type="text" id="hero-img" placeholder="Enter image URL" value="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1920&q=80">
-                                <button onclick="updatePreview('hero')">Update Preview</button>
-                            </div>
-                        </div>
+            <button class="save-btn" id="saveBtn" onclick="saveAllChanges()">💾 Save All Changes</button>
+
+            <div class="image-sections">
+                <!-- Hero Background -->
+                <div class="image-card">
+                    <h2>Hero Section Background</h2>
+                    <div class="current-image-info">
+                        <p><strong>Current:</strong> <span id="heroStatus">Video background</span></p>
+                        <p>Recommended size: 1920x1080px or larger</p>
                     </div>
+                    <img id="heroPreview" class="image-preview" style="display:none;">
+                    <div class="upload-area" onclick="document.getElementById('heroInput').click()"
+                         ondragover="handleDragOver(event)"
+                         ondrop="handleDrop(event, 'hero')">
+                        <p>📁 Drag & drop image here</p>
+                        <p class="browse">or click to browse</p>
+                    </div>
+                    <input type="file" id="heroInput" class="file-input" accept="image/jpeg,image/jpg,image/png" onchange="handleFileSelect(event, 'hero')">
+                </div>
+
+                <!-- Logo -->
+                <div class="image-card">
+                    <h2>Logo</h2>
+                    <div class="current-image-info">
+                        <p><strong>Current:</strong> <span id="logoStatus">logo-transparent.png</span></p>
+                        <p>Recommended: Transparent PNG, 500x500px</p>
+                    </div>
+                    <img id="logoPreview" class="image-preview" style="display:none;">
+                    <div class="upload-area" onclick="document.getElementById('logoInput').click()"
+                         ondragover="handleDragOver(event)"
+                         ondrop="handleDrop(event, 'logo')">
+                        <p>📁 Drag & drop image here</p>
+                        <p class="browse">or click to browse</p>
+                    </div>
+                    <input type="file" id="logoInput" class="file-input" accept="image/jpeg,image/jpg,image/png" onchange="handleFileSelect(event, 'logo')">
                 </div>
 
                 <!-- Location Image -->
-                <div class="image-manager">
-                    <h3>Location Section Image</h3>
-                    <div class="image-input-group">
-                        <img id="location-preview" src="https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=800&q=80" alt="Location preview">
-                        <div class="upload-options">
-                            <div class="upload-method">
-                                <label>📁 Upload from computer:</label>
-                                <input type="file" id="location-file" accept="image/*" onchange="handleImageUpload('location', this)">
-                            </div>
-                            <div class="upload-method">
-                                <label>🔗 Or paste URL:</label>
-                                <input type="text" id="location-img" placeholder="Enter image URL" value="https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=800&q=80">
-                                <button onclick="updatePreview('location')">Update Preview</button>
-                            </div>
-                        </div>
+                <div class="image-card">
+                    <h2>Location Section</h2>
+                    <div class="current-image-info">
+                        <p><strong>Current:</strong> <span id="locationStatus">Unsplash image</span></p>
+                        <p>Recommended size: 800x600px or larger</p>
                     </div>
+                    <img id="locationPreview" class="image-preview" style="display:none;">
+                    <div class="upload-area" onclick="document.getElementById('locationInput').click()"
+                         ondragover="handleDragOver(event)"
+                         ondrop="handleDrop(event, 'location')">
+                        <p>📁 Drag & drop image here</p>
+                        <p class="browse">or click to browse</p>
+                    </div>
+                    <input type="file" id="locationInput" class="file-input" accept="image/jpeg,image/jpg,image/png" onchange="handleFileSelect(event, 'location')">
                 </div>
 
                 <!-- Method Image -->
-                <div class="image-manager">
-                    <h3>Method Section Image</h3>
-                    <div class="image-input-group">
-                        <img id="method-preview" src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80" alt="Method preview">
-                        <div class="upload-options">
-                            <div class="upload-method">
-                                <label>📁 Upload from computer:</label>
-                                <input type="file" id="method-file" accept="image/*" onchange="handleImageUpload('method', this)">
-                            </div>
-                            <div class="upload-method">
-                                <label>🔗 Or paste URL:</label>
-                                <input type="text" id="method-img" placeholder="Enter image URL" value="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80">
-                                <button onclick="updatePreview('method')">Update Preview</button>
-                            </div>
-                        </div>
+                <div class="image-card">
+                    <h2>Method Section</h2>
+                    <div class="current-image-info">
+                        <p><strong>Current:</strong> <span id="methodStatus">Unsplash image</span></p>
+                        <p>Recommended size: 800x600px or larger</p>
                     </div>
+                    <img id="methodPreview" class="image-preview" style="display:none;">
+                    <div class="upload-area" onclick="document.getElementById('methodInput').click()"
+                         ondragover="handleDragOver(event)"
+                         ondrop="handleDrop(event, 'method')">
+                        <p>📁 Drag & drop image here</p>
+                        <p class="browse">or click to browse</p>
+                    </div>
+                    <input type="file" id="methodInput" class="file-input" accept="image/jpeg,image/jpg,image/png" onchange="handleFileSelect(event, 'method')">
                 </div>
 
                 <!-- Gallery Images -->
-                <div class="image-manager">
-                    <h3>Gallery Images (6 images)</h3>
-                    <div class="gallery-manager">
-                        <div class="gallery-item-manager">
-                            <label>Image 1</label>
-                            <img id="gallery1-preview" src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80" alt="Gallery 1">
-                            <input type="file" id="gallery1-file" accept="image/*" onchange="handleImageUpload('gallery1', this)">
-                            <input type="text" id="gallery1-img" placeholder="Or paste URL" value="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80">
-                            <input type="text" id="gallery1-alt" placeholder="Alt text" value="Fresh mussels in pristine waters">
-                            <button onclick="updatePreview('gallery1')">Update</button>
-                        </div>
-
-                        <div class="gallery-item-manager">
-                            <label>Image 2</label>
-                            <img id="gallery2-preview" src="https://images.unsplash.com/photo-1583506897994-c2de2a2b5b27?w=600&q=80" alt="Gallery 2">
-                            <input type="file" id="gallery2-file" accept="image/*" onchange="handleImageUpload('gallery2', this)">
-                            <input type="text" id="gallery2-img" placeholder="Or paste URL" value="https://images.unsplash.com/photo-1583506897994-c2de2a2b5b27?w=600&q=80">
-                            <input type="text" id="gallery2-alt" placeholder="Alt text" value="Greek coastal landscape at dawn">
-                            <button onclick="updatePreview('gallery2')">Update</button>
-                        </div>
-
-                        <div class="gallery-item-manager">
-                            <label>Image 3</label>
-                            <img id="gallery3-preview" src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=80" alt="Gallery 3">
-                            <input type="file" id="gallery3-file" accept="image/*" onchange="handleImageUpload('gallery3', this)">
-                            <input type="text" id="gallery3-img" placeholder="Or paste URL" value="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=80">
-                            <input type="text" id="gallery3-alt" placeholder="Alt text" value="Fresh mussels close-up">
-                            <button onclick="updatePreview('gallery3')">Update</button>
-                        </div>
-
-                        <div class="gallery-item-manager">
-                            <label>Image 4</label>
-                            <img id="gallery4-preview" src="https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=600&q=80" alt="Gallery 4">
-                            <input type="file" id="gallery4-file" accept="image/*" onchange="handleImageUpload('gallery4', this)">
-                            <input type="text" id="gallery4-img" placeholder="Or paste URL" value="https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=600&q=80">
-                            <input type="text" id="gallery4-alt" placeholder="Alt text" value="Greek sea aerial view">
-                            <button onclick="updatePreview('gallery4')">Update</button>
-                        </div>
-
-                        <div class="gallery-item-manager">
-                            <label>Image 5</label>
-                            <img id="gallery5-preview" src="https://images.unsplash.com/photo-1580541631950-7282082b53ce?w=600&q=80" alt="Gallery 5">
-                            <input type="file" id="gallery5-file" accept="image/*" onchange="handleImageUpload('gallery5', this)">
-                            <input type="text" id="gallery5-img" placeholder="Or paste URL" value="https://images.unsplash.com/photo-1580541631950-7282082b53ce?w=600&q=80">
-                            <input type="text" id="gallery5-alt" placeholder="Alt text" value="Greek strait and coastal waters">
-                            <button onclick="updatePreview('gallery5')">Update</button>
-                        </div>
-
-                        <div class="gallery-item-manager">
-                            <label>Image 6</label>
-                            <img id="gallery6-preview" src="https://images.unsplash.com/photo-1566024287286-457247b70310?w=600&q=80" alt="Gallery 6">
-                            <input type="file" id="gallery6-file" accept="image/*" onchange="handleImageUpload('gallery6', this)">
-                            <input type="text" id="gallery6-img" placeholder="Or paste URL" value="https://images.unsplash.com/photo-1566024287286-457247b70310?w=600&q=80">
-                            <input type="text" id="gallery6-alt" placeholder="Alt text" value="Sunset over Mediterranean waters">
-                            <button onclick="updatePreview('gallery6')">Update</button>
-                        </div>
+                <div class="image-card">
+                    <h2>Gallery (6 Images)</h2>
+                    <div class="current-image-info">
+                        <p><strong>Current:</strong> 6 Unsplash images</p>
+                        <p>Upload up to 6 images for the gallery</p>
                     </div>
-                </div>
-
-                <div class="info-box">
-                    <h4>Tips for finding images:</h4>
-                    <ul>
-                        <li>Use <a href="https://unsplash.com" target="_blank">Unsplash</a> for free high-quality images</li>
-                        <li>Search for: "greek sea", "mediterranean", "mussels", "aquaculture", "greek coastline"</li>
-                        <li>Right-click on any image and select "Copy image address"</li>
-                        <li>For Unsplash, add ?w=800&q=80 to the end of the URL for optimized loading</li>
-                    </ul>
-                </div>
-            </section>
-
-            <!-- Content Section -->
-            <section id="content-section" class="admin-section">
-                <h2>Manage Content</h2>
-
-                <div class="content-editor">
-                    <h3>News Banner</h3>
-                    <input type="text" id="news-text" placeholder="News text" value="Precision in Motion — Our New Dispatch Center Is Underway.">
-                </div>
-
-                <div class="content-editor">
-                    <h3>Hero Section</h3>
-                    <input type="text" id="hero-title" placeholder="Hero title" value="Where the Sea Crafts Its Own Masterpiece">
-                    <textarea id="hero-subtitle" rows="3" placeholder="Hero subtitle">In the moving depths of the Artemisium Strait, we cultivate Mediterranean mussels shaped by pure waters, natural forces, and a heritage refined through generations.</textarea>
-                </div>
-
-                <div class="content-editor">
-                    <h3>Contact Information</h3>
-                    <input type="text" id="contact-phone" placeholder="Phone" value="+30 6984092007">
-                    <input type="text" id="contact-email" placeholder="Email" value="mediterramf@gmail.com">
-                </div>
-            </section>
-
-            <!-- Settings Section -->
-            <section id="settings-section" class="admin-section">
-                <h2>Settings</h2>
-
-                <div class="settings-group">
-                    <h3>Data Management</h3>
-                    <button onclick="exportData()" class="btn-export">Export Settings (Download JSON)</button>
-                    <button onclick="importData()" class="btn-import">Import Settings (Upload JSON)</button>
-                    <button onclick="resetToDefaults()" class="btn-reset">Reset to Defaults</button>
-                    <p class="settings-note">💡 <strong>To sync across devices:</strong> Export your settings, commit the site-data.json file to your repository, and deploy to Vercel.</p>
-                </div>
-
-                <div class="settings-group">
-                    <h3>⚡ Auto-Deploy to Production (Recommended)</h3>
-                    <div style="background: #f0fdf4; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #10b981; margin-bottom: 1.5rem;">
-                        <h4 style="margin-top: 0; color: #059669;">🚀 One-Click Deploy Setup</h4>
-                        <p style="margin: 0.5rem 0; color: #374151;">Configure GitHub API to automatically deploy changes when you click "Save Changes". No manual git commands needed!</p>
-
-                        <div style="margin: 1.5rem 0;">
-                            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">GitHub Repository:</label>
-                            <input type="text" id="github-repo" placeholder="username/repository-name"
-                                   style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-family: monospace;" />
-                            <small style="color: #6b7280;">Example: Worldhealthai/Mediterra</small>
-                        </div>
-
-                        <div style="margin: 1.5rem 0;">
-                            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">GitHub Branch:</label>
-                            <input type="text" id="github-branch" placeholder="main" value="main"
-                                   style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-family: monospace;" />
-                            <small style="color: #6b7280;">Usually "main" or "master"</small>
-                        </div>
-
-                        <div style="margin: 1.5rem 0;">
-                            <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">GitHub Personal Access Token:</label>
-                            <input type="password" id="github-token" placeholder="ghp_xxxxxxxxxxxx"
-                                   style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-family: monospace;" />
-                            <small style="color: #6b7280;">
-                                <a href="https://github.com/settings/tokens/new?description=Mediterra%20Admin%20Panel&scopes=repo" target="_blank" style="color: #2563eb; text-decoration: underline;">
-                                    Click here to create a token
-                                </a> (needs "repo" permission)
-                            </small>
-                        </div>
-
-                        <button onclick="saveGitHubConfig()" style="background: #10b981; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%;">
-                            💾 Save Auto-Deploy Configuration
-                        </button>
-
-                        <div id="github-status" style="margin-top: 1rem; padding: 0.75rem; border-radius: 6px; display: none;"></div>
-
-                        <details style="margin-top: 1.5rem;">
-                            <summary style="cursor: pointer; font-weight: 600; color: #374151;">📖 How to get a GitHub token (click to expand)</summary>
-                            <ol style="margin: 1rem 0; padding-left: 1.5rem; line-height: 1.8; color: #4b5563;">
-                                <li>Click the link above to create a token</li>
-                                <li>Give it a name like "Mediterra Admin Panel"</li>
-                                <li>Select "repo" permission (full repository access)</li>
-                                <li>Click "Generate token" at the bottom</li>
-                                <li>Copy the token (you won't see it again!)</li>
-                                <li>Paste it in the field above and click Save</li>
-                            </ol>
-                        </details>
+                    <div class="gallery-grid" id="galleryPreviews"></div>
+                    <div class="upload-area" onclick="document.getElementById('galleryInput').click()"
+                         ondragover="handleDragOver(event)"
+                         ondrop="handleDrop(event, 'gallery')">
+                        <p>📁 Drag & drop up to 6 images here</p>
+                        <p class="browse">or click to browse</p>
                     </div>
+                    <input type="file" id="galleryInput" class="file-input" accept="image/jpeg,image/jpg,image/png" multiple onchange="handleFileSelect(event, 'gallery')">
                 </div>
-
-                <div class="settings-group">
-                    <h3>📋 Manual Deployment (Alternative)</h3>
-                    <div style="background: #f0f9ff; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #3b82f6; margin-bottom: 1.5rem;">
-                        <h4 style="margin-top: 0; color: #1e40af;">If you prefer manual git commands:</h4>
-                        <ol style="margin: 1rem 0; padding-left: 1.5rem; line-height: 1.8;">
-                            <li><strong>Edit:</strong> Make changes in the Images or Content tabs</li>
-                            <li><strong>Preview:</strong> Click "Update Preview" to see changes</li>
-                            <li><strong>Save:</strong> Click "Save Changes" button at the top</li>
-                            <li><strong>Download:</strong> site-data.json will automatically download</li>
-                            <li><strong>Deploy:</strong> Move the file to your project folder and run:
-                                <pre style="background: #1e293b; color: #e2e8f0; padding: 0.75rem; border-radius: 4px; margin: 0.5rem 0; overflow-x: auto;">git add site-data.json
-git commit -m "Update site content"
-git push</pre>
-                            </li>
-                            <li><strong>Live:</strong> Your changes will be live after deployment! 🎉</li>
-                        </ol>
-                    </div>
-                </div>
-
-                <div class="settings-group">
-                    <h3>Instructions</h3>
-                    <ol>
-                        <li>Make changes in the Images or Content sections</li>
-                        <li>Click "Update Preview" to see changes</li>
-                        <li>Click "Save Changes" at the top to apply to your website</li>
-                        <li>Your changes are saved in your browser's storage</li>
-                    </ol>
-                </div>
-            </section>
-        </main>
+            </div>
+        </div>
     </div>
-
-    <div id="notification" class="notification"></div>
 
     <script src="admin-script.js"></script>
 </body>

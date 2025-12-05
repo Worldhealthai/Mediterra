@@ -86,7 +86,6 @@ body.splash-active {
     align-items: center;
     justify-content: center;
     z-index: 10000;
-    animation: splashFadeOut 0.8s ease-in-out 2.5s forwards;
 }
 
 .splash-screen::before {
@@ -125,6 +124,7 @@ body.splash-active {
     margin-right: auto;
     overflow: hidden;
     position: relative;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .splash-loader::after {
@@ -134,8 +134,15 @@ body.splash-active {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: var(--gold);
-    animation: loaderSlide 1.5s ease-in-out infinite;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(212, 175, 55, 0.5) 20%,
+        var(--gold-light) 50%,
+        rgba(212, 175, 55, 0.5) 80%,
+        transparent 100%);
+    animation: loaderSlide 1.8s ease-in-out infinite;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.8), 0 0 40px rgba(212, 175, 55, 0.4);
+    border-radius: 10px;
 }
 
 @keyframes splashFadeOut {
@@ -275,7 +282,7 @@ h1, h2, h3, h4, h5, h6 {
 .nav-container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 1.5rem 2rem;
+    padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -289,13 +296,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .logo-img {
-    height: 65px;
+    height: 110px;
     width: auto;
 }
 
 .logo-text {
     font-family: var(--font-serif);
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     font-weight: 600;
     letter-spacing: 3px;
     background: linear-gradient(135deg, #ffffff 0%, var(--gold-light) 100%);
@@ -365,7 +372,7 @@ h1, h2, h3, h4, h5, h6 {
    =========================== */
 
 .news-banner {
-    margin-top: 100px;
+    margin-top: 150px;
     background: linear-gradient(135deg, rgba(10, 17, 40, 0.9) 0%, rgba(28, 37, 65, 0.8) 100%);
     backdrop-filter: blur(10px);
     padding: 1.25rem 0;
@@ -1993,14 +2000,14 @@ section {
     font-size: 0.85rem;
     font-weight: 600;
     letter-spacing: 3px;
-    color: #60a5fa;
+    color: #ffffff;
     margin-bottom: 1rem;
     padding: 0.5rem 1.5rem;
-    background: rgba(59, 130, 246, 0.15);
+    background: rgba(59, 130, 246, 0.25);
     border-radius: 30px;
-    border: 1px solid rgba(96, 165, 250, 0.4);
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
-    text-shadow: 0 0 10px rgba(96, 165, 250, 0.3);
+    border: 1px solid rgba(96, 165, 250, 0.5);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+    text-shadow: 0 0 10px rgba(96, 165, 250, 0.5);
 }
 
 .page-title {
@@ -2840,15 +2847,15 @@ section {
 .insight-category {
     display: inline-block;
     padding: 0.4rem 1rem;
-    background: rgba(59, 130, 246, 0.2);
-    color: #60a5fa;
+    background: rgba(59, 130, 246, 0.3);
+    color: #ffffff;
     border-radius: 20px;
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
     margin-bottom: 1rem;
-    border: 1px solid rgba(96, 165, 250, 0.3);
+    border: 1px solid rgba(96, 165, 250, 0.5);
 }
 
 .insight-card h3 {
@@ -2876,9 +2883,9 @@ section {
 }
 
 .insight-date {
-    color: #60a5fa;
+    color: #d4af37;
     font-weight: 600;
-    text-shadow: 0 0 10px rgba(96, 165, 250, 0.3);
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
 }
 
 .insight-source {

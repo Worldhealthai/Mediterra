@@ -1743,15 +1743,32 @@ section {
     .wholesale-grid,
     .contact-grid {
         grid-template-columns: 1fr;
-        gap: 3rem;
+        gap: 2rem;
     }
 
-    .gallery-grid {
-        grid-template-columns: repeat(2, 1fr);
+    .location-img,
+    .method-img {
+        min-height: 280px;
+        max-height: 320px;
+        border-radius: 12px;
+    }
+
+    .location-visual,
+    .method-visual {
+        margin-bottom: 1.5rem;
     }
 
     .method-visual {
         order: -1;
+    }
+
+    .location-text,
+    .method-text {
+        padding: 2rem 1.5rem;
+    }
+
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .footer-content {
@@ -1861,6 +1878,15 @@ section {
         padding: 0 1.5rem;
     }
 
+    section {
+        padding: 3rem 0;
+    }
+
+    .location,
+    .method {
+        padding: 4rem 0;
+    }
+
     .hero {
         min-height: 90vh;
     }
@@ -1904,8 +1930,21 @@ section {
 
     .location-img,
     .method-img {
-        height: 250px;
+        min-height: 220px;
+        max-height: 280px;
+        height: auto;
         object-fit: cover;
+        border-radius: 12px;
+    }
+
+    .location-visual,
+    .method-visual {
+        margin-bottom: 1.5rem;
+    }
+
+    .location-text,
+    .method-text {
+        padding: 1.5rem 1rem;
     }
 
     .features-list ul {

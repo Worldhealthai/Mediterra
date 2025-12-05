@@ -74,7 +74,14 @@ body.splash-active {
     left: 0;
     width: 100%;
     height: 100vh;
-    background: linear-gradient(135deg, #1a4d6d 0%, #2d5f7e 20%, #4a7a96 40%, #2d5f7e 60%, #1a4d6d 100%);
+    background: radial-gradient(ellipse at center,
+        #e8f0f7 0%,      /* Very light blue-white center */
+        #c5d9e8 25%,     /* Light blue */
+        #8fb3d4 45%,     /* Medium blue */
+        #5a8cbb 65%,     /* Ocean blue */
+        #2d5f7e 85%,     /* Deep ocean */
+        #1a4d6d 100%     /* Darkest blue edges */
+    );
     display: flex;
     align-items: center;
     justify-content: center;
@@ -89,7 +96,7 @@ body.splash-active {
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.08) 0%, rgba(201, 169, 97, 0.06) 30%, rgba(28, 37, 65, 0.15) 60%, transparent 80%);
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.3) 0%, transparent 40%);
     animation: pulse 2s ease-in-out infinite;
 }
 
@@ -104,9 +111,7 @@ body.splash-active {
     width: 280px;
     max-width: 80vw;
     height: auto;
-    filter: drop-shadow(0 10px 40px rgba(255, 255, 255, 0.15))
-            drop-shadow(0 0 60px rgba(201, 169, 97, 0.25))
-            drop-shadow(0 5px 25px rgba(0, 0, 0, 0.5));
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
     animation: logoScale 1.2s ease-out;
 }
 
@@ -114,7 +119,7 @@ body.splash-active {
     margin-top: 2rem;
     width: 60px;
     height: 3px;
-    background: rgba(201, 169, 97, 0.2);
+    background: rgba(42, 95, 126, 0.25);
     border-radius: 3px;
     margin-left: auto;
     margin-right: auto;
@@ -246,19 +251,19 @@ h1, h2, h3, h4, h5, h6 {
     left: 0;
     right: 0;
     z-index: 1000;
-    background: rgba(10, 17, 40, 0.85);
-    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(20px) saturate(180%);
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(212, 175, 55, 0.1);
-    border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    border-bottom: 1px solid rgba(201, 169, 97, 0.2);
     opacity: 1;
     transform: translateY(0);
 }
 
 .navbar.scrolled {
-    background: rgba(10, 17, 40, 0.95);
-    box-shadow: 0 4px 40px rgba(0, 0, 0, 0.6), 0 0 60px rgba(212, 175, 55, 0.1);
-    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+    background: rgba(28, 37, 65, 0.75);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(201, 169, 97, 0.25);
 }
 
 .navbar.hidden {
@@ -286,7 +291,6 @@ h1, h2, h3, h4, h5, h6 {
 .logo-img {
     height: 65px;
     width: auto;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
 .logo-text {

@@ -1780,7 +1780,7 @@ section {
 
 @media (max-width: 768px) {
     .news-banner {
-        margin-top: 70px;
+        margin-top: 80px;
         padding: 1rem 0;
     }
 
@@ -1962,7 +1962,7 @@ section {
     }
 
     .news-banner {
-        margin-top: 60px;
+        margin-top: 80px;
         padding: 0.9rem 0;
         font-size: 0.85rem;
     }

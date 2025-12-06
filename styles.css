@@ -297,6 +297,13 @@ h1, h2, h3, h4, h5, h6 {
 .logo-img {
     height: 65px;
     width: auto;
+    filter: drop-shadow(0 2px 8px rgba(201, 169, 97, 0.3)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.logo-img:hover {
+    filter: drop-shadow(0 4px 12px rgba(201, 169, 97, 0.5)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    transform: scale(1.05);
 }
 
 .logo-text {
@@ -463,6 +470,17 @@ h1, h2, h3, h4, h5, h6 {
     background-position: center;
     animation: slowZoom 60s ease-in-out infinite alternate;
     z-index: 0;
+    filter: contrast(1.1) saturate(1.2);
+}
+
+.hero-bg-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.3) 100%),
+        linear-gradient(180deg, rgba(10, 17, 40, 0.2) 0%, transparent 30%, transparent 70%, rgba(10, 17, 40, 0.4) 100%);
+    pointer-events: none;
 }
 
 @keyframes slowZoom {
@@ -812,16 +830,49 @@ section {
     height: 100%;
     min-height: 500px;
     object-fit: cover;
-    border-radius: 8px;
-    transition: var(--transition);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border-radius: 16px;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.4),
+        0 8px 24px rgba(201, 169, 97, 0.25),
+        inset 0 0 0 1px rgba(201, 169, 97, 0.2);
 }
 
 .location-visual,
 .method-visual {
     overflow: hidden;
-    border-radius: 8px;
+    border-radius: 16px;
     position: relative;
+    border: 4px solid transparent;
+    background: linear-gradient(135deg, rgba(201, 169, 97, 0.25), rgba(201, 169, 97, 0.08)) border-box;
+    box-shadow:
+        0 16px 48px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(201, 169, 97, 0.3);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.location-visual::before,
+.method-visual::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 16px;
+    padding: 4px;
+    background: linear-gradient(135deg,
+        var(--gold-light) 0%,
+        rgba(201, 169, 97, 0.5) 25%,
+        transparent 50%,
+        rgba(201, 169, 97, 0.5) 75%,
+        var(--gold-light) 100%
+    );
+    background-size: 200% 200%;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0.5;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+    pointer-events: none;
 }
 
 .location-visual::after,
@@ -829,21 +880,47 @@ section {
     content: '';
     position: absolute;
     inset: 0;
-    border: 2px solid var(--gold);
-    border-radius: 8px;
+    background: linear-gradient(135deg,
+        rgba(201, 169, 97, 0.2) 0%,
+        transparent 40%,
+        rgba(201, 169, 97, 0.15) 100%
+    );
+    border-radius: 16px;
     opacity: 0;
-    transition: var(--transition);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: none;
+    z-index: 2;
+}
+
+.location-visual:hover,
+.method-visual:hover {
+    transform: translateY(-12px);
+    box-shadow:
+        0 32px 80px rgba(0, 0, 0, 0.6),
+        0 16px 40px rgba(201, 169, 97, 0.4),
+        0 0 100px rgba(201, 169, 97, 0.3),
+        0 0 0 1px rgba(201, 169, 97, 0.6);
+}
+
+.location-visual:hover::before,
+.method-visual:hover::before {
+    opacity: 1;
+    background-position: 100% 100%;
 }
 
 .location-visual:hover::after,
 .method-visual:hover::after {
-    opacity: 0.5;
+    opacity: 1;
 }
 
 .location-img:hover,
 .method-img:hover {
-    transform: scale(1.05);
+    transform: scale(1.08);
+    filter: brightness(1.1) contrast(1.05) saturate(1.15);
+    box-shadow:
+        0 24px 72px rgba(0, 0, 0, 0.5),
+        0 12px 32px rgba(201, 169, 97, 0.35),
+        inset 0 0 0 1px rgba(201, 169, 97, 0.4);
 }
 
 /* ===========================
@@ -1524,28 +1601,61 @@ section {
     aspect-ratio: 1;
     overflow: hidden;
     cursor: pointer;
-    transition: var(--transition);
-    border-radius: 8px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 12px;
     position: relative;
+    border: 3px solid transparent;
+    background: linear-gradient(135deg, rgba(201, 169, 97, 0.3), rgba(201, 169, 97, 0.1)) border-box;
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        0 4px 16px rgba(201, 169, 97, 0.2),
+        inset 0 0 0 1px rgba(201, 169, 97, 0.3);
+}
+
+.gallery-item::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    padding: 3px;
+    background: linear-gradient(135deg, var(--gold) 0%, rgba(201, 169, 97, 0.4) 50%, var(--gold) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0.6;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
 }
 
 .gallery-item::after {
     content: '';
     position: absolute;
     inset: 0;
-    border: 2px solid var(--gold);
-    border-radius: 8px;
+    background: linear-gradient(135deg, rgba(201, 169, 97, 0.15) 0%, transparent 50%, rgba(201, 169, 97, 0.1) 100%);
+    border-radius: 12px;
     opacity: 0;
-    transition: var(--transition);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 2;
+    pointer-events: none;
 }
 
 .gallery-item:hover {
-    transform: scale(1.05);
-    box-shadow: 0 20px 50px rgba(201, 169, 97, 0.4);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow:
+        0 24px 64px rgba(0, 0, 0, 0.5),
+        0 12px 32px rgba(201, 169, 97, 0.4),
+        inset 0 0 0 1px rgba(201, 169, 97, 0.5),
+        0 0 80px rgba(201, 169, 97, 0.3);
+    border-color: rgba(201, 169, 97, 0.3);
+}
+
+.gallery-item:hover::before {
+    opacity: 1;
+    background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 50%, var(--gold-light) 100%);
 }
 
 .gallery-item:hover::after {
-    opacity: 0.6;
+    opacity: 1;
 }
 
 .gallery-img {
@@ -1553,12 +1663,14 @@ section {
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: var(--transition);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 0;
 }
 
 .gallery-item:hover .gallery-img {
-    filter: brightness(1.1);
-    transform: scale(1.05);
+    filter: brightness(1.15) contrast(1.05) saturate(1.1);
+    transform: scale(1.08);
 }
 
 /* ===========================

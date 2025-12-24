@@ -13,10 +13,37 @@ let imageData = {
 
 // Load existing images from localStorage on page load
 function loadExistingImages() {
+    // Check what's in localStorage for debugging
+    console.log('🔍 Checking localStorage on admin panel load...');
+
     const stored = localStorage.getItem('mediterra_images');
+    const siteConfig = localStorage.getItem('mediterra_site_config');
+
+    console.log('Admin data (mediterra_images):', stored ? '✓ Found' : '✗ Not found');
+    console.log('Site config (mediterra_site_config):', siteConfig ? '✓ Found' : '✗ Not found');
+
+    if (siteConfig) {
+        try {
+            const config = JSON.parse(siteConfig);
+            console.log('📸 Current saved images:', {
+                hero: config.images?.hero ? '✓' : '✗',
+                logo: config.images?.logo ? '✓' : '✗',
+                location: config.images?.location ? '✓' : '✗',
+                method: config.images?.method ? '✓' : '✗',
+                gallery: config.images?.gallery?.length || 0,
+                lastUpdated: config.lastUpdated
+            });
+        } catch (e) {
+            console.error('❌ Error parsing site config:', e);
+        }
+    }
+
     if (stored) {
         imageData = JSON.parse(stored);
         updateAllPreviews();
+        console.log('✅ Loaded existing images into admin panel');
+    } else {
+        console.log('ℹ️ No existing admin data found - starting fresh');
     }
 }
 
@@ -248,11 +275,37 @@ function showSaveButton() {
 // Save all changes
 function saveAllChanges() {
     try {
-        // Save to localStorage
+        // Save to localStorage (for admin panel internal use)
         localStorage.setItem('mediterra_images', JSON.stringify(imageData));
 
         // Update the actual website by modifying the DOM
         updateWebsiteImages();
+
+        // VERIFY the save worked
+        const verification = localStorage.getItem('mediterra_site_config');
+        if (verification) {
+            console.log('✅ VERIFIED: Data saved to localStorage successfully');
+            console.log('📊 Saved data size:', new Blob([verification]).size, 'bytes');
+            console.log('🔑 localStorage key:', 'mediterra_site_config');
+
+            // Parse and log what was saved
+            try {
+                const parsed = JSON.parse(verification);
+                console.log('📸 Images saved:', {
+                    hero: parsed.images?.hero ? '✓' : '✗',
+                    logo: parsed.images?.logo ? '✓' : '✗',
+                    location: parsed.images?.location ? '✓' : '✗',
+                    method: parsed.images?.method ? '✓' : '✗',
+                    gallery: parsed.images?.gallery?.length || 0
+                });
+            } catch (e) {
+                console.error('Error parsing saved data:', e);
+            }
+        } else {
+            console.error('❌ ERROR: Data was NOT saved to localStorage!');
+            alert('WARNING: Failed to save to localStorage. Your images may not persist!');
+            return;
+        }
 
         // Show success message
         const successMsg = document.getElementById('successMessage');
@@ -267,8 +320,19 @@ function saveAllChanges() {
         setTimeout(() => {
             successMsg.classList.remove('show');
         }, 5000);
+
+        // Show additional success info
+        alert('✅ Images saved successfully!\n\n' +
+              'IMPORTANT: Your images are saved to this browser\'s localStorage.\n\n' +
+              '⚠️ Note:\n' +
+              '- Images only persist in THIS browser\n' +
+              '- Different browsers won\'t see your custom images\n' +
+              '- Private/Incognito mode clears data when closed\n' +
+              '- Check browser settings if images don\'t persist\n\n' +
+              'Check the browser console (F12) for detailed save info.');
+
     } catch (error) {
-        console.error('Error saving images:', error);
+        console.error('❌ Error saving images:', error);
         if (error.name === 'QuotaExceededError') {
             alert('Images are too large to save. Please try uploading smaller images or fewer gallery images. The admin panel automatically compresses images, but your current selection exceeds storage limits.');
         } else {

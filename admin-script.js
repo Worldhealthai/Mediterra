@@ -2,6 +2,12 @@
 // Simple password-based authentication
 const ADMIN_PASSWORD = 'Kayak'; // Change this to your desired password
 
+// Initialize Supabase client
+let supabase = null;
+document.addEventListener('DOMContentLoaded', () => {
+    supabase = initSupabase();
+});
+
 // Storage for uploaded images
 let imageData = {
     hero: null,
@@ -11,11 +17,48 @@ let imageData = {
     gallery: []
 };
 
-// Load existing images from localStorage on page load
-function loadExistingImages() {
-    // Check what's in localStorage for debugging
-    console.log('🔍 Checking localStorage on admin panel load...');
+// Load existing images from Supabase on page load
+async function loadExistingImages() {
+    console.log('🔍 Loading existing images from Supabase...');
 
+    try {
+        // Load from Supabase
+        const supabaseImages = await loadImagesFromSupabase();
+
+        if (supabaseImages && supabaseImages.length > 0) {
+            console.log(`✅ Found ${supabaseImages.length} images in Supabase`);
+
+            // Convert Supabase data back to imageData format
+            supabaseImages.forEach(img => {
+                const type = img.image_type;
+
+                if (type.startsWith('gallery-')) {
+                    // Gallery image
+                    if (!imageData.gallery) imageData.gallery = [];
+                    imageData.gallery.push({
+                        data: img.image_url,
+                        name: img.storage_path.split('/').pop(),
+                        alt: img.alt_text
+                    });
+                } else {
+                    // Single image (hero, logo, location, method)
+                    imageData[type] = {
+                        data: img.image_url,
+                        name: img.storage_path.split('/').pop()
+                    };
+                }
+            });
+
+            updateAllPreviews();
+            console.log('✅ Loaded existing images from Supabase into admin panel');
+            return;
+        }
+    } catch (error) {
+        console.error('❌ Error loading from Supabase:', error);
+    }
+
+    // Fallback to localStorage if Supabase fails
+    console.log('⚠️ Falling back to localStorage...');
     const stored = localStorage.getItem('mediterra_images');
     const siteConfig = localStorage.getItem('mediterra_site_config');
 
@@ -41,7 +84,7 @@ function loadExistingImages() {
     if (stored) {
         imageData = JSON.parse(stored);
         updateAllPreviews();
-        console.log('✅ Loaded existing images into admin panel');
+        console.log('✅ Loaded existing images from localStorage into admin panel');
     } else {
         console.log('ℹ️ No existing admin data found - starting fresh');
     }
@@ -272,47 +315,212 @@ function showSaveButton() {
     document.getElementById('saveBtn').classList.add('show');
 }
 
-// Save all changes
-function saveAllChanges() {
-    try {
-        // Save to localStorage (for admin panel internal use)
-        localStorage.setItem('mediterra_images', JSON.stringify(imageData));
+// ===========================
+// SUPABASE HELPER FUNCTIONS
+// ===========================
 
-        // Update the actual website by modifying the DOM
+// Convert data URL to Blob
+function dataURLtoBlob(dataURL) {
+    const arr = dataURL.split(',');
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], { type: mime });
+}
+
+// Upload image to Supabase Storage
+async function uploadToSupabase(dataURL, fileName, imageType) {
+    if (!supabase) {
+        console.error('❌ Supabase client not initialized');
+        return null;
+    }
+
+    try {
+        // Convert data URL to blob
+        const blob = dataURLtoBlob(dataURL);
+
+        // Create unique file path
+        const timestamp = Date.now();
+        const filePath = `${imageType}/${timestamp}-${fileName}`;
+
+        console.log(`📤 Uploading ${imageType} to Supabase...`);
+
+        // Upload to Supabase Storage
+        const { data, error } = await supabase
+            .storage
+            .from(SUPABASE_CONFIG.bucketName)
+            .upload(filePath, blob, {
+                contentType: blob.type,
+                upsert: false
+            });
+
+        if (error) {
+            console.error('❌ Upload error:', error);
+            throw error;
+        }
+
+        // Get public URL
+        const { data: { publicUrl } } = supabase
+            .storage
+            .from(SUPABASE_CONFIG.bucketName)
+            .getPublicUrl(filePath);
+
+        console.log(`✅ Uploaded successfully: ${publicUrl}`);
+
+        return {
+            url: publicUrl,
+            path: filePath
+        };
+
+    } catch (error) {
+        console.error('❌ Error uploading to Supabase:', error);
+        return null;
+    }
+}
+
+// Save image metadata to database
+async function saveImageToDatabase(imageType, imageUrl, storagePath, altText = '') {
+    if (!supabase) {
+        console.error('❌ Supabase client not initialized');
+        return false;
+    }
+
+    try {
+        // Upsert (insert or update) image record
+        const { data, error } = await supabase
+            .from('site_images')
+            .upsert({
+                image_type: imageType,
+                image_url: imageUrl,
+                storage_path: storagePath,
+                alt_text: altText || `${imageType} image`,
+                is_active: true,
+                updated_at: new Date().toISOString()
+            }, {
+                onConflict: 'image_type'
+            });
+
+        if (error) {
+            console.error('❌ Database save error:', error);
+            throw error;
+        }
+
+        console.log(`✅ Saved ${imageType} to database`);
+        return true;
+
+    } catch (error) {
+        console.error('❌ Error saving to database:', error);
+        return false;
+    }
+}
+
+// Load images from Supabase
+async function loadImagesFromSupabase() {
+    if (!supabase) {
+        console.error('❌ Supabase client not initialized');
+        return null;
+    }
+
+    try {
+        const { data, error } = await supabase
+            .from('site_images')
+            .select('*')
+            .eq('is_active', true);
+
+        if (error) throw error;
+
+        console.log('✅ Loaded images from Supabase:', data);
+        return data;
+
+    } catch (error) {
+        console.error('❌ Error loading from Supabase:', error);
+        return null;
+    }
+}
+
+// Save all changes
+async function saveAllChanges() {
+    try {
+        console.log('💾 Starting save process...');
+
+        // Show loading indicator
+        const saveBtn = document.getElementById('saveBtn');
+        const originalText = saveBtn.textContent;
+        saveBtn.textContent = '⏳ Uploading to Supabase...';
+        saveBtn.disabled = true;
+
+        let uploadedCount = 0;
+        let totalToUpload = 0;
+
+        // Count images to upload
+        ['hero', 'logo', 'location', 'method'].forEach(type => {
+            if (imageData[type]?.data) totalToUpload++;
+        });
+        totalToUpload += imageData.gallery?.length || 0;
+
+        console.log(`📊 Total images to upload: ${totalToUpload}`);
+
+        // Upload single images
+        for (const imageType of ['hero', 'logo', 'location', 'method']) {
+            if (imageData[imageType] && imageData[imageType].data) {
+                console.log(`🔄 Processing ${imageType}...`);
+
+                const result = await uploadToSupabase(
+                    imageData[imageType].data,
+                    imageData[imageType].name,
+                    imageType
+                );
+
+                if (result) {
+                    await saveImageToDatabase(imageType, result.url, result.path);
+                    uploadedCount++;
+                    saveBtn.textContent = `⏳ Uploading... (${uploadedCount}/${totalToUpload})`;
+                } else {
+                    console.error(`❌ Failed to upload ${imageType}`);
+                }
+            }
+        }
+
+        // Upload gallery images
+        if (imageData.gallery && imageData.gallery.length > 0) {
+            for (let i = 0; i < imageData.gallery.length; i++) {
+                const img = imageData.gallery[i];
+                console.log(`🔄 Processing gallery image ${i + 1}...`);
+
+                const result = await uploadToSupabase(
+                    img.data,
+                    img.name,
+                    `gallery-${i + 1}`
+                );
+
+                if (result) {
+                    await saveImageToDatabase(`gallery-${i + 1}`, result.url, result.path, img.alt);
+                    uploadedCount++;
+                    saveBtn.textContent = `⏳ Uploading... (${uploadedCount}/${totalToUpload})`;
+                } else {
+                    console.error(`❌ Failed to upload gallery image ${i + 1}`);
+                }
+            }
+        }
+
+        // Also save to localStorage as backup
+        localStorage.setItem('mediterra_images', JSON.stringify(imageData));
         updateWebsiteImages();
 
-        // VERIFY the save worked
-        const verification = localStorage.getItem('mediterra_site_config');
-        if (verification) {
-            console.log('✅ VERIFIED: Data saved to localStorage successfully');
-            console.log('📊 Saved data size:', new Blob([verification]).size, 'bytes');
-            console.log('🔑 localStorage key:', 'mediterra_site_config');
-
-            // Parse and log what was saved
-            try {
-                const parsed = JSON.parse(verification);
-                console.log('📸 Images saved:', {
-                    hero: parsed.images?.hero ? '✓' : '✗',
-                    logo: parsed.images?.logo ? '✓' : '✗',
-                    location: parsed.images?.location ? '✓' : '✗',
-                    method: parsed.images?.method ? '✓' : '✗',
-                    gallery: parsed.images?.gallery?.length || 0
-                });
-            } catch (e) {
-                console.error('Error parsing saved data:', e);
-            }
-        } else {
-            console.error('❌ ERROR: Data was NOT saved to localStorage!');
-            alert('WARNING: Failed to save to localStorage. Your images may not persist!');
-            return;
-        }
+        console.log(`✅ Successfully uploaded ${uploadedCount} of ${totalToUpload} images to Supabase`);
 
         // Show success message
         const successMsg = document.getElementById('successMessage');
         successMsg.classList.add('show');
 
-        // Hide save button
-        document.getElementById('saveBtn').classList.remove('show');
+        // Reset save button
+        saveBtn.textContent = originalText;
+        saveBtn.disabled = false;
+        saveBtn.classList.remove('show');
 
         // Update status indicators
         updateAllPreviews();
@@ -321,23 +529,26 @@ function saveAllChanges() {
             successMsg.classList.remove('show');
         }, 5000);
 
-        // Show additional success info
-        alert('✅ Images saved successfully!\n\n' +
-              'IMPORTANT: Your images are saved to this browser\'s localStorage.\n\n' +
-              '⚠️ Note:\n' +
-              '- Images only persist in THIS browser\n' +
-              '- Different browsers won\'t see your custom images\n' +
-              '- Private/Incognito mode clears data when closed\n' +
-              '- Check browser settings if images don\'t persist\n\n' +
-              'Check the browser console (F12) for detailed save info.');
+        // Show success alert
+        alert(`✅ Images saved successfully to Supabase!\n\n` +
+              `📤 Uploaded: ${uploadedCount} of ${totalToUpload} images\n\n` +
+              `🌐 Your images are now stored in the cloud and will persist across all browsers and devices!\n\n` +
+              `💡 Changes will be visible on your live website immediately.`);
 
     } catch (error) {
         console.error('❌ Error saving images:', error);
-        if (error.name === 'QuotaExceededError') {
-            alert('Images are too large to save. Please try uploading smaller images or fewer gallery images. The admin panel automatically compresses images, but your current selection exceeds storage limits.');
-        } else {
-            alert('Error saving images: ' + error.message);
-        }
+
+        // Reset save button
+        const saveBtn = document.getElementById('saveBtn');
+        saveBtn.textContent = '💾 Save All Changes';
+        saveBtn.disabled = false;
+
+        alert('❌ Error saving images to Supabase: ' + error.message + '\n\n' +
+              'Please check:\n' +
+              '1. Supabase database is set up (run supabase-setup.sql)\n' +
+              '2. Internet connection is working\n' +
+              '3. Browser console (F12) for detailed error info\n\n' +
+              'Images have been saved to localStorage as backup.');
     }
 }
 

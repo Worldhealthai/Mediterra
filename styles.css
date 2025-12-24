@@ -75,10 +75,10 @@ body.splash-active {
     width: 100%;
     height: 100vh;
     background: linear-gradient(135deg,
-        #0a1128 0%,
-        #0f1a2f 35%,
-        #14233c 60%,
-        #1c2541 100%
+        #1a2d4f 0%,
+        #2a3f5f 35%,
+        #3a5270 60%,
+        #4a6280 100%
     );
     display: flex;
     align-items: center;
@@ -110,28 +110,21 @@ body.splash-active {
     height: 280px;
     object-fit: cover;
     object-position: center 25%;
-    background: radial-gradient(ellipse at center,
-        rgba(255, 255, 255, 0.15) 0%,
-        rgba(255, 255, 255, 0.08) 40%,
-        transparent 70%
-    );
-    padding: 3rem;
-    border-radius: 50%;
-    filter: drop-shadow(0 0 60px rgba(212, 175, 55, 0.25))
-            drop-shadow(0 0 30px rgba(255, 255, 255, 0.1));
+    filter: drop-shadow(0 0 40px rgba(212, 175, 55, 0.3))
+            drop-shadow(0 0 20px rgba(255, 255, 255, 0.2));
     animation: elegantReveal 2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .splash-text {
-    color: #ffffff;
+    color: rgba(255, 245, 220, 0.95);
     font-family: var(--font-sans);
     font-size: 2.5rem;
     font-weight: 300;
     letter-spacing: 0.5rem;
     margin-top: 2rem;
     margin-bottom: 0.5rem;
-    text-shadow: 0 0 30px rgba(212, 175, 55, 0.3),
-                 0 0 15px rgba(255, 255, 255, 0.2);
+    text-shadow: 0 0 30px rgba(212, 175, 55, 0.5),
+                 0 0 15px rgba(255, 255, 255, 0.3);
     animation: elegantFadeIn 2.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -208,14 +201,14 @@ body.splash-active {
     0% {
         opacity: 0;
         transform: scale(0.96);
-        filter: drop-shadow(0 0 60px rgba(212, 175, 55, 0))
-                drop-shadow(0 0 30px rgba(255, 255, 255, 0));
+        filter: drop-shadow(0 0 40px rgba(212, 175, 55, 0))
+                drop-shadow(0 0 20px rgba(255, 255, 255, 0));
     }
     100% {
         opacity: 1;
         transform: scale(1);
-        filter: drop-shadow(0 0 60px rgba(212, 175, 55, 0.25))
-                drop-shadow(0 0 30px rgba(255, 255, 255, 0.1));
+        filter: drop-shadow(0 0 40px rgba(212, 175, 55, 0.3))
+                drop-shadow(0 0 20px rgba(255, 255, 255, 0.2));
     }
 }
 
@@ -2119,7 +2112,6 @@ section {
     .splash-logo {
         width: 200px;
         height: 200px;
-        padding: 2rem;
     }
 
     section {

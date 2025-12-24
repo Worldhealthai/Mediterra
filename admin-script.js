@@ -75,41 +75,25 @@ let imageData = {
     gallery: []
 };
 
-// Load existing images from localStorage on page load
-function loadExistingImages() {
-    // Check what's in localStorage for debugging
-    console.log('🔍 Checking localStorage on admin panel load...');
+async function loadExistingImages() {
+    console.log("🔍 Loading images from Supabase...");
 
-    const stored = localStorage.getItem('mediterra_images');
-    const siteConfig = localStorage.getItem('mediterra_site_config');
-
-    console.log('Admin data (mediterra_images):', stored ? '✓ Found' : '✗ Not found');
-    console.log('Site config (mediterra_site_config):', siteConfig ? '✓ Found' : '✗ Not found');
-
-    if (siteConfig) {
-        try {
-            const config = JSON.parse(siteConfig);
-            console.log('📸 Current saved images:', {
-                hero: config.images?.hero ? '✓' : '✗',
-                logo: config.images?.logo ? '✓' : '✗',
-                location: config.images?.location ? '✓' : '✗',
-                method: config.images?.method ? '✓' : '✗',
-                gallery: config.images?.gallery?.length || 0,
-                lastUpdated: config.lastUpdated
-            });
-        } catch (e) {
-            console.error('❌ Error parsing site config:', e);
-        }
+    const config = await loadSiteConfigFromSupabase();
+    if (!config || !config.images) {
+        console.log("ℹ️ No images found in Supabase");
+        return;
     }
 
-    if (stored) {
-        imageData = JSON.parse(stored);
-        updateAllPreviews();
-        console.log('✅ Loaded existing images into admin panel');
-    } else {
-        console.log('ℹ️ No existing admin data found - starting fresh');
-    }
+    imageData.hero = config.images.hero ? { data: config.images.hero } : null;
+    imageData.logo = config.images.logo ? { data: config.images.logo } : null;
+    imageData.location = config.images.location ? { data: config.images.location } : null;
+    imageData.method = config.images.method ? { data: config.images.method } : null;
+    imageData.gallery = config.images.gallery || [];
+
+    updateAllPreviews();
+    console.log("✅ Images loaded from Supabase");
 }
+
 
 // Login handling
 document.getElementById('loginForm').addEventListener('submit', function(e) {
@@ -336,40 +320,53 @@ function showSaveButton() {
     document.getElementById('saveBtn').classList.add('show');
 }
 
-// Save all changes
-function saveAllChanges() {
+async function saveAllChanges() {
     try {
-        // Save to localStorage (for admin panel internal use)
-        localStorage.setItem('mediterra_images', JSON.stringify(imageData));
+        const config = {
+            images: {
+                hero: imageData.hero
+                    ? await uploadImageToSupabase("hero", imageData.hero.data)
+                    : null,
 
-        // Update the actual website by modifying the DOM
-        updateWebsiteImages();
+                logo: imageData.logo
+                    ? await uploadImageToSupabase("logo", imageData.logo.data)
+                    : null,
 
-        // VERIFY the save worked
-        const verification = localStorage.getItem('mediterra_site_config');
-        if (verification) {
-            console.log('✅ VERIFIED: Data saved to localStorage successfully');
-            console.log('📊 Saved data size:', new Blob([verification]).size, 'bytes');
-            console.log('🔑 localStorage key:', 'mediterra_site_config');
+                location: imageData.location
+                    ? await uploadImageToSupabase("location", imageData.location.data)
+                    : null,
 
-            // Parse and log what was saved
-            try {
-                const parsed = JSON.parse(verification);
-                console.log('📸 Images saved:', {
-                    hero: parsed.images?.hero ? '✓' : '✗',
-                    logo: parsed.images?.logo ? '✓' : '✗',
-                    location: parsed.images?.location ? '✓' : '✗',
-                    method: parsed.images?.method ? '✓' : '✗',
-                    gallery: parsed.images?.gallery?.length || 0
-                });
-            } catch (e) {
-                console.error('Error parsing saved data:', e);
-            }
-        } else {
-            console.error('❌ ERROR: Data was NOT saved to localStorage!');
-            alert('WARNING: Failed to save to localStorage. Your images may not persist!');
-            return;
-        }
+                method: imageData.method
+                    ? await uploadImageToSupabase("method", imageData.method.data)
+                    : null,
+
+                gallery: await Promise.all(
+                    imageData.gallery.map(async (img, i) => ({
+                        src: await uploadImageToSupabase(`gallery-${i}`, img.data),
+                        alt: img.alt
+                    }))
+                )
+            },
+            lastUpdated: new Date().toISOString()
+        };
+
+        await saveSiteConfigToSupabase(config);
+
+        document.getElementById("saveBtn").classList.remove("show");
+        document.getElementById("successMessage").classList.add("show");
+
+        setTimeout(() => {
+            document.getElementById("successMessage").classList.remove("show");
+        }, 4000);
+
+        alert("✅ Images uploaded to Supabase successfully!");
+
+    } catch (err) {
+        console.error("❌ Save failed:", err);
+        alert("Failed to save images. Check console.");
+    }
+}
+
 
         // Show success message
         const successMsg = document.getElementById('successMessage');

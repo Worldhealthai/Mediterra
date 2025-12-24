@@ -2,12 +2,12 @@
 // Simple password-based authentication
 const ADMIN_PASSWORD = 'Kayak'; // Change this to your desired password
 
-// Initialize Supabase client (uses supabaseClient from supabase-config.js)
-let supabaseClient = null;
+// Use Supabase client from supabase-config.js (already declared globally)
 document.addEventListener('DOMContentLoaded', () => {
     try {
         if (typeof initSupabase === 'function') {
-            supabaseClient = initSupabase();
+            // Initialize and use the global supabaseClient from supabase-config.js
+            initSupabase();
             console.log('✅ Supabase initialized in admin panel');
         } else {
             console.warn('⚠️ Supabase config not loaded - will use localStorage only');

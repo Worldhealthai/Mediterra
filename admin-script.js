@@ -1,24 +1,30 @@
 // ===========================
+// ADMIN SCRIPT - Mediterra
+// ===========================
+
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+// ===========================
 // SUPABASE CONFIG
 // ===========================
 const supabaseUrl = "https://tgbvjmknsjiutksucbnt.supabase.co";
 const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRnYnZqbWtuc2ppdXRrc3VjYm50Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY1Nzc5NjEsImV4cCI6MjA4MjE1Mzk2MX0.p4e4XMoWqVRBOS_-vqaSl44myRGy1HdGD5snvbBHQn4";
-const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // ===========================
 // ADMIN PASSWORD
 // ===========================
-const ADMIN_PASSWORD = 'Kayak'; // change if needed
+const ADMIN_PASSWORD = 'Kayak';
 
 // ===========================
 // IMAGE DATA STORAGE
 // ===========================
 let imageData = {
-    hero: null,
-    logo: null,
-    location: null,
-    method: null,
-    gallery: []
+  hero: null,
+  logo: null,
+  location: null,
+  method: null,
+  gallery: []
 };
 
 // ===========================
@@ -52,22 +58,18 @@ async function loadSiteConfigFromSupabase() {
 // ===========================
 // LOGIN HANDLING
 // ===========================
-document.addEventListener('DOMContentLoaded', () => {
-    const loginForm = document.getElementById('loginForm');
-    if (loginForm) {
-        loginForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            const password = document.getElementById('password').value;
-            if (password === ADMIN_PASSWORD) {
-                document.getElementById('loginContainer').style.display = 'none';
-                document.getElementById('adminPanel').classList.add('active');
-                loadExistingImages();
-            } else {
-                const errorEl = document.getElementById('loginError');
-                errorEl.classList.add('show');
-                setTimeout(() => errorEl.classList.remove('show'), 3000);
-            }
-        });
+document.getElementById('loginForm')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const password = document.getElementById('password').value;
+
+    if (password === ADMIN_PASSWORD) {
+        document.getElementById('loginContainer').style.display = 'none';
+        document.getElementById('adminPanel').classList.add('active');
+        loadExistingImages();
+    } else {
+        const errorEl = document.getElementById('loginError');
+        errorEl.classList.add('show');
+        setTimeout(() => errorEl.classList.remove('show'), 3000);
     }
 });
 
@@ -97,12 +99,15 @@ function updateGalleryPreviews() {
     imageData.gallery.forEach((img, index) => {
         const div = document.createElement('div');
         div.className = 'gallery-item';
+
         const imgEl = document.createElement('img');
         imgEl.src = img.data;
         imgEl.alt = img.alt;
+
         const label = document.createElement('div');
         label.className = 'gallery-item-label';
         label.textContent = `Image ${index + 1}`;
+
         div.appendChild(imgEl);
         div.appendChild(label);
         container.appendChild(div);
@@ -110,7 +115,7 @@ function updateGalleryPreviews() {
 }
 
 function updateAllPreviews() {
-    ['hero', 'logo', 'location', 'method'].forEach(section => {
+    ['hero','logo','location','method'].forEach(section => {
         if (imageData[section]?.data) updatePreview(section, imageData[section].data);
     });
     if (imageData.gallery?.length > 0) updateGalleryPreviews();
@@ -127,27 +132,25 @@ function compressImage(file, section) {
             img.onload = () => {
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d');
-                let maxWidth = 1200, maxHeight = 900;
-                if (section === 'hero') { maxWidth = 1920; maxHeight = 1080; }
-                if (section === 'logo') { maxWidth = 500; maxHeight = 500; }
-                if (section === 'gallery') { maxWidth = 800; maxHeight = 600; }
+                let maxWidth=1200, maxHeight=900;
+                if(section==='hero'){ maxWidth=1920; maxHeight=1080; }
+                if(section==='logo'){ maxWidth=500; maxHeight=500; }
+                if(section==='gallery'){ maxWidth=800; maxHeight=600; }
 
-                let width = img.width, height = img.height;
-                if (width > maxWidth || height > maxHeight) {
-                    const ratio = Math.min(maxWidth / width, maxHeight / height);
-                    width *= ratio;
-                    height *= ratio;
+                let width=img.width, height=img.height;
+                if(width>maxWidth||height>maxHeight){
+                    const ratio=Math.min(maxWidth/width,maxHeight/height);
+                    width*=ratio; height*=ratio;
                 }
-                canvas.width = width;
-                canvas.height = height;
-                ctx.drawImage(img, 0, 0, width, height);
-                const compressed = canvas.toDataURL('image/jpeg', 0.8);
+                canvas.width=width; canvas.height=height;
+                ctx.drawImage(img,0,0,width,height);
+                const compressed = canvas.toDataURL('image/jpeg',0.8);
                 resolve(compressed);
             };
-            img.onerror = reject;
-            img.src = e.target.result;
+            img.onerror=reject;
+            img.src=e.target.result;
         };
-        reader.onerror = reject;
+        reader.onerror=reject;
         reader.readAsDataURL(file);
     });
 }
@@ -156,27 +159,27 @@ function compressImage(file, section) {
 // FILE HANDLING
 // ===========================
 function processFiles(files, section) {
-    if (section === 'gallery') {
-        const maxImages = 6;
-        const filesToProcess = Array.from(files).slice(0, maxImages);
-        imageData.gallery = [];
-        let count = 0;
-        filesToProcess.forEach((file, i) => {
-            if (file.type.match(/image\/(jpeg|jpg|png)/)) {
-                compressImage(file, 'gallery').then(dataUrl => {
-                    imageData.gallery.push({ data: dataUrl, alt: `Gallery image ${i + 1}` });
-                    count++; if (count === filesToProcess.length) { updateGalleryPreviews(); showSaveButton(); }
-                }).catch(err => { console.error(err); alert('Error processing image'); });
+    if(section==='gallery'){
+        const maxImages=6;
+        const filesToProcess=Array.from(files).slice(0,maxImages);
+        imageData.gallery=[];
+        let count=0;
+        filesToProcess.forEach((file,i)=>{
+            if(file.type.match(/image\/(jpeg|jpg|png)/)){
+                compressImage(file,'gallery').then(dataUrl=>{
+                    imageData.gallery.push({data:dataUrl,alt:`Gallery image ${i+1}`});
+                    count++; if(count===filesToProcess.length) { updateGalleryPreviews(); showSaveButton(); }
+                }).catch(err=>{console.error(err); alert('Error processing image');});
             }
         });
     } else {
-        const file = files[0];
-        if (file.type.match(/image\/(jpeg|jpg|png)/)) {
-            compressImage(file, section).then(dataUrl => {
-                imageData[section] = { data: dataUrl, name: file.name };
-                updatePreview(section, dataUrl);
+        const file=files[0];
+        if(file.type.match(/image\/(jpeg|jpg|png)/)){
+            compressImage(file,section).then(dataUrl=>{
+                imageData[section]={data:dataUrl,name:file.name};
+                updatePreview(section,dataUrl);
                 showSaveButton();
-            }).catch(err => { console.error(err); alert('Error processing image'); });
+            }).catch(err=>{console.error(err); alert('Error processing image');});
         } else alert('Please upload a JPG or PNG file.');
     }
 }
@@ -184,48 +187,56 @@ function processFiles(files, section) {
 // ===========================
 // DRAG & DROP
 // ===========================
-function handleDragOver(e) { e.preventDefault(); e.stopPropagation(); e.currentTarget.classList.add('dragover'); }
-function handleDrop(e, section) { e.preventDefault(); e.stopPropagation(); e.currentTarget.classList.remove('dragover'); processFiles(e.dataTransfer.files, section); }
-function handleFileSelect(e, section) { processFiles(e.target.files, section); }
+function handleDragOver(e){ e.preventDefault(); e.stopPropagation(); e.currentTarget.classList.add('dragover'); }
+function handleDrop(e,section){ e.preventDefault(); e.stopPropagation(); e.currentTarget.classList.remove('dragover'); processFiles(e.dataTransfer.files,section);}
+function handleFileSelect(e,section){ processFiles(e.target.files,section); }
 
 // ===========================
 // SAVE BUTTON
 // ===========================
-function showSaveButton() { document.getElementById('saveBtn')?.classList.add('show'); }
+function showSaveButton(){ document.getElementById('saveBtn')?.classList.add('show'); }
 
-async function saveAllChanges() {
-    try {
-        const config = {
-            images: {
-                hero: imageData.hero ? await uploadImageToSupabase('hero', imageData.hero.data) : null,
-                logo: imageData.logo ? await uploadImageToSupabase('logo', imageData.logo.data) : null,
-                location: imageData.location ? await uploadImageToSupabase('location', imageData.location.data) : null,
-                method: imageData.method ? await uploadImageToSupabase('method', imageData.method.data) : null,
-                gallery: await Promise.all(imageData.gallery.map(async (img, i) => ({ src: await uploadImageToSupabase(`gallery-${i}`, img.data), alt: img.alt })))
+async function saveAllChanges(){
+    try{
+        const config={
+            images:{
+                hero: imageData.hero ? await uploadImageToSupabase('hero',imageData.hero.data) : null,
+                logo: imageData.logo ? await uploadImageToSupabase('logo',imageData.logo.data) : null,
+                location: imageData.location ? await uploadImageToSupabase('location',imageData.location.data) : null,
+                method: imageData.method ? await uploadImageToSupabase('method',imageData.method.data) : null,
+                gallery: await Promise.all(imageData.gallery.map(async (img,i)=>({src:await uploadImageToSupabase(`gallery-${i}`,img.data),alt:img.alt})))
             },
-            lastUpdated: new Date().toISOString()
+            lastUpdated:new Date().toISOString()
         };
         await saveSiteConfigToSupabase(config);
+
+        // Update previews
         updateAllPreviews();
         document.getElementById('saveBtn')?.classList.remove('show');
-        const msg = document.getElementById('successMessage');
+        const msg=document.getElementById('successMessage');
         msg?.classList.add('show');
-        setTimeout(() => msg?.classList.remove('show'), 4000);
+        setTimeout(()=>msg?.classList.remove('show'),4000);
+
+        // ✅ Update localStorage and live site immediately
         updateWebsiteImages();
+
         alert('✅ Images saved successfully!');
-    } catch (err) { console.error(err); alert('❌ Failed to save images'); }
+    } catch(err){ 
+        console.error(err); 
+        alert('❌ Failed to save images'); 
+    }
 }
 
 // ===========================
 // LOAD EXISTING IMAGES
 // ===========================
-async function loadExistingImages() {
+async function loadExistingImages(){
     const config = await loadSiteConfigFromSupabase();
-    if (!config?.images) return;
-    imageData.hero = config.images.hero ? { data: config.images.hero } : null;
-    imageData.logo = config.images.logo ? { data: config.images.logo } : null;
-    imageData.location = config.images.location ? { data: config.images.location } : null;
-    imageData.method = config.images.method ? { data: config.images.method } : null;
+    if(!config?.images) return;
+    imageData.hero = config.images.hero ? {data:config.images.hero} : null;
+    imageData.logo = config.images.logo ? {data:config.images.logo} : null;
+    imageData.location = config.images.location ? {data:config.images.location} : null;
+    imageData.method = config.images.method ? {data:config.images.method} : null;
     imageData.gallery = config.images.gallery || [];
     updateAllPreviews();
 }
@@ -233,26 +244,72 @@ async function loadExistingImages() {
 // ===========================
 // LOCALSTORAGE UPDATE FOR MAIN SITE
 // ===========================
-function updateWebsiteImages() {
-    const config = {
-        images: {
-            hero: imageData.hero?.data || null,
-            logo: imageData.logo?.data || null,
-            location: imageData.location?.data || null,
-            method: imageData.method?.data || null,
-            gallery: imageData.gallery.map(img => ({ src: img.data, alt: img.alt }))
+function updateWebsiteImages(){
+    const config={
+        images:{
+            hero:imageData.hero?.data||null,
+            logo:imageData.logo?.data||null,
+            location:imageData.location?.data||null,
+            method:imageData.method?.data||null,
+            gallery:imageData.gallery.map(img=>({src:img.data,alt:img.alt}))
         },
-        lastUpdated: new Date().toISOString()
+        lastUpdated:new Date().toISOString()
     };
-    localStorage.setItem('mediterra_site_config', JSON.stringify(config));
+    localStorage.setItem('mediterra_site_config',JSON.stringify(config));
+
+    // Update main site DOM if admin and main page are same window
+    if (window.location.pathname.includes('index.html')) {
+        if(config.images.hero) {
+            const heroVideoSource = document.querySelector('.hero-video source');
+            if(heroVideoSource){ heroVideoSource.src=config.images.hero; }
+            const heroVideo = document.querySelector('.hero-video');
+            if(heroVideo){ heroVideo.load(); }
+        }
+        if(config.images.logo){
+            document.querySelectorAll('.logo-img').forEach(img=>img.src=config.images.logo);
+        }
+        if(config.images.location){
+            const locationImg = document.querySelector('#location .location-img');
+            if(locationImg) locationImg.src=config.images.location;
+        }
+        if(config.images.method){
+            const methodImg = document.querySelector('#method .method-img');
+            if(methodImg) methodImg.src=config.images.method;
+        }
+        if(config.images.gallery && config.images.gallery.length>0){
+            const galleryContainer = document.querySelector('.gallery-grid');
+            if(galleryContainer){
+                galleryContainer.innerHTML='';
+                config.images.gallery.forEach(item=>{
+                    const div = document.createElement('div');
+                    div.className='gallery-item';
+                    const imgEl = document.createElement('img');
+                    imgEl.src=item.src;
+                    imgEl.alt=item.alt;
+                    imgEl.className='gallery-img';
+                    div.appendChild(imgEl);
+                    galleryContainer.appendChild(div);
+                });
+            }
+        }
+    }
 }
 
 // ===========================
 // DRAG LEAVE HANDLER
 // ===========================
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.upload-area').forEach(area => {
-        area.addEventListener('dragleave', e => { e.currentTarget.classList.remove('dragover'); });
+document.addEventListener('DOMContentLoaded',()=>{
+    document.querySelectorAll('.upload-area').forEach(area=>{
+        area.addEventListener('dragleave', e=>{ e.currentTarget.classList.remove('dragover'); });
     });
 });
 
+// ===========================
+// FAIL-SAFE: SHOW LOGIN IF SPLASH BLOCKED
+// ===========================
+window.addEventListener('load',()=>{
+    const splash=document.getElementById('splashScreen');
+    if(splash) splash.style.display='none';
+    const login=document.getElementById('loginContainer');
+    if(login) login.style.display='flex';
+});

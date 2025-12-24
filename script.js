@@ -214,32 +214,6 @@ function applyNewAdminData(config) {
 
         console.log(`✅ Successfully applied ${imagesApplied} custom images`);
 
-        // Show a subtle notification that custom images are loaded
-        if (imagesApplied > 0) {
-            const notification = document.createElement('div');
-            notification.textContent = '✓ Custom images loaded';
-            notification.style.cssText = `
-                position: fixed;
-                bottom: 20px;
-                right: 20px;
-                background: rgba(212, 175, 55, 0.9);
-                color: white;
-                padding: 12px 20px;
-                border-radius: 8px;
-                font-size: 14px;
-                z-index: 10001;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-                animation: slideIn 0.3s ease-out;
-            `;
-            document.body.appendChild(notification);
-
-            // Remove notification after 3 seconds
-            setTimeout(() => {
-                notification.style.animation = 'slideOut 0.3s ease-out';
-                setTimeout(() => notification.remove(), 300);
-            }, 3000);
-        }
-
     } catch (error) {
         console.error('❌ Error applying custom images:', error);
         alert('Error loading custom images. Please try uploading them again in the admin panel.');

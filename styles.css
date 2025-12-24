@@ -2000,12 +2000,26 @@ section {
         grid-template-columns: 1fr;
     }
 
+    .contact-item {
+        padding: 1.25rem;
+    }
+
+    .contact-item p {
+        word-break: break-word;
+        overflow-wrap: break-word;
+    }
+
+    .contact-item a {
+        word-break: break-all;
+    }
+
     .contact-actions {
         margin-top: 2rem;
     }
 
     .social-links {
-        justify-content: center;
+        justify-content: flex-start;
+        flex-wrap: wrap;
     }
 
     .guide-grid {
@@ -2123,6 +2137,36 @@ section {
 
     .news-content {
         font-size: 0.85rem;
+    }
+
+    .contact-item {
+        padding: 1rem;
+    }
+
+    .contact-item p {
+        font-size: 0.95rem;
+        word-break: break-word;
+        overflow-wrap: break-word;
+    }
+
+    .contact-item a {
+        word-break: break-all;
+    }
+
+    .contact-details {
+        margin: 1.5rem 0;
+        gap: 1.5rem;
+    }
+
+    .social-links {
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: flex-start;
+    }
+
+    .social-link {
+        font-size: 0.85rem;
+        padding: 0.4rem 0.8rem;
     }
 
     .contact-actions {

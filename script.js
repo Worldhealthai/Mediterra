@@ -1,51 +1,7 @@
 // ===========================
-// SPLASH SCREEN
-// ===========================
-
-// Remove splash screen helper
-function removeSplashScreen() {
-    document.body.classList.remove('splash-active');
-    const splashScreen = document.getElementById('splashScreen');
-    if (splashScreen) {
-        setTimeout(() => {
-            splashScreen.remove();
-        }, 800);
-    }
-}
-
-// Check if splash has been shown in this session
-const splashShown = sessionStorage.getItem('splashShown');
-
-if (!splashShown) {
-    // First page load in this session - show splash
-    document.body.classList.add('splash-active');
-
-    // Mark splash as shown for this session
-    sessionStorage.setItem('splashShown', 'true');
-
-    // Remove splash screen after animation completes
-    window.addEventListener('load', () => {
-        setTimeout(() => {
-            removeSplashScreen();
-        }, 2500);
-    });
-
-    // Safety timeout - always remove splash after 5 seconds max
-    setTimeout(() => {
-        removeSplashScreen();
-    }, 5000);
-} else {
-    // Already shown in this session - hide immediately
-    const splashScreen = document.getElementById('splashScreen');
-    if (splashScreen) {
-        splashScreen.style.display = 'none';
-        splashScreen.remove();
-    }
-}
-
-// ===========================
 // LOAD ADMIN PANEL DATA
 // ===========================
+// Note: Splash screen is now handled by inline script in index.html
 
 // Initialize Supabase client
 let supabase = null;

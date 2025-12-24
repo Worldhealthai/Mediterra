@@ -21,6 +21,50 @@
         </div>
     </div>
 
+    <!-- Inline Splash Screen Handler (runs immediately, independent of external scripts) -->
+    <script>
+        (function() {
+            // Remove splash screen helper
+            function removeSplash() {
+                var body = document.body;
+                var splash = document.getElementById('splashScreen');
+                if (body) body.classList.remove('splash-active');
+                if (splash) {
+                    splash.style.opacity = '0';
+                    setTimeout(function() {
+                        if (splash && splash.parentNode) {
+                            splash.parentNode.removeChild(splash);
+                        }
+                    }, 800);
+                }
+            }
+
+            // Check if splash was already shown in this session
+            var splashShown = sessionStorage.getItem('splashShown');
+
+            if (!splashShown) {
+                // First load - show splash
+                document.body.classList.add('splash-active');
+                sessionStorage.setItem('splashShown', 'true');
+
+                // Remove splash after 2.5 seconds
+                setTimeout(removeSplash, 2500);
+
+                // Safety timeout - ALWAYS remove after 4 seconds max
+                setTimeout(removeSplash, 4000);
+            } else {
+                // Already shown - hide immediately
+                var splash = document.getElementById('splashScreen');
+                if (splash) {
+                    splash.style.display = 'none';
+                    if (splash.parentNode) {
+                        splash.parentNode.removeChild(splash);
+                    }
+                }
+            }
+        })();
+    </script>
+
     <!-- Navigation -->
     <nav class="navbar" id="navbar">
         <div class="nav-container">

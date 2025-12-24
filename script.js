@@ -37,61 +37,92 @@ if (!splashShown) {
 // LOAD ADMIN PANEL DATA
 // ===========================
 
-// Load images IMMEDIATELY (before DOM is ready) to prevent hardcoded images from showing
-(function loadAdminDataImmediately() {
-    console.log('🔍 [MEDITERRA] Checking for custom images...');
-    console.log('🌐 Current URL:', window.location.href);
-    console.log('🗂️ localStorage available:', typeof(Storage) !== 'undefined' ? 'YES' : 'NO');
-
-    const newAdminData = localStorage.getItem('mediterra_site_config');
-
-    if (newAdminData) {
-        try {
-            const data = JSON.parse(newAdminData);
-            console.log('✅ Custom images found in localStorage!');
-            console.log('📸 Images to load:', {
-                hero: data.images?.hero ? '✓' : '✗',
-                logo: data.images?.logo ? '✓' : '✗',
-                location: data.images?.location ? '✓' : '✗',
-                method: data.images?.method ? '✓' : '✗',
-                gallery: data.images?.gallery?.length || 0
-            });
-            console.log('🕐 Last updated:', data.lastUpdated);
-
-            // Store in window for access after DOM loads
-            window._mediterraCustomImages = data;
-        } catch (error) {
-            console.error('❌ Error parsing admin data:', error);
-        }
-    } else {
-        console.log('⚠️ No custom images found in localStorage');
-        console.log('💡 Tip: Upload images via /admin.html to customize your site');
-        console.log('🔑 Expected localStorage key: mediterra_site_config');
-
-        // Check if there's ANY data in localStorage
-        console.log('📊 localStorage keys found:', Object.keys(localStorage).length);
-        if (Object.keys(localStorage).length > 0) {
-            console.log('🗂️ Available keys:', Object.keys(localStorage));
-        }
-    }
-})();
-
-// Apply custom images as soon as DOM is ready
+// Initialize Supabase client
+let supabase = null;
 document.addEventListener('DOMContentLoaded', () => {
+    supabase = initSupabase();
     loadAdminData();
 });
 
+// Load images from Supabase
+async function loadImagesFromSupabase() {
+    if (!supabase) {
+        console.error('❌ Supabase client not initialized');
+        return null;
+    }
+
+    try {
+        const { data, error } = await supabase
+            .from('site_images')
+            .select('*')
+            .eq('is_active', true);
+
+        if (error) throw error;
+
+        console.log('✅ Loaded images from Supabase:', data);
+        return data;
+
+    } catch (error) {
+        console.error('❌ Error loading from Supabase:', error);
+        return null;
+    }
+}
+
+// Apply custom images as soon as DOM is ready
 async function loadAdminData() {
-    // Try to load from new admin panel data first
+    console.log('🔍 [MEDITERRA] Loading custom images...');
+
+    try {
+        // Try to load from Supabase first
+        const supabaseImages = await loadImagesFromSupabase();
+
+        if (supabaseImages && supabaseImages.length > 0) {
+            console.log(`✅ Found ${supabaseImages.length} images in Supabase`);
+
+            // Convert Supabase data to config format
+            const config = {
+                images: {
+                    hero: null,
+                    logo: null,
+                    location: null,
+                    method: null,
+                    gallery: []
+                },
+                lastUpdated: new Date().toISOString()
+            };
+
+            supabaseImages.forEach(img => {
+                const type = img.image_type;
+
+                if (type.startsWith('gallery-')) {
+                    config.images.gallery.push({
+                        src: img.image_url,
+                        alt: img.alt_text
+                    });
+                } else {
+                    config.images[type] = img.image_url;
+                }
+            });
+
+            applyNewAdminData(config);
+            console.log('✅ Custom images from Supabase applied successfully');
+            return;
+        }
+    } catch (error) {
+        console.error('❌ Error loading from Supabase:', error);
+    }
+
+    // Fallback to localStorage
+    console.log('⚠️ Falling back to localStorage...');
     const newAdminData = localStorage.getItem('mediterra_site_config');
     if (newAdminData) {
         try {
             const data = JSON.parse(newAdminData);
             applyNewAdminData(data);
-            console.log('✅ Custom images applied successfully');
+            console.log('✅ Custom images from localStorage applied successfully');
             return;
         } catch (error) {
-            console.error('❌ Error loading new admin data:', error);
+            console.error('❌ Error loading localStorage data:', error);
         }
     }
 
@@ -104,8 +135,7 @@ async function loadAdminData() {
             return;
         }
     } catch (error) {
-        // site-data.json doesn't exist, fall back to old localStorage
-        console.log('No site-data.json found, using localStorage');
+        console.log('No site-data.json found');
     }
 
     // Fallback to old localStorage format

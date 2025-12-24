@@ -348,9 +348,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const navMenu = document.getElementById('navMenu');
     const navLinks = document.querySelectorAll('.nav-menu a');
 
+    console.log('🔧 Navbar script initialized');
+    console.log('📍 Navbar element:', navbar ? 'Found' : 'Not found');
+
     // Check if navbar exists
     if (!navbar) {
-        console.error('Navbar element not found');
+        console.error('❌ Navbar element not found');
         return;
     }
 
@@ -371,13 +374,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentScroll > lastScroll && currentScroll > 150) {
             // Scrolling down & past threshold
             navbar.classList.add('hidden');
+            console.log('⬇️ Navbar hidden (scroll down)');
         } else if (currentScroll < lastScroll) {
             // Scrolling up
             navbar.classList.remove('hidden');
+            console.log('⬆️ Navbar visible (scroll up)');
         }
 
         lastScroll = currentScroll;
     });
+
+    console.log('✅ Navbar scroll listener attached');
 
     // Mobile menu toggle
     if (menuToggle && navMenu) {

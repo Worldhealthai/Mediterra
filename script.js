@@ -3,14 +3,14 @@
 // ===========================
 // Note: Splash screen is now handled by inline script in index.html
 
-// Initialize Supabase client (uses supabaseClient from supabase-config.js)
-let supabaseClient = null;
+// Use Supabase client from supabase-config.js (already declared globally)
 
 // Initialize Supabase when library is ready (non-blocking)
 function initSupabaseIfReady() {
     try {
         if (typeof initSupabase === 'function') {
-            supabaseClient = initSupabase();
+            // Initialize the global supabaseClient from supabase-config.js
+            initSupabase();
             console.log('✅ Supabase initialized');
         } else {
             console.log('⚠️ Supabase config not loaded yet');

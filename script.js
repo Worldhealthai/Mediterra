@@ -37,6 +37,24 @@ if (!splashShown) {
 // LOAD ADMIN PANEL DATA
 // ===========================
 
+// Load images IMMEDIATELY (before DOM is ready) to prevent hardcoded images from showing
+(function loadAdminDataImmediately() {
+    const newAdminData = localStorage.getItem('mediterra_site_config');
+    if (newAdminData) {
+        try {
+            const data = JSON.parse(newAdminData);
+            console.log('✅ Custom images found in localStorage, will apply on page load');
+            // Store in window for access after DOM loads
+            window._mediterraCustomImages = data;
+        } catch (error) {
+            console.error('❌ Error parsing admin data:', error);
+        }
+    } else {
+        console.log('ℹ️ No custom images found, using default images');
+    }
+})();
+
+// Apply custom images as soon as DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
     loadAdminData();
 });
@@ -48,9 +66,10 @@ async function loadAdminData() {
         try {
             const data = JSON.parse(newAdminData);
             applyNewAdminData(data);
+            console.log('✅ Custom images applied successfully');
             return;
         } catch (error) {
-            console.error('Error loading new admin data:', error);
+            console.error('❌ Error loading new admin data:', error);
         }
     }
 
@@ -81,58 +100,109 @@ async function loadAdminData() {
 
 // Apply data from new admin panel
 function applyNewAdminData(config) {
-    if (config && config.images) {
-        try {
-            // Hero background
-            if (config.images.hero) {
-                const heroBg = document.querySelector('.hero-bg-image');
-                if (heroBg) {
-                    heroBg.style.backgroundImage = `url('${config.images.hero}')`;
-                    heroBg.style.opacity = '1';
-                }
-            }
+    if (!config || !config.images) {
+        console.log('ℹ️ No admin config to apply');
+        return;
+    }
 
-            // Logo
-            if (config.images.logo) {
-                const logoImgs = document.querySelectorAll('.logo-img, .splash-logo');
-                logoImgs.forEach(img => {
-                    if (img) img.src = config.images.logo;
-                });
-            }
+    let imagesApplied = 0;
 
-            // Location image
-            if (config.images.location) {
-                const locationImg = document.querySelector('.location-img');
-                if (locationImg) {
-                    locationImg.src = config.images.location;
-                }
+    try {
+        // Hero background
+        if (config.images.hero) {
+            const heroBg = document.querySelector('.hero-bg-image');
+            if (heroBg) {
+                heroBg.style.backgroundImage = `url('${config.images.hero}')`;
+                heroBg.style.opacity = '1';
+                imagesApplied++;
+                console.log('✓ Hero background updated');
             }
-
-            // Method image
-            if (config.images.method) {
-                const methodImg = document.querySelector('.method-img');
-                if (methodImg) {
-                    methodImg.src = config.images.method;
-                }
-            }
-
-            // Gallery images
-            if (config.images.gallery && config.images.gallery.length > 0) {
-                const galleryImgs = document.querySelectorAll('.gallery-img');
-                config.images.gallery.forEach((img, index) => {
-                    if (galleryImgs[index] && img.src) {
-                        galleryImgs[index].src = img.src;
-                        if (img.alt) {
-                            galleryImgs[index].alt = img.alt;
-                        }
-                    }
-                });
-            }
-
-            console.log('✅ Admin images loaded successfully');
-        } catch (error) {
-            console.error('Error applying new admin data:', error);
         }
+
+        // Logo (navbar and splash screen)
+        if (config.images.logo) {
+            const logoImgs = document.querySelectorAll('.logo-img');
+            logoImgs.forEach(img => {
+                if (img) {
+                    img.src = config.images.logo;
+                    imagesApplied++;
+                }
+            });
+            // Also update splash logo if it still exists
+            const splashLogo = document.querySelector('.splash-logo');
+            if (splashLogo) {
+                splashLogo.src = config.images.logo;
+                imagesApplied++;
+            }
+            console.log('✓ Logo images updated');
+        }
+
+        // Location image
+        if (config.images.location) {
+            const locationImg = document.querySelector('.location-img');
+            if (locationImg) {
+                locationImg.src = config.images.location;
+                imagesApplied++;
+                console.log('✓ Location image updated');
+            }
+        }
+
+        // Method image
+        if (config.images.method) {
+            const methodImg = document.querySelector('.method-img');
+            if (methodImg) {
+                methodImg.src = config.images.method;
+                imagesApplied++;
+                console.log('✓ Method image updated');
+            }
+        }
+
+        // Gallery images
+        if (config.images.gallery && config.images.gallery.length > 0) {
+            const galleryImgs = document.querySelectorAll('.gallery-img');
+            config.images.gallery.forEach((img, index) => {
+                if (galleryImgs[index] && img.src) {
+                    galleryImgs[index].src = img.src;
+                    if (img.alt) {
+                        galleryImgs[index].alt = img.alt;
+                    }
+                    imagesApplied++;
+                }
+            });
+            console.log(`✓ ${config.images.gallery.length} gallery images updated`);
+        }
+
+        console.log(`✅ Successfully applied ${imagesApplied} custom images`);
+
+        // Show a subtle notification that custom images are loaded
+        if (imagesApplied > 0) {
+            const notification = document.createElement('div');
+            notification.textContent = '✓ Custom images loaded';
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: rgba(212, 175, 55, 0.9);
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                font-size: 14px;
+                z-index: 10001;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                animation: slideIn 0.3s ease-out;
+            `;
+            document.body.appendChild(notification);
+
+            // Remove notification after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+    } catch (error) {
+        console.error('❌ Error applying custom images:', error);
+        alert('Error loading custom images. Please try uploading them again in the admin panel.');
     }
 }
 

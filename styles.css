@@ -105,9 +105,11 @@ body.splash-active {
 }
 
 .splash-logo {
-    width: 320px;
+    width: 280px;
     max-width: 80vw;
-    height: auto;
+    height: 280px;
+    object-fit: cover;
+    object-position: center 25%;
     background: radial-gradient(ellipse at center,
         rgba(255, 255, 255, 0.15) 0%,
         rgba(255, 255, 255, 0.08) 40%,
@@ -127,16 +129,28 @@ body.splash-active {
     font-weight: 300;
     letter-spacing: 0.5rem;
     margin-top: 2rem;
+    margin-bottom: 0.5rem;
     text-shadow: 0 0 30px rgba(212, 175, 55, 0.3),
                  0 0 15px rgba(255, 255, 255, 0.2);
     animation: elegantFadeIn 2.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.splash-subtitle {
+    color: rgba(212, 175, 55, 0.9);
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    font-weight: 300;
+    letter-spacing: 0.2rem;
+    margin-bottom: 0;
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.4),
+                 0 0 10px rgba(255, 255, 255, 0.15);
+    animation: elegantFadeIn 2.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 .splash-loader {
     margin-top: 3rem;
-    width: 2px;
-    height: 2px;
-    background: transparent;
+    width: 50px;
+    height: 50px;
     margin-left: auto;
     margin-right: auto;
     position: relative;
@@ -150,19 +164,26 @@ body.splash-active {
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 50%;
-    border: 1px solid rgba(212, 175, 55, 0.3);
 }
 
 .splash-loader::before {
-    width: 40px;
-    height: 40px;
-    animation: elegantPulse 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    width: 50px;
+    height: 50px;
+    border: 2px solid transparent;
+    border-top-color: rgba(212, 175, 55, 0.8);
+    border-right-color: rgba(212, 175, 55, 0.4);
+    animation: goldenSpin 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.6));
 }
 
 .splash-loader::after {
-    width: 56px;
-    height: 56px;
-    animation: elegantPulse 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite 0.4s;
+    width: 36px;
+    height: 36px;
+    border: 2px solid transparent;
+    border-bottom-color: rgba(201, 169, 97, 0.6);
+    border-left-color: rgba(201, 169, 97, 0.3);
+    animation: goldenSpin 1.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite reverse;
+    filter: drop-shadow(0 0 6px rgba(201, 169, 97, 0.5));
 }
 
 @keyframes splashFadeOut {
@@ -221,6 +242,15 @@ body.splash-active {
     50% {
         opacity: 0.6;
         transform: translateX(5%);
+    }
+}
+
+@keyframes goldenSpin {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
     }
 }
 
@@ -2079,6 +2109,17 @@ section {
         font-size: 1.5rem;
         letter-spacing: 0.3rem;
         margin-top: 1.5rem;
+    }
+
+    .splash-subtitle {
+        font-size: 0.85rem;
+        letter-spacing: 0.15rem;
+    }
+
+    .splash-logo {
+        width: 200px;
+        height: 200px;
+        padding: 2rem;
     }
 
     section {

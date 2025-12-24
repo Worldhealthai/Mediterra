@@ -7,6 +7,61 @@ const supabaseAnonKey =
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 
+// ===== SUPABASE HELPERS =====
+
+async function uploadImageToSupabase(section, fileDataUrl) {
+    const blob = await (await fetch(fileDataUrl)).blob();
+    const filePath = `images/${section}-${Date.now()}.jpg`;
+
+    const { error } = await supabase
+        .storage
+        .from("assets")
+        .upload(filePath, blob, { upsert: true });
+
+    if (error) {
+        console.error("Upload failed:", error);
+        throw error;
+    }
+
+    const { data } = supabase
+        .storage
+        .from("assets")
+        .getPublicUrl(filePath);
+
+    return data.publicUrl;
+}
+
+async function saveSiteConfigToSupabase(config) {
+    const { error } = await supabase
+        .from("content")
+        .upsert(
+            { key: "site_images", value: config },
+            { onConflict: "key" }
+        );
+
+    if (error) {
+        console.error("DB save failed:", error);
+        throw error;
+    }
+}
+
+async function loadSiteConfigFromSupabase() {
+    const { data, error } = await supabase
+        .from("content")
+        .select("value")
+        .eq("key", "site_images")
+        .single();
+
+    if (error) {
+        console.warn("No existing config found");
+        return null;
+    }
+
+    return data.value;
+}
+
+
+
 // Admin Panel Script for Image Management
 // Simple password-based authentication
 const ADMIN_PASSWORD = 'Kayak'; // Change this to your desired password

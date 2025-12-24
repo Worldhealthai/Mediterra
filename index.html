@@ -55,21 +55,80 @@
     </div>
 </section>
 
-<!-- Add your other sections here (about, location, method, wholesale, story, gallery, contact, footer) -->
+<!-- About Section -->
+<section class="about" id="about">
+    <div class="container">
+        <h2 class="section-title">Crafted by Nature. Refined Through Experience. Elevated by Purpose.</h2>
+        <p>Mediterra Mussel Farm is a family-owned aquaculture enterprise rooted in one of Greece's most exceptional marine landscapes.</p>
+    </div>
+</section>
 
-<!-- Scripts -->
+<!-- Location Section -->
+<section class="location" id="location">
+    <div class="container">
+        <h2 class="section-title">The Artemisium Strait – A Sea That Remembers</h2>
+        <img id="location-img" src="https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=800&q=80" alt="Location image">
+    </div>
+</section>
+
+<!-- Method Section -->
+<section class="method" id="method">
+    <div class="container">
+        <h2 class="section-title">Cultivation Guided by Nature, Perfected by Mastery</h2>
+        <img id="method-img" src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80" alt="Method image">
+    </div>
+</section>
+
+<!-- Wholesale Section -->
+<section class="wholesale" id="wholesale">
+    <div class="container">
+        <h2 class="section-title">For Partners Who Value Origin, Precision, and Authentic Mediterranean Quality</h2>
+    </div>
+</section>
+
+<!-- Story Section -->
+<section class="story" id="story">
+    <div class="container">
+        <h2 class="section-title">Resilience in Motion</h2>
+    </div>
+</section>
+
+<!-- Gallery Section -->
+<section class="gallery" id="gallery">
+    <div class="container gallery-grid" id="gallery-grid">
+        <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80" alt="Gallery 1" class="gallery-img">
+        <img src="https://images.unsplash.com/photo-1583506897994-c2de2a2b5b27?w=600&q=80" alt="Gallery 2" class="gallery-img">
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="contact" id="contact">
+    <div class="container">
+        <h2 class="section-title">Contact Us</h2>
+        <p>Email: mediterramf@gmail.com</p>
+        <p>Phone: +30 6984092007</p>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <p>&copy; 2026 Mediterra Mussel Farm. All rights reserved.</p>
+    </div>
+</footer>
+
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const splash = document.getElementById('splashScreen');
+    const logoEls = document.querySelectorAll('.logo-img');
     let config = null;
 
     try {
-        const siteConfigStr = localStorage.getItem('mediterra_site_config');
-        if (siteConfigStr) config = JSON.parse(siteConfigStr);
-    } catch(e) { console.warn('LocalStorage parse failed', e); }
+        const saved = localStorage.getItem('mediterra_site_config');
+        if(saved) config = JSON.parse(saved);
+    } catch(e){ console.warn(e); }
 
-    // Default fallback images
-    if (!config) {
+    if(!config){
         config = {
             images: {
                 hero: 'https://assets.mixkit.co/videos/preview/mixkit-waves-in-the-water-1164-large.mp4',
@@ -77,51 +136,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 location: 'https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=800&q=80',
                 method: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80',
                 gallery: [
-                    { src: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80', alt: 'Gallery image 1' },
-                    { src: 'https://images.unsplash.com/photo-1583506897994-c2de2a2b5b27?w=600&q=80', alt: 'Gallery image 2' },
-                    { src: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=80', alt: 'Gallery image 3' },
-                    { src: 'https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=600&q=80', alt: 'Gallery image 4' },
-                    { src: 'https://images.unsplash.com/photo-1580541631950-7282082b53ce?w=600&q=80', alt: 'Gallery image 5' },
-                    { src: 'https://images.unsplash.com/photo-1566024287286-457247b70310?w=600&q=80', alt: 'Gallery image 6' }
+                    {src:'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80', alt:'Gallery 1'},
+                    {src:'https://images.unsplash.com/photo-1583506897994-c2de2a2b5b27?w=600&q=80', alt:'Gallery 2'}
                 ]
             }
         };
     }
 
     // Apply images
-    const { images } = config;
-    const heroVideoSource = document.querySelector('.hero-video source');
-    if (heroVideoSource) heroVideoSource.src = images.hero;
-    const heroVideo = document.querySelector('.hero-video');
-    if (heroVideo) heroVideo.load();
+    document.querySelector('.hero-video source').src = config.images.hero;
+    document.querySelector('.hero-video').load();
+    logoEls.forEach(img=>img.src = config.images.logo);
+    document.getElementById('location-img').src = config.images.location;
+    document.getElementById('method-img').src = config.images.method;
 
-    document.querySelectorAll('.logo-img').forEach(img => img.src = images.logo);
-
-    const locationImg = document.querySelector('#location .location-img');
-    if (locationImg) locationImg.src = images.location;
-
-    const methodImg = document.querySelector('#method .method-img');
-    if (methodImg) methodImg.src = images.method;
-
-    const galleryContainer = document.querySelector('.gallery-grid');
-    if (galleryContainer) {
-        galleryContainer.innerHTML = '';
-        images.gallery.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'gallery-item';
-            const imgEl = document.createElement('img');
-            imgEl.src = item.src;
-            imgEl.alt = item.alt;
-            imgEl.className = 'gallery-img';
-            div.appendChild(imgEl);
-            galleryContainer.appendChild(div);
-        });
-    }
+    const galleryGrid = document.getElementById('gallery-grid');
+    galleryGrid.innerHTML='';
+    config.images.gallery.forEach(item=>{
+        const img=document.createElement('img');
+        img.src=item.src;
+        img.alt=item.alt;
+        img.className='gallery-img';
+        galleryGrid.appendChild(img);
+    });
 
     // Hide splash after 1.5s
-    setTimeout(() => {
-        if (splash) splash.style.display = 'none';
-    }, 1500);
+    setTimeout(()=>{ if(splash) splash.style.display='none'; }, 1500);
 });
 </script>
 </body>

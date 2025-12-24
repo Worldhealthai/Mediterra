@@ -5,7 +5,17 @@ const ADMIN_PASSWORD = 'Kayak'; // Change this to your desired password
 // Initialize Supabase client
 let supabase = null;
 document.addEventListener('DOMContentLoaded', () => {
-    supabase = initSupabase();
+    try {
+        if (typeof initSupabase === 'function') {
+            supabase = initSupabase();
+            console.log('✅ Supabase initialized in admin panel');
+        } else {
+            console.warn('⚠️ Supabase config not loaded - will use localStorage only');
+        }
+    } catch (error) {
+        console.error('❌ Error initializing Supabase:', error);
+        console.log('📝 Admin panel will function with localStorage only');
+    }
 });
 
 // Storage for uploaded images

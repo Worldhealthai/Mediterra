@@ -75,10 +75,10 @@ body.splash-active {
     width: 100%;
     height: 100vh;
     background: linear-gradient(135deg,
-        rgba(10, 17, 40, 1) 0%,
-        rgba(15, 26, 47, 1) 35%,
-        rgba(20, 35, 60, 0.98) 60%,
-        rgba(28, 37, 65, 0.95) 100%
+        #1a2d4f 0%,
+        #2a3f5f 35%,
+        #3a5270 60%,
+        #4a6280 100%
     );
     display: flex;
     align-items: center;
@@ -105,18 +105,47 @@ body.splash-active {
 }
 
 .splash-logo {
-    width: 320px;
+    width: 280px;
     max-width: 80vw;
-    height: auto;
-    filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.4)) drop-shadow(0 0 40px rgba(212, 175, 55, 0.15));
+    height: 280px;
+    object-fit: cover;
+    object-position: center 25%;
+    filter: drop-shadow(0 0 40px rgba(212, 175, 55, 0.3))
+            drop-shadow(0 0 20px rgba(255, 255, 255, 0.2));
     animation: elegantReveal 2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.splash-text {
+    color: rgba(255, 245, 220, 0.95);
+    font-family: var(--font-serif);
+    font-size: 3rem;
+    font-weight: 400;
+    letter-spacing: 0.6rem;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    text-shadow: 0 0 30px rgba(212, 175, 55, 0.5),
+                 0 0 15px rgba(255, 255, 255, 0.3);
+    animation: elegantFadeIn 2.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.splash-subtitle {
+    color: rgba(212, 175, 55, 0.9);
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    font-weight: 300;
+    font-style: italic;
+    letter-spacing: 0.25rem;
+    margin-bottom: 0;
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.4),
+                 0 0 10px rgba(255, 255, 255, 0.15);
+    animation: elegantFadeIn 2.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .splash-loader {
     margin-top: 3rem;
-    width: 2px;
-    height: 2px;
-    background: transparent;
+    width: 50px;
+    height: 50px;
     margin-left: auto;
     margin-right: auto;
     position: relative;
@@ -130,19 +159,26 @@ body.splash-active {
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 50%;
-    border: 1px solid rgba(212, 175, 55, 0.3);
 }
 
 .splash-loader::before {
-    width: 40px;
-    height: 40px;
-    animation: elegantPulse 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    width: 50px;
+    height: 50px;
+    border: 2px solid transparent;
+    border-top-color: rgba(212, 175, 55, 0.8);
+    border-right-color: rgba(212, 175, 55, 0.4);
+    animation: goldenSpin 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.6));
 }
 
 .splash-loader::after {
-    width: 56px;
-    height: 56px;
-    animation: elegantPulse 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite 0.4s;
+    width: 36px;
+    height: 36px;
+    border: 2px solid transparent;
+    border-bottom-color: rgba(201, 169, 97, 0.6);
+    border-left-color: rgba(201, 169, 97, 0.3);
+    animation: goldenSpin 1.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite reverse;
+    filter: drop-shadow(0 0 6px rgba(201, 169, 97, 0.5));
 }
 
 @keyframes splashFadeOut {
@@ -167,12 +203,14 @@ body.splash-active {
     0% {
         opacity: 0;
         transform: scale(0.96);
-        filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.4)) drop-shadow(0 0 40px rgba(212, 175, 55, 0));
+        filter: drop-shadow(0 0 40px rgba(212, 175, 55, 0))
+                drop-shadow(0 0 20px rgba(255, 255, 255, 0));
     }
     100% {
         opacity: 1;
         transform: scale(1);
-        filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.4)) drop-shadow(0 0 40px rgba(212, 175, 55, 0.15));
+        filter: drop-shadow(0 0 40px rgba(212, 175, 55, 0.3))
+                drop-shadow(0 0 20px rgba(255, 255, 255, 0.2));
     }
 }
 
@@ -199,6 +237,15 @@ body.splash-active {
     50% {
         opacity: 0.6;
         transform: translateX(5%);
+    }
+}
+
+@keyframes goldenSpin {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
     }
 }
 
@@ -387,7 +434,7 @@ h1, h2, h3, h4, h5, h6 {
    =========================== */
 
 .news-banner {
-    margin-top: 80px;
+    margin-top: 142px;
     background: linear-gradient(135deg, rgba(10, 17, 40, 0.9) 0%, rgba(28, 37, 65, 0.8) 100%);
     backdrop-filter: blur(10px);
     padding: 0.75rem 0;
@@ -427,7 +474,7 @@ h1, h2, h3, h4, h5, h6 {
 .news-label {
     color: var(--gold);
     font-weight: 600;
-    margin-right: 1rem;
+    margin-right: 0.5rem;
 }
 
 .news-text {
@@ -1936,7 +1983,7 @@ section {
 
 @media (max-width: 768px) {
     .news-banner {
-        margin-top: 70px;
+        margin-top: 82px;
         padding: 0.65rem 0;
     }
 
@@ -2053,6 +2100,23 @@ section {
         padding: 0 1.5rem;
     }
 
+    .splash-text {
+        font-size: 1.8rem;
+        letter-spacing: 0.4rem;
+        margin-top: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .splash-subtitle {
+        font-size: 1rem;
+        letter-spacing: 0.2rem;
+    }
+
+    .splash-logo {
+        width: 200px;
+        height: 200px;
+    }
+
     section {
         padding: 3rem 0;
     }
@@ -2132,7 +2196,7 @@ section {
     }
 
     .news-banner {
-        margin-top: 70px;
+        margin-top: 82px;
         padding: 0.6rem 0;
         font-size: 0.85rem;
     }

@@ -1,6 +1,6 @@
 // Admin Panel Script for Image Management
 // Simple password-based authentication
-const ADMIN_PASSWORD = 'mediterra2024'; // Change this to your desired password
+const ADMIN_PASSWORD = 'Kayak'; // Change this to your desired password
 
 // Storage for uploaded images
 let imageData = {

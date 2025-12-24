@@ -2,6 +2,17 @@
 // SPLASH SCREEN
 // ===========================
 
+// Remove splash screen helper
+function removeSplashScreen() {
+    document.body.classList.remove('splash-active');
+    const splashScreen = document.getElementById('splashScreen');
+    if (splashScreen) {
+        setTimeout(() => {
+            splashScreen.remove();
+        }, 800);
+    }
+}
+
 // Check if splash has been shown in this session
 const splashShown = sessionStorage.getItem('splashShown');
 
@@ -15,15 +26,14 @@ if (!splashShown) {
     // Remove splash screen after animation completes
     window.addEventListener('load', () => {
         setTimeout(() => {
-            document.body.classList.remove('splash-active');
-            const splashScreen = document.getElementById('splashScreen');
-            if (splashScreen) {
-                setTimeout(() => {
-                    splashScreen.remove();
-                }, 800);
-            }
+            removeSplashScreen();
         }, 2500);
     });
+
+    // Safety timeout - always remove splash after 5 seconds max
+    setTimeout(() => {
+        removeSplashScreen();
+    }, 5000);
 } else {
     // Already shown in this session - hide immediately
     const splashScreen = document.getElementById('splashScreen');
@@ -39,15 +49,25 @@ if (!splashShown) {
 
 // Initialize Supabase client
 let supabase = null;
-document.addEventListener('DOMContentLoaded', () => {
-    supabase = initSupabase();
-    loadAdminData();
-});
+
+// Initialize Supabase when library is ready (non-blocking)
+function initSupabaseIfReady() {
+    try {
+        if (typeof initSupabase === 'function') {
+            supabase = initSupabase();
+            console.log('✅ Supabase initialized');
+        } else {
+            console.log('⚠️ Supabase config not loaded yet');
+        }
+    } catch (error) {
+        console.error('❌ Error initializing Supabase:', error);
+    }
+}
 
 // Load images from Supabase
 async function loadImagesFromSupabase() {
     if (!supabase) {
-        console.error('❌ Supabase client not initialized');
+        console.log('⚠️ Supabase client not initialized, skipping...');
         return null;
     }
 
@@ -73,40 +93,45 @@ async function loadAdminData() {
     console.log('🔍 [MEDITERRA] Loading custom images...');
 
     try {
-        // Try to load from Supabase first
-        const supabaseImages = await loadImagesFromSupabase();
+        // Initialize Supabase first
+        initSupabaseIfReady();
 
-        if (supabaseImages && supabaseImages.length > 0) {
-            console.log(`✅ Found ${supabaseImages.length} images in Supabase`);
+        // Try to load from Supabase first (only if initialized)
+        if (supabase) {
+            const supabaseImages = await loadImagesFromSupabase();
 
-            // Convert Supabase data to config format
-            const config = {
-                images: {
-                    hero: null,
-                    logo: null,
-                    location: null,
-                    method: null,
-                    gallery: []
-                },
-                lastUpdated: new Date().toISOString()
-            };
+            if (supabaseImages && supabaseImages.length > 0) {
+                console.log(`✅ Found ${supabaseImages.length} images in Supabase`);
 
-            supabaseImages.forEach(img => {
-                const type = img.image_type;
+                // Convert Supabase data to config format
+                const config = {
+                    images: {
+                        hero: null,
+                        logo: null,
+                        location: null,
+                        method: null,
+                        gallery: []
+                    },
+                    lastUpdated: new Date().toISOString()
+                };
 
-                if (type.startsWith('gallery-')) {
-                    config.images.gallery.push({
-                        src: img.image_url,
-                        alt: img.alt_text
-                    });
-                } else {
-                    config.images[type] = img.image_url;
-                }
-            });
+                supabaseImages.forEach(img => {
+                    const type = img.image_type;
 
-            applyNewAdminData(config);
-            console.log('✅ Custom images from Supabase applied successfully');
-            return;
+                    if (type.startsWith('gallery-')) {
+                        config.images.gallery.push({
+                            src: img.image_url,
+                            alt: img.alt_text
+                        });
+                    } else {
+                        config.images[type] = img.image_url;
+                    }
+                });
+
+                applyNewAdminData(config);
+                console.log('✅ Custom images from Supabase applied successfully');
+                return;
+            }
         }
     } catch (error) {
         console.error('❌ Error loading from Supabase:', error);
@@ -149,6 +174,13 @@ async function loadAdminData() {
         }
     }
 }
+
+// Load admin data when DOM is ready (non-blocking)
+document.addEventListener('DOMContentLoaded', () => {
+    loadAdminData().catch(error => {
+        console.error('❌ Error in loadAdminData:', error);
+    });
+});
 
 // Apply data from new admin panel
 function applyNewAdminData(config) {

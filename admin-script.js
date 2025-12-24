@@ -2,12 +2,12 @@
 // Simple password-based authentication
 const ADMIN_PASSWORD = 'Kayak'; // Change this to your desired password
 
-// Initialize Supabase client
-let supabase = null;
+// Initialize Supabase client (uses supabaseClient from supabase-config.js)
+let supabaseClient = null;
 document.addEventListener('DOMContentLoaded', () => {
     try {
         if (typeof initSupabase === 'function') {
-            supabase = initSupabase();
+            supabaseClient = initSupabase();
             console.log('✅ Supabase initialized in admin panel');
         } else {
             console.warn('⚠️ Supabase config not loaded - will use localStorage only');
@@ -344,7 +344,7 @@ function dataURLtoBlob(dataURL) {
 
 // Upload image to Supabase Storage
 async function uploadToSupabase(dataURL, fileName, imageType) {
-    if (!supabase) {
+    if (!supabaseClient) {
         console.error('❌ Supabase client not initialized');
         return null;
     }
@@ -360,7 +360,7 @@ async function uploadToSupabase(dataURL, fileName, imageType) {
         console.log(`📤 Uploading ${imageType} to Supabase...`);
 
         // Upload to Supabase Storage
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .storage
             .from(SUPABASE_CONFIG.bucketName)
             .upload(filePath, blob, {
@@ -374,7 +374,7 @@ async function uploadToSupabase(dataURL, fileName, imageType) {
         }
 
         // Get public URL
-        const { data: { publicUrl } } = supabase
+        const { data: { publicUrl } } = supabaseClient
             .storage
             .from(SUPABASE_CONFIG.bucketName)
             .getPublicUrl(filePath);
@@ -394,14 +394,14 @@ async function uploadToSupabase(dataURL, fileName, imageType) {
 
 // Save image metadata to database
 async function saveImageToDatabase(imageType, imageUrl, storagePath, altText = '') {
-    if (!supabase) {
+    if (!supabaseClient) {
         console.error('❌ Supabase client not initialized');
         return false;
     }
 
     try {
         // Upsert (insert or update) image record
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from('site_images')
             .upsert({
                 image_type: imageType,
@@ -430,13 +430,13 @@ async function saveImageToDatabase(imageType, imageUrl, storagePath, altText = '
 
 // Load images from Supabase
 async function loadImagesFromSupabase() {
-    if (!supabase) {
+    if (!supabaseClient) {
         console.error('❌ Supabase client not initialized');
         return null;
     }
 
     try {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from('site_images')
             .select('*')
             .eq('is_active', true);

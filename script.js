@@ -3,14 +3,14 @@
 // ===========================
 // Note: Splash screen is now handled by inline script in index.html
 
-// Initialize Supabase client
-let supabase = null;
+// Initialize Supabase client (uses supabaseClient from supabase-config.js)
+let supabaseClient = null;
 
 // Initialize Supabase when library is ready (non-blocking)
 function initSupabaseIfReady() {
     try {
         if (typeof initSupabase === 'function') {
-            supabase = initSupabase();
+            supabaseClient = initSupabase();
             console.log('✅ Supabase initialized');
         } else {
             console.log('⚠️ Supabase config not loaded yet');
@@ -22,13 +22,13 @@ function initSupabaseIfReady() {
 
 // Load images from Supabase
 async function loadImagesFromSupabase() {
-    if (!supabase) {
+    if (!supabaseClient) {
         console.log('⚠️ Supabase client not initialized, skipping...');
         return null;
     }
 
     try {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from('site_images')
             .select('*')
             .eq('is_active', true);
@@ -53,7 +53,7 @@ async function loadAdminData() {
         initSupabaseIfReady();
 
         // Try to load from Supabase first (only if initialized)
-        if (supabase) {
+        if (supabaseClient) {
             const supabaseImages = await loadImagesFromSupabase();
 
             if (supabaseImages && supabaseImages.length > 0) {

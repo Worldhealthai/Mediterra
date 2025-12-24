@@ -39,18 +39,40 @@ if (!splashShown) {
 
 // Load images IMMEDIATELY (before DOM is ready) to prevent hardcoded images from showing
 (function loadAdminDataImmediately() {
+    console.log('🔍 [MEDITERRA] Checking for custom images...');
+    console.log('🌐 Current URL:', window.location.href);
+    console.log('🗂️ localStorage available:', typeof(Storage) !== 'undefined' ? 'YES' : 'NO');
+
     const newAdminData = localStorage.getItem('mediterra_site_config');
+
     if (newAdminData) {
         try {
             const data = JSON.parse(newAdminData);
-            console.log('✅ Custom images found in localStorage, will apply on page load');
+            console.log('✅ Custom images found in localStorage!');
+            console.log('📸 Images to load:', {
+                hero: data.images?.hero ? '✓' : '✗',
+                logo: data.images?.logo ? '✓' : '✗',
+                location: data.images?.location ? '✓' : '✗',
+                method: data.images?.method ? '✓' : '✗',
+                gallery: data.images?.gallery?.length || 0
+            });
+            console.log('🕐 Last updated:', data.lastUpdated);
+
             // Store in window for access after DOM loads
             window._mediterraCustomImages = data;
         } catch (error) {
             console.error('❌ Error parsing admin data:', error);
         }
     } else {
-        console.log('ℹ️ No custom images found, using default images');
+        console.log('⚠️ No custom images found in localStorage');
+        console.log('💡 Tip: Upload images via /admin.html to customize your site');
+        console.log('🔑 Expected localStorage key: mediterra_site_config');
+
+        // Check if there's ANY data in localStorage
+        console.log('📊 localStorage keys found:', Object.keys(localStorage).length);
+        if (Object.keys(localStorage).length > 0) {
+            console.log('🗂️ Available keys:', Object.keys(localStorage));
+        }
     }
 })();
 

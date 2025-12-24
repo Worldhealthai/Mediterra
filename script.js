@@ -6,6 +6,46 @@ const supabaseAnonKey =
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+async function loadImagesFromSupabase() {
+    const { data, error } = await supabase
+        .from("content")
+        .select("value")
+        .eq("key", "site_images")
+        .single();
+
+    if (error || !data) {
+        console.warn("No images found in Supabase");
+        return;
+    }
+
+    const images = data.value.images;
+
+    if (images.hero)
+        document.querySelector(".hero-image").src = images.hero;
+
+    if (images.logo)
+        document.querySelector(".logo").src = images.logo;
+
+    if (images.location)
+        document.querySelector(".location-image").src = images.location;
+
+    if (images.method)
+        document.querySelector(".method-image").src = images.method;
+
+    if (images.gallery?.length) {
+        const gallery = document.querySelector(".gallery");
+        gallery.innerHTML = "";
+
+        images.gallery.forEach(img => {
+            const el = document.createElement("img");
+            el.src = img.src;
+            el.alt = img.alt;
+            gallery.appendChild(el);
+        });
+    }
+}
+
+document.addEventListener("DOMContentLoaded", loadImagesFromSupabase);
 
 
 // ===========================

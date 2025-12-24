@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mediterra Mussel Farm – Premium Mediterranean Mussels from Greece</title>
-<meta name="description" content="Premium Mediterranean mussels cultivated in the pristine waters of the Artemisium Strait, North Evia, Greece. Wholesale supply to Athens and throughout Greece.">
 <link rel="stylesheet" href="styles.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,53 +20,109 @@
     </div>
 </div>
 
-<!-- Your existing HTML sections (navbar, hero, about, etc.) remain unchanged -->
+<!-- Navigation -->
+<nav class="navbar" id="navbar">
+    <div class="nav-container">
+        <a href="#hero" class="logo">
+            <img src="logo-transparent.png" alt="Mediterra Logo" class="logo-img">
+            <span class="logo-text">MEDITERRA</span>
+        </a>
+        <button class="menu-toggle" id="menuToggle"><span></span><span></span><span></span></button>
+        <ul class="nav-menu" id="navMenu">
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#location">Location</a></li>
+            <li><a href="#method">Method</a></li>
+            <li><a href="#wholesale">Wholesale</a></li>
+            <li><a href="#story">Story</a></li>
+            <li><a href="insights.html">Insights</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </div>
+</nav>
 
-<!-- Supabase & Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-config.js"></script>
+<!-- Hero Section -->
+<section class="hero" id="hero">
+    <video class="hero-video" autoplay muted loop playsinline>
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-waves-in-the-water-1164-large.mp4" type="video/mp4">
+    </video>
+    <div class="hero-bg-image"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <h1 class="hero-title">Where the Sea Crafts Its Own Masterpiece</h1>
+        <p class="hero-subtitle">In the moving depths of the Artemisium Strait, we cultivate Mediterranean mussels shaped by pure waters, natural forces, and a heritage refined through generations.</p>
+        <p class="hero-description">A craft elevated by precision, guided by instinct, and grounded in a place with its own memory.</p>
+        <a href="#wholesale" class="btn-primary">Wholesale Enquiries</a>
+    </div>
+</section>
+
+<!-- Add your other sections here (about, location, method, wholesale, story, gallery, contact, footer) -->
+
+<!-- Scripts -->
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    // Hide splash screen after 2.5s
     const splash = document.getElementById('splashScreen');
+    let config = null;
+
+    try {
+        const siteConfigStr = localStorage.getItem('mediterra_site_config');
+        if (siteConfigStr) config = JSON.parse(siteConfigStr);
+    } catch(e) { console.warn('LocalStorage parse failed', e); }
+
+    // Default fallback images
+    if (!config) {
+        config = {
+            images: {
+                hero: 'https://assets.mixkit.co/videos/preview/mixkit-waves-in-the-water-1164-large.mp4',
+                logo: 'logo-transparent.png',
+                location: 'https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=800&q=80',
+                method: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80',
+                gallery: [
+                    { src: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80', alt: 'Gallery image 1' },
+                    { src: 'https://images.unsplash.com/photo-1583506897994-c2de2a2b5b27?w=600&q=80', alt: 'Gallery image 2' },
+                    { src: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=80', alt: 'Gallery image 3' },
+                    { src: 'https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=600&q=80', alt: 'Gallery image 4' },
+                    { src: 'https://images.unsplash.com/photo-1580541631950-7282082b53ce?w=600&q=80', alt: 'Gallery image 5' },
+                    { src: 'https://images.unsplash.com/photo-1566024287286-457247b70310?w=600&q=80', alt: 'Gallery image 6' }
+                ]
+            }
+        };
+    }
+
+    // Apply images
+    const { images } = config;
+    const heroVideoSource = document.querySelector('.hero-video source');
+    if (heroVideoSource) heroVideoSource.src = images.hero;
+    const heroVideo = document.querySelector('.hero-video');
+    if (heroVideo) heroVideo.load();
+
+    document.querySelectorAll('.logo-img').forEach(img => img.src = images.logo);
+
+    const locationImg = document.querySelector('#location .location-img');
+    if (locationImg) locationImg.src = images.location;
+
+    const methodImg = document.querySelector('#method .method-img');
+    if (methodImg) methodImg.src = images.method;
+
+    const galleryContainer = document.querySelector('.gallery-grid');
+    if (galleryContainer) {
+        galleryContainer.innerHTML = '';
+        images.gallery.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'gallery-item';
+            const imgEl = document.createElement('img');
+            imgEl.src = item.src;
+            imgEl.alt = item.alt;
+            imgEl.className = 'gallery-img';
+            div.appendChild(imgEl);
+            galleryContainer.appendChild(div);
+        });
+    }
+
+    // Hide splash after 1.5s
     setTimeout(() => {
         if (splash) splash.style.display = 'none';
-    }, 2500);
-
-    // Load images from localStorage if available
-    const config = localStorage.getItem('mediterra_site_config');
-    if (config) {
-        try {
-            const siteConfig = JSON.parse(config);
-            if (siteConfig.images) {
-                const { hero, logo, location, method, gallery } = siteConfig.images;
-                if (hero) document.querySelector('.hero-video source')?.setAttribute('src', hero);
-                if (logo) {
-                    document.querySelectorAll('.logo-img').forEach(img => img.src = logo);
-                }
-                if (location) document.querySelector('#location .location-img')?.setAttribute('src', location);
-                if (method) document.querySelector('#method .method-img')?.setAttribute('src', method);
-                if (gallery && gallery.length > 0) {
-                    const galleryContainer = document.querySelector('.gallery-grid');
-                    if (galleryContainer) {
-                        galleryContainer.innerHTML = '';
-                        gallery.forEach(item => {
-                            const div = document.createElement('div');
-                            div.className = 'gallery-item';
-                            const imgEl = document.createElement('img');
-                            imgEl.src = item.src;
-                            imgEl.alt = item.alt;
-                            imgEl.className = 'gallery-img';
-                            div.appendChild(imgEl);
-                            galleryContainer.appendChild(div);
-                        });
-                    }
-                }
-            }
-        } catch(e) { console.error('Failed to load site images from localStorage', e); }
-    }
+    }, 1500);
 });
 </script>
-<script src="script.js"></script>
 </body>
 </html>

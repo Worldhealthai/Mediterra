@@ -1,8 +1,8 @@
 // Supabase Configuration
 // DO NOT commit this file with real credentials to public repositories
 const SUPABASE_CONFIG = {
-    url: 'https://tgbvjmknsjiutksucbnt.supabase.co',
-    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRnYnZqbWtuc2ppdXRrc3VjYm50Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY1Nzc5NjEsImV4cCI6MjA4MjE1Mzk2MX0.p4e4XMoWqVRBOS_-vqaSl44myRGy1HdGD5snvbBHQn4',
+    url: 'https://rwpapbwtcmgdptiwmicr.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3cGFwYnd0Y21nZHB0aXdtaWNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4OTQ3MDcsImV4cCI6MjA4ODQ3MDcwN30.wP6ZEa_7xmj-S31ZAHZidWsz1yXZpBUUqBk09y53xb8',
     bucketName: 'mediterra-images'
 };
 

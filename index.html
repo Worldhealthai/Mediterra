@@ -3,418 +3,332 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mediterra Mussel Farm – Premium Mediterranean Mussels from Greece</title>
-    <meta name="description" content="Premium Mediterranean mussels cultivated in the pristine waters of the Artemisium Strait, North Evia, Greece. Wholesale supply to Athens and throughout Greece.">
-    <link rel="stylesheet" href="styles.css">
+    <title>Mediterra — Premium Mediterranean Mussels</title>
+    <meta name="description" content="Premium Mediterranean mussels from the Artemisium Strait, Greece. Wholesale aquaculture for global partners.">
+    <link rel="icon" type="image/png" href="logo-transparent.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="supabase-config.js" defer></script>
+    <script src="script.js" defer></script>
 </head>
 <body>
-    <!-- Splash Screen -->
-    <div class="splash-screen" id="splashScreen">
-        <div class="splash-content">
-            <img src="logo-transparent.png" alt="Mediterra Mussel Farm" class="splash-logo">
-            <h1 class="splash-text">MEDITERRA</h1>
-            <p class="splash-subtitle">Mussel Farm</p>
-            <div class="splash-loader"></div>
+
+<!-- =====================================================================
+     NAVIGATION
+===================================================================== -->
+<nav id="navbar">
+    <div class="nav-wrap">
+        <a href="#" class="nav-brand">
+            <img src="logo-transparent.png" alt="Mediterra" class="logo-img">
+        </a>
+        <ul class="nav-links" id="navMenu">
+            <li><a href="#origin">Origin</a></li>
+            <li><a href="#process">Process</a></li>
+            <li><a href="#partnership">Partnership</a></li>
+            <li><a href="insights.html">Insights</a></li>
+        </ul>
+        <a href="#contact" class="nav-enquire">Wholesale Enquiries</a>
+        <button class="nav-toggle" id="menuToggle" aria-label="Open menu">
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</nav>
+
+<!-- =====================================================================
+     HERO
+===================================================================== -->
+<section class="hero" id="hero">
+    <video class="hero-video" autoplay muted loop playsinline>
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-waves-in-the-water-1164-large.mp4" type="video/mp4">
+    </video>
+    <div class="hero-bg-image"></div>
+    <div class="hero-veil"></div>
+
+    <div class="hero-body">
+        <span class="hero-label">Artemisium Strait &nbsp;&middot;&nbsp; North Evia, Greece</span>
+        <h1 class="hero-heading">Mediterranean<br>Mussels.</h1>
+        <p class="hero-sub">Premium aquaculture &nbsp;&middot;&nbsp; Global wholesale</p>
+        <div class="hero-ctas">
+            <a href="#contact" class="cta-gold">Wholesale Enquiries</a>
+            <a href="#process" class="cta-outline">Our Process</a>
         </div>
     </div>
 
-    <!-- Inline Splash Screen Handler (runs immediately, independent of external scripts) -->
-    <script>
-        (function() {
-            // Remove splash screen helper
-            function removeSplash() {
-                var body = document.body;
-                var splash = document.getElementById('splashScreen');
-                if (body) body.classList.remove('splash-active');
-                if (splash) {
-                    splash.style.opacity = '0';
-                    setTimeout(function() {
-                        if (splash && splash.parentNode) {
-                            splash.parentNode.removeChild(splash);
-                        }
-                    }, 800);
-                }
-            }
+    <div class="hero-scroll">
+        <div class="scroll-bar"></div>
+    </div>
 
-            // Check if splash was already shown in this session
-            var splashShown = sessionStorage.getItem('splashShown');
+    <div class="hero-ticker">
+        <div class="ticker-track">
+            <span>Quality Without Compromise</span>
+            <span class="t-dot">&middot;</span>
+            <span>Mediterranean Heritage</span>
+            <span class="t-dot">&middot;</span>
+            <span>Precision Cultivation</span>
+            <span class="t-dot">&middot;</span>
+            <span>Wholesale Partnership</span>
+            <span class="t-dot">&middot;</span>
+            <span>Artemisium Strait, Greece</span>
+            <span class="t-dot">&middot;</span>
+            <span>300 Tonnes Annual Production</span>
+            <span class="t-dot">&middot;</span>
+            <span>Quality Without Compromise</span>
+            <span class="t-dot">&middot;</span>
+            <span>Mediterranean Heritage</span>
+            <span class="t-dot">&middot;</span>
+            <span>Precision Cultivation</span>
+            <span class="t-dot">&middot;</span>
+            <span>Wholesale Partnership</span>
+            <span class="t-dot">&middot;</span>
+            <span>Artemisium Strait, Greece</span>
+            <span class="t-dot">&middot;</span>
+            <span>300 Tonnes Annual Production</span>
+            <span class="t-dot">&middot;</span>
+        </div>
+    </div>
+</section>
 
-            if (!splashShown) {
-                // First load - show splash
-                document.body.classList.add('splash-active');
-                sessionStorage.setItem('splashShown', 'true');
+<!-- =====================================================================
+     01 — PHILOSOPHY
+===================================================================== -->
+<section class="s-about" id="about">
+    <div class="wrap">
+        <div class="about-grid">
+            <div class="about-index">
+                <span class="s-num">01</span>
+                <div class="s-rule"></div>
+            </div>
+            <div class="about-body fade-up">
+                <h2 class="s-heading">Crafted by nature.<br>Refined by experience.</h2>
+                <p class="s-body">A family-owned aquaculture enterprise rooted in the Artemisium Strait, North Evia — where the sea sets the standard and quality is non-negotiable. Every mussel we produce carries the character of this place: resilient, mineral-rich, unmistakably Mediterranean.</p>
+                <div class="stat-band">
+                    <div class="stat">
+                        <span class="stat-n">300T</span>
+                        <span class="stat-l">Annual Production</span>
+                    </div>
+                    <div class="stat-div"></div>
+                    <div class="stat">
+                        <span class="stat-n">24H</span>
+                        <span class="stat-l">Dispatch to Athens</span>
+                    </div>
+                    <div class="stat-div"></div>
+                    <div class="stat">
+                        <span class="stat-n">3+</span>
+                        <span class="stat-l">Generations</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-                // Remove splash after 2.5 seconds
-                setTimeout(removeSplash, 2500);
-
-                // Safety timeout - ALWAYS remove after 4 seconds max
-                setTimeout(removeSplash, 4000);
-            } else {
-                // Already shown - hide immediately
-                var splash = document.getElementById('splashScreen');
-                if (splash) {
-                    splash.style.display = 'none';
-                    if (splash.parentNode) {
-                        splash.parentNode.removeChild(splash);
-                    }
-                }
-            }
-        })();
-    </script>
-
-    <!-- Navigation -->
-    <nav class="navbar" id="navbar">
-        <div class="nav-container">
-            <a href="#hero" class="logo">
-                <img src="logo-transparent.png" alt="Mediterra Logo" class="logo-img">
-                <span class="logo-text">MEDITERRA</span>
-            </a>
-            <button class="menu-toggle" id="menuToggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <ul class="nav-menu" id="navMenu">
-                <li><a href="#hero">Home</a></li>
-                <li><a href="#location">Location</a></li>
-                <li><a href="#method">Method</a></li>
-                <li><a href="#wholesale">Wholesale</a></li>
-                <li><a href="#story">Story</a></li>
-                <li><a href="insights.html">Insights</a></li>
-                <li><a href="#contact">Contact</a></li>
+<!-- =====================================================================
+     02 — ORIGIN
+===================================================================== -->
+<section class="s-origin" id="origin">
+    <div class="origin-grid">
+        <div class="origin-media">
+            <img
+                src="https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=1200&q=80"
+                alt="Artemisium Strait, North Evia, Greece"
+                class="location-img origin-photo"
+                loading="lazy">
+        </div>
+        <div class="origin-text fade-up">
+            <span class="s-num light">02</span>
+            <div class="s-rule light"></div>
+            <h2 class="s-heading light">The<br>Artemisium Strait</h2>
+            <p class="origin-lead">One of the Mediterranean&rsquo;s most powerful marine corridors.</p>
+            <p class="s-body muted">Strong natural currents renew the water continuously — delivering oxygen, minerals, and the precise conditions that shape our mussels&rsquo; character. This is not a location chosen for convenience. It is a place with its own memory.</p>
+            <ul class="attr-list">
+                <li>Continuous natural water movement</li>
+                <li>High dissolved oxygen levels</li>
+                <li>Rich mineral and nutrient flow</li>
+                <li>Stable, balanced ecosystem</li>
             </ul>
         </div>
-    </nav>
+    </div>
+</section>
 
-    <!-- News Banner -->
-    <div class="news-banner">
-        <div class="news-ticker">
-            <div class="news-content">
-                <span class="news-label">NEWS:</span>
-                <span class="news-text">Precision in Motion — Our New Dispatch Center Is Underway.</span>
+<!-- =====================================================================
+     03 — PROCESS
+===================================================================== -->
+<section class="s-process" id="process">
+    <div class="wrap">
+        <div class="process-top fade-up">
+            <div class="process-top-left">
+                <span class="s-num">03</span>
+                <div class="s-rule"></div>
+                <h2 class="s-heading">The Method</h2>
+            </div>
+            <p class="process-intro">Sea-crafted precision across every stage — from the water column to your door.</p>
+        </div>
+        <div class="process-steps">
+            <div class="p-step fade-up">
+                <span class="p-num">I</span>
+                <h3 class="p-title">Long-Line<br>Cultivation</h3>
+                <p class="p-body">Suspended in the strait&rsquo;s moving water column. Natural filtration only — no artificial feeding, no shortcuts.</p>
+            </div>
+            <div class="p-step fade-up">
+                <span class="p-num">II</span>
+                <h3 class="p-title">Daily<br>Oversight</h3>
+                <p class="p-body">Water conditions monitored every single day. Temperature, salinity, oxygen — nothing is left to assumption.</p>
+            </div>
+            <div class="p-step fade-up">
+                <span class="p-num">III</span>
+                <h3 class="p-title">Selective<br>Harvest</h3>
+                <p class="p-body">Harvested at peak maturity only. Each batch assessed for size, purity, and shell integrity before leaving the water.</p>
+            </div>
+            <div class="p-step fade-up">
+                <span class="p-num">IV</span>
+                <h3 class="p-title">Clean<br>Dispatch</h3>
+                <p class="p-body">Delivered to Athens within 24 hours. Cold chain maintained from strait to market, without exception.</p>
+            </div>
+        </div>
+        <div class="process-quote fade-up">
+            <blockquote>&ldquo;This is not mass aquaculture. This is sea-crafted precision.&rdquo;</blockquote>
+        </div>
+    </div>
+</section>
+
+<!-- =====================================================================
+     GALLERY
+===================================================================== -->
+<section class="s-gallery">
+    <div class="gallery-mosaic">
+        <div class="g-item g-tall">
+            <img class="gallery-img" src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=900&q=80" alt="Premium mussels" loading="lazy">
+        </div>
+        <div class="g-item">
+            <img class="gallery-img" src="https://images.unsplash.com/photo-1583506897994-c2de2a2b5b27?w=700&q=80" alt="Greek coastal dawn" loading="lazy">
+        </div>
+        <div class="g-item">
+            <img class="gallery-img" src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=700&q=80" alt="Mussel close-up" loading="lazy">
+        </div>
+        <div class="g-item g-wide">
+            <img class="gallery-img" src="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=1200&q=80" alt="Mediterranean ocean aerial" loading="lazy">
+        </div>
+        <div class="g-item">
+            <img class="gallery-img" src="https://images.unsplash.com/photo-1580541631950-7282082b53ce?w=700&q=80" alt="Greek strait waters" loading="lazy">
+        </div>
+        <div class="g-item">
+            <img class="gallery-img" src="https://images.unsplash.com/photo-1566024287286-457247b70310?w=700&q=80" alt="Mediterranean sunset" loading="lazy">
+        </div>
+    </div>
+</section>
+
+<!-- =====================================================================
+     04 — PARTNERSHIP
+===================================================================== -->
+<section class="s-partner" id="partnership">
+    <div class="wrap">
+        <div class="partner-grid">
+            <div class="partner-left fade-up">
+                <span class="s-num light">04</span>
+                <div class="s-rule light"></div>
+                <h2 class="s-heading light">Wholesale<br>Partnership</h2>
+                <p class="s-body muted">We supply distributors, seafood markets, hotels and fine dining across Greece and beyond. Our partnerships are built on consistency, transparency, and long-term mutual respect &mdash; not transaction.</p>
+                <a href="#contact" class="cta-gold">Begin a Conversation</a>
+            </div>
+            <div class="partner-right">
+                <div class="criteria">
+                    <div class="c-item fade-up">
+                        <div class="c-top">
+                            <span class="c-dash">&mdash;</span>
+                            <h4 class="c-title">Consistent Volume</h4>
+                        </div>
+                        <p class="c-body">~300 tonnes per annum with seasonal planning and supply forecasting for partners.</p>
+                    </div>
+                    <div class="c-item fade-up">
+                        <div class="c-top">
+                            <span class="c-dash">&mdash;</span>
+                            <h4 class="c-title">Quality Standards</h4>
+                        </div>
+                        <p class="c-body">Every batch assessed. Uniform size, pristine shell, uncompromised freshness at delivery.</p>
+                    </div>
+                    <div class="c-item fade-up">
+                        <div class="c-top">
+                            <span class="c-dash">&mdash;</span>
+                            <h4 class="c-title">Direct Communication</h4>
+                        </div>
+                        <p class="c-body">You speak directly with the producers. No intermediaries, no ambiguity.</p>
+                    </div>
+                    <div class="c-item fade-up">
+                        <div class="c-top">
+                            <span class="c-dash">&mdash;</span>
+                            <h4 class="c-title">Sustainable Practice</h4>
+                        </div>
+                        <p class="c-body">Regenerative aquaculture that actively improves the local marine ecosystem.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+</section>
 
-    <!-- Hero Section -->
-    <section class="hero" id="hero">
-        <!-- Video Background -->
-        <video class="hero-video" autoplay muted loop playsinline>
-            <source src="https://assets.mixkit.co/videos/preview/mixkit-waves-in-the-water-1164-large.mp4" type="video/mp4">
-        </video>
-        <!-- Fallback image if video doesn't load -->
-        <div class="hero-bg-image"></div>
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <h1 class="hero-title">Where the Sea Crafts Its Own Masterpiece</h1>
-            <p class="hero-subtitle">In the moving depths of the Artemisium Strait, we cultivate Mediterranean mussels shaped by pure waters, natural forces, and a heritage refined through generations.</p>
-            <p class="hero-description">A craft elevated by precision, guided by instinct, and grounded in a place with its own memory.</p>
-            <a href="#wholesale" class="btn-primary">Wholesale Enquiries</a>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section class="about" id="about">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Crafted by Nature. Refined Through Experience. Elevated by Purpose.</h2>
+<!-- =====================================================================
+     05 — CONTACT
+===================================================================== -->
+<section class="s-contact" id="contact">
+    <div class="wrap">
+        <div class="contact-grid fade-up">
+            <div class="contact-left">
+                <span class="s-num">05</span>
+                <div class="s-rule"></div>
+                <h2 class="s-heading">Make<br>Contact</h2>
+                <p class="s-body">For wholesale enquiries, partnership discussions, or to learn more about our operation and supply capabilities.</p>
             </div>
-            <div class="about-content">
-                <p class="lead-text">Mediterra Mussel Farm is a family-owned aquaculture enterprise rooted in one of Greece's most exceptional marine landscapes.</p>
-                <p>Here, powerful natural currents carve their own rhythm, renewing the waters and shaping the environment in which our mussels grow.</p>
-                <p>We combine meticulous care, disciplined work, and a deep respect for the sea to offer premium Mediterranean mussels to select wholesale partners in Athens and throughout Greece.</p>
-                <div class="philosophy">
-                    <h3>Our philosophy is simple:</h3>
-                    <p class="emphasis">Quality without compromise. Excellence without shortcuts.</p>
+            <div class="contact-right">
+                <a href="tel:+306984092007" class="c-line">
+                    <span class="c-label">Telephone</span>
+                    <span class="c-value">+30 698 409 2007</span>
+                </a>
+                <a href="mailto:mediterramf@gmail.com" class="c-line">
+                    <span class="c-label">Email</span>
+                    <span class="c-value">mediterramf@gmail.com</span>
+                </a>
+                <div class="c-line">
+                    <span class="c-label">Location</span>
+                    <span class="c-value">Artemisium Strait, North Evia, Greece</span>
                 </div>
             </div>
         </div>
-    </section>
-
-    <!-- Location Section -->
-    <section class="location" id="location">
-        <div class="container">
-            <div class="location-grid">
-                <div class="location-text">
-                    <h2 class="section-title">The Artemisium Strait – A Sea That Remembers</h2>
-                    <p>Between North Evia and the Greek mainland lies a strait known not only for its clarity and depth, but also for its quiet historical significance.</p>
-                    <p>These waters once witnessed ancient maritime passages and events that helped shape the story of the Mediterranean.</p>
-                    <p>Today, the same natural currents continue their timeless motion — strong, clean, and continuously renewing.</p>
-
-                    <div class="features-list">
-                        <h3>This remarkable marine environment is defined by:</h3>
-                        <ul>
-                            <li>Continuous natural movement</li>
-                            <li>High oxygen levels</li>
-                            <li>Reliable water purity</li>
-                            <li>Rich mineral and nutrient flow</li>
-                            <li>A stable, balanced ecosystem</li>
-                        </ul>
-                    </div>
-
-                    <p class="emphasis">Every mussel we harvest carries the imprint of this place: deep, resilient, refined, and unmistakably true to its origin.</p>
-                </div>
-                <div class="location-visual">
-                    <img src="" alt="Aerial view of Greek coastline" class="location-img">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Method Section -->
-    <section class="method" id="method">
-        <div class="container">
-            <div class="method-grid">
-                <div class="method-visual">
-                    <img src="" alt="Mussel farming in pristine waters" class="method-img">
-                </div>
-                <div class="method-text">
-                    <h2 class="section-title">Cultivation Guided by Nature, Perfected by Mastery</h2>
-                    <p>Our mussels are raised using the long-line method, allowing them to grow suspended in open, moving water — as close to their natural environment as possible.</p>
-
-                    <div class="features-list">
-                        <h3>We follow a disciplined, responsible approach:</h3>
-                        <ul>
-                            <li>Natural growth with no artificial feeding</li>
-                            <li>Daily oversight of water conditions</li>
-                            <li>Selective harvesting at peak maturity</li>
-                            <li>Clean, respectful handling across all stages</li>
-                        </ul>
-                    </div>
-
-                    <p class="emphasis">This is not mass aquaculture.</p>
-                    <p class="emphasis">This is sea-crafted precision, shaped by dedication and respect for the environment that sustains us.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Wholesale Section -->
-    <section class="wholesale" id="wholesale">
-        <div class="container">
-            <div class="wholesale-content">
-                <h2 class="section-title">For Partners Who Value Origin, Precision, and Authentic Mediterranean Quality</h2>
-                <p class="lead-text">Mediterra Mussel Farm supplies premium Mediterranean mussels to wholesale distributors, seafood markets, hotels, and fine restaurants across Greece.</p>
-
-                <div class="wholesale-grid">
-                    <div class="wholesale-features">
-                        <h3>We provide:</h3>
-                        <ul>
-                            <li>Fresh, high-quality Mediterranean mussels</li>
-                            <li>Approx. 300 tons of annual production</li>
-                            <li>Professional, reliable distribution to Athens</li>
-                            <li>Consistent size, purity, and freshness</li>
-                            <li>Long-term partnership mindset</li>
-                            <li>Transparent communication and dependable supply</li>
-                        </ul>
-                    </div>
-                    <div class="wholesale-cta">
-                        <p>We serve partners who understand that true quality begins long before the product reaches the market — it begins in the sea itself.</p>
-                        <a href="#contact" class="btn-secondary">Request Wholesale Pricing</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Story Section -->
-    <section class="story" id="story">
-        <div class="container">
-            <div class="story-content">
-                <h2 class="section-title">Resilience in Motion</h2>
-                <p class="lead-text">Mediterra is a story shaped by tides, seasons, rebuilding, and rising stronger each time.</p>
-                <p>Our family's bond with the sea is the foundation of everything we do — a commitment built on heritage, precision, and the relentless pursuit of excellence.</p>
-
-                <div class="story-values">
-                    <h3>Our journey reflects:</h3>
-                    <ul>
-                        <li>Endurance through challenges</li>
-                        <li>A disciplined craft refined over years</li>
-                        <li>Deep respect for our environment</li>
-                        <li>A vision for long-term growth and contribution</li>
-                        <li>The understanding that strength is built through dedication</li>
-                    </ul>
-                </div>
-
-                <p class="emphasis">Every harvest represents more than a product — it is a reflection of character, care, and continuity.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Insights Preview Section -->
-    <section class="insights-preview">
-        <div class="container">
-            <div class="insights-preview-content">
-                <div class="insights-preview-text">
-                    <span class="section-label">KNOWLEDGE HUB</span>
-                    <h2 class="section-title">Discover the Art of Mediterranean Mussels</h2>
-                    <p class="lead-text">From preparation techniques to nutritional benefits and sustainability — explore our comprehensive guide to premium Mediterranean mussels.</p>
-
-                    <div class="insights-highlights">
-                        <div class="highlight-item">
-                            <div class="highlight-icon"></div>
-                            <h4>Preparation Guide</h4>
-                            <p>Master the art of shucking, cooking, and serving</p>
-                        </div>
-                        <div class="highlight-item">
-                            <div class="highlight-icon"></div>
-                            <h4>Health Benefits</h4>
-                            <p>High in protein, Omega-3s, and essential nutrients</p>
-                        </div>
-                        <div class="highlight-item">
-                            <div class="highlight-icon"></div>
-                            <h4>Sustainability</h4>
-                            <p>Learn why mussels are the ocean's superfood</p>
-                        </div>
-                    </div>
-
-                    <a href="insights.html" class="btn-insights">Explore Insights <span class="arrow">→</span></a>
-                </div>
-                <div class="insights-preview-visual">
-                    <div class="preview-card">
-                        <div class="preview-icon"></div>
-                        <h3>Complete Mussel Guide</h3>
-                        <p>Everything you need to know about selecting, storing, and preparing premium mussels</p>
-                    </div>
-                    <div class="preview-card">
-                        <div class="preview-icon"></div>
-                        <h3>Environmental Impact</h3>
-                        <p>Discover how mussel farming benefits marine ecosystems</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Eco Hub Section -->
-    <section class="eco-hub">
-        <div class="container">
-            <div class="eco-hub-content">
-                <span class="section-label">The Next Chapter</span>
-                <h2 class="section-title">Mediterra Eco Hub</h2>
-                <p class="lead-text">A new destination is unfolding on our horizon: the Mediterra Eco Hub — a visionary initiative that will extend our work beyond production into education, culture, and environmental connection.</p>
-                <p>Designed as a future space for curated experiences, learning programs, and refined interactions with nature and the sea, the Mediterra Eco Hub will welcome visitors, students, and partners to explore the delicate balance between people and the marine world.</p>
-                <p class="emphasis">This project is currently in development and represents the next evolution of our commitment to the region and to responsible Mediterranean living.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Gallery Section -->
-    <section class="gallery" id="gallery">
-        <div class="gallery-header">
-            <h2 class="section-title">Gallery</h2>
-        </div>
-        <div class="gallery-grid">
-            <div class="gallery-item">
-                <img src="" alt="Fresh mussels in pristine waters" class="gallery-img">
-            </div>
-            <div class="gallery-item">
-                <img src="" alt="Greek coastal landscape at dawn" class="gallery-img">
-            </div>
-            <div class="gallery-item">
-                <img src="" alt="Fresh mussels close-up" class="gallery-img">
-            </div>
-            <div class="gallery-item">
-                <img src="" alt="Greek sea aerial view" class="gallery-img">
-            </div>
-            <div class="gallery-item">
-                <img src="" alt="Greek strait and coastal waters" class="gallery-img">
-            </div>
-            <div class="gallery-item">
-                <img src="" alt="Sunset over Mediterranean waters" class="gallery-img">
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section class="contact" id="contact">
-        <div class="container">
-            <div class="contact-grid">
-                <div class="contact-info">
-                    <h2 class="section-title">Wholesale & Partnerships</h2>
-                    <p>For professional inquiries, collaborations, or further information:</p>
-
-                    <div class="contact-details">
-                        <div class="contact-item">
-                            <h3>Phone</h3>
-                            <p><a href="tel:+306984092007">+30 6984092007</a></p>
-                        </div>
-                        <div class="contact-item">
-                            <h3>Email</h3>
-                            <p><a href="mailto:mediterramf@gmail.com">mediterramf@gmail.com</a></p>
-                        </div>
-                        <div class="contact-item">
-                            <h3>Location</h3>
-                            <p>Artemisium Strait, North Evia, Greece</p>
-                        </div>
-                    </div>
-
-                    <div class="social-links">
-                        <a href="#" class="social-link" aria-label="Instagram">Instagram</a>
-                        <a href="#" class="social-link" aria-label="LinkedIn">LinkedIn</a>
-                        <a href="#" class="social-link" aria-label="TikTok">TikTok</a>
-                    </div>
-                </div>
-
-                <div class="contact-actions">
-                    <a href="tel:+306984092007" class="btn-primary">Call Us</a>
-                    <a href="mailto:mediterramf@gmail.com" class="btn-secondary">Email Us</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Mediterra Mussel Farm</h3>
-                    <p>Premium Mediterranean mussels from the pristine waters of the Artemisium Strait, Greece.</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="#about">About</a></li>
-                        <li><a href="#location">Location</a></li>
-                        <li><a href="#method">Method</a></li>
-                        <li><a href="#wholesale">Wholesale</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Resources</h4>
-                    <ul>
-                        <li><a href="insights.html">Insights</a></li>
-                        <li><a href="#story">Our Story</a></li>
-                        <li><a href="#gallery">Gallery</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Contact</h4>
-                    <p><a href="tel:+306984092007">+30 6984092007</a></p>
-                    <p><a href="mailto:mediterramf@gmail.com">mediterramf@gmail.com</a></p>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 Mediterra Mussel Farm. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Floating CTA Button -->
-    <div class="floating-cta" id="floatingCta">
-        <a href="#wholesale" class="floating-cta-btn">
-            <span class="floating-cta-icon">✉️</span>
-            <span>Wholesale Enquiries</span>
-        </a>
     </div>
+</section>
 
-    <!-- Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabase-config.js"></script>
-    <script src="script.js"></script>
+<!-- =====================================================================
+     FOOTER
+===================================================================== -->
+<footer class="site-footer">
+    <div class="wrap">
+        <div class="footer-top">
+            <div class="footer-brand">
+                <img src="logo-transparent.png" alt="Mediterra" class="footer-logo logo-img">
+                <p>Premium Mediterranean mussels.<br>Since the first generation.</p>
+            </div>
+            <nav class="footer-nav">
+                <a href="#origin">Origin</a>
+                <a href="#process">Process</a>
+                <a href="#partnership">Partnership</a>
+                <a href="insights.html">Insights</a>
+                <a href="#contact">Contact</a>
+            </nav>
+            <div class="footer-contact">
+                <a href="tel:+306984092007">+30 698 409 2007</a>
+                <a href="mailto:mediterramf@gmail.com">mediterramf@gmail.com</a>
+                <a href="/admin" class="footer-admin">Admin</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 Mediterra Mussel Farm, Greece</span>
+            <span>Artemisium Strait &middot; North Evia</span>
+        </div>
+    </div>
+</footer>
+
 </body>
 </html>

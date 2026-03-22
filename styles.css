@@ -347,8 +347,8 @@ ul{list-style:none}
 
 .process-row{
   display:grid;
-  grid-template-columns:52px 1fr auto 1fr;
-  gap:0 2rem;
+  grid-template-columns:52px 1fr auto 1fr 340px;
+  gap:0 2.4rem;
   align-items:center;
   padding:2.2rem 0;
   border-bottom:1px solid rgba(255,255,255,.1);
@@ -358,7 +358,7 @@ ul{list-style:none}
 
 .p-roman{
   font-family:var(--serif);font-size:1.1rem;font-weight:400;
-  color:var(--amber);letter-spacing:.05em;
+  color:var(--amber);letter-spacing:.05em;flex-shrink:0;
 }
 
 .p-line{height:1px;background:rgba(255,255,255,.12)}
@@ -370,7 +370,7 @@ ul{list-style:none}
 
 .p-desc{
   font-size:.83rem;font-weight:300;line-height:1.85;
-  color:rgba(255,255,255,.45);text-align:right;max-width:380px;margin-left:auto;
+  color:rgba(255,255,255,.45);text-align:right;
 }
 
 .process-quote{
@@ -648,9 +648,10 @@ a.contact-item:hover .ci-value{color:var(--white)}
   .origin-text{padding:3rem 2.5rem}
   .origin-image{min-height:360px}
 
-  .process-row{grid-template-columns:40px 1fr;gap:1.5rem}
+  .process-row{grid-template-columns:40px 1fr;gap:.8rem 1.5rem}
   .p-line{display:none}
-  .p-desc{text-align:left;margin-left:0;max-width:100%;grid-column:2}
+  .p-title{grid-column:2}
+  .p-desc{text-align:left;grid-column:2;max-width:100%}
 
   .gallery-strip{grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(3,280px)}
 

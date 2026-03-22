@@ -1,646 +1,179 @@
-// ===========================
-// LOAD ADMIN PANEL DATA
-// ===========================
-// Note: Splash screen is now handled by inline script in index.html
+// ================================================================
+// MEDITERRA — Main Script
+// ================================================================
 
-// Use Supabase client from supabase-config.js (already declared globally)
+// ── Supabase image loading ────────────────────────────────────
 
-// Initialize Supabase when library is ready (non-blocking)
 function initSupabaseIfReady() {
-    try {
-        if (typeof initSupabase === 'function') {
-            // Initialize the global supabaseClient from supabase-config.js
-            initSupabase();
-            console.log('✅ Supabase initialized');
-        } else {
-            console.log('⚠️ Supabase config not loaded yet');
-        }
-    } catch (error) {
-        console.error('❌ Error initializing Supabase:', error);
-    }
+    try { if (typeof initSupabase === 'function') initSupabase(); }
+    catch (e) { console.warn('Supabase init:', e); }
 }
 
-// Load images from Supabase
 async function loadImagesFromSupabase() {
-    if (!supabaseClient) {
-        console.log('⚠️ Supabase client not initialized, skipping...');
-        return null;
-    }
-
+    if (!supabaseClient) return null;
     try {
         const { data, error } = await supabaseClient
-            .from('site_images')
-            .select('*')
-            .eq('is_active', true);
-
+            .from('site_images').select('*').eq('is_active', true);
         if (error) throw error;
-
-        console.log('✅ Loaded images from Supabase:', data);
         return data;
-
-    } catch (error) {
-        console.error('❌ Error loading from Supabase:', error);
-        return null;
-    }
+    } catch (e) { console.warn('Supabase load:', e); return null; }
 }
 
-// Apply custom images as soon as DOM is ready
 async function loadAdminData() {
-    console.log('🔍 [MEDITERRA] Loading custom images...');
-
     try {
-        // Initialize Supabase first
         initSupabaseIfReady();
-
-        // Try to load from Supabase first (only if initialized)
         if (supabaseClient) {
-            const supabaseImages = await loadImagesFromSupabase();
-
-            if (supabaseImages && supabaseImages.length > 0) {
-                console.log(`✅ Found ${supabaseImages.length} images in Supabase`);
-
-                // Convert Supabase data to config format
-                const config = {
-                    images: {
-                        hero: null,
-                        logo: null,
-                        location: null,
-                        method: null,
-                        gallery: []
-                    },
-                    lastUpdated: new Date().toISOString()
-                };
-
-                supabaseImages.forEach(img => {
-                    const type = img.image_type;
-
-                    if (type.startsWith('gallery-')) {
-                        config.images.gallery.push({
-                            src: img.image_url,
-                            alt: img.alt_text
-                        });
-                    } else {
-                        config.images[type] = img.image_url;
-                    }
+            const rows = await loadImagesFromSupabase();
+            if (rows && rows.length) {
+                const cfg = { images: { hero: null, logo: null, location: null, method: null, gallery: [] } };
+                rows.forEach(r => {
+                    if (r.image_type.startsWith('gallery-'))
+                        cfg.images.gallery.push({ src: r.image_url, alt: r.alt_text });
+                    else cfg.images[r.image_type] = r.image_url;
                 });
-
-                applyNewAdminData(config);
-                console.log('✅ Custom images from Supabase applied successfully');
-                return;
+                applyImages(cfg); return;
             }
         }
-    } catch (error) {
-        console.error('❌ Error loading from Supabase:', error);
-    }
+    } catch (e) { console.warn('loadAdminData:', e); }
 
-    // Fallback to localStorage
-    console.log('⚠️ Falling back to localStorage...');
-    const newAdminData = localStorage.getItem('mediterra_site_config');
-    if (newAdminData) {
-        try {
-            const data = JSON.parse(newAdminData);
-            applyNewAdminData(data);
-            console.log('✅ Custom images from localStorage applied successfully');
-            return;
-        } catch (error) {
-            console.error('❌ Error loading localStorage data:', error);
-        }
-    }
+    const stored = localStorage.getItem('mediterra_site_config');
+    if (stored) { try { applyImages(JSON.parse(stored)); return; } catch (_) {} }
 
-    // Try to load from site-data.json (for Vercel deployment)
-    try {
-        const response = await fetch('site-data.json');
-        if (response.ok) {
-            const data = await response.json();
-            applyAdminData(data);
-            return;
-        }
-    } catch (error) {
-        console.log('No site-data.json found');
-    }
+    const legacy = localStorage.getItem('mediterraData');
+    if (legacy) { try { applyLegacy(JSON.parse(legacy)); } catch (_) {} }
+}
 
-    // Fallback to old localStorage format
-    const savedData = localStorage.getItem('mediterraData');
-    if (savedData) {
-        try {
-            const data = JSON.parse(savedData);
-            applyAdminData(data);
-        } catch (error) {
-            console.error('Error loading saved data:', error);
-        }
+function applyImages(cfg) {
+    if (!cfg?.images) return;
+    if (cfg.images.hero) {
+        const el = document.querySelector('.hero-bg');
+        if (el) el.style.backgroundImage = `url('${cfg.images.hero}')`;
+    }
+    if (cfg.images.logo)
+        document.querySelectorAll('.logo-img').forEach(img => { img.src = cfg.images.logo; });
+    if (cfg.images.location) {
+        const el = document.querySelector('.location-img');
+        if (el) el.src = cfg.images.location;
+    }
+    if (cfg.images.method) {
+        const el = document.querySelector('.method-img');
+        if (el) el.src = cfg.images.method;
+    }
+    if (cfg.images.gallery?.length) {
+        const imgs = document.querySelectorAll('.gallery-img');
+        cfg.images.gallery.forEach((item, i) => {
+            if (imgs[i] && item.src) { imgs[i].src = item.src; if (item.alt) imgs[i].alt = item.alt; }
+        });
     }
 }
 
-// Load admin data when DOM is ready (non-blocking)
-document.addEventListener('DOMContentLoaded', () => {
-    loadAdminData().catch(error => {
-        console.error('❌ Error in loadAdminData:', error);
-    });
-});
-
-// Apply data from new admin panel
-function applyNewAdminData(config) {
-    if (!config || !config.images) {
-        console.log('ℹ️ No admin config to apply');
-        return;
+function applyLegacy(data) {
+    if (!data?.images) return;
+    if (data.images.hero) {
+        const el = document.querySelector('.hero-bg');
+        if (el) el.style.backgroundImage = `url('${data.images.hero}')`;
     }
-
-    let imagesApplied = 0;
-
-    try {
-        // Hero background
-        if (config.images.hero) {
-            const heroBg = document.querySelector('.hero-bg-image');
-            if (heroBg) {
-                heroBg.style.backgroundImage = `url('${config.images.hero}')`;
-                heroBg.style.opacity = '1';
-                imagesApplied++;
-                console.log('✓ Hero background updated');
-            }
-        }
-
-        // Logo (navbar and splash screen)
-        if (config.images.logo) {
-            const logoImgs = document.querySelectorAll('.logo-img');
-            logoImgs.forEach(img => {
-                if (img) {
-                    img.src = config.images.logo;
-                    imagesApplied++;
-                }
-            });
-            // Also update splash logo if it still exists
-            const splashLogo = document.querySelector('.splash-logo');
-            if (splashLogo) {
-                splashLogo.src = config.images.logo;
-                imagesApplied++;
-            }
-            console.log('✓ Logo images updated');
-        }
-
-        // Location image
-        if (config.images.location) {
-            const locationImg = document.querySelector('.location-img');
-            if (locationImg) {
-                locationImg.src = config.images.location;
-                imagesApplied++;
-                console.log('✓ Location image updated');
-            }
-        }
-
-        // Method image
-        if (config.images.method) {
-            const methodImg = document.querySelector('.method-img');
-            if (methodImg) {
-                methodImg.src = config.images.method;
-                imagesApplied++;
-                console.log('✓ Method image updated');
-            }
-        }
-
-        // Gallery images
-        if (config.images.gallery && config.images.gallery.length > 0) {
-            const galleryImgs = document.querySelectorAll('.gallery-img');
-            config.images.gallery.forEach((img, index) => {
-                if (galleryImgs[index] && img.src) {
-                    galleryImgs[index].src = img.src;
-                    if (img.alt) {
-                        galleryImgs[index].alt = img.alt;
-                    }
-                    imagesApplied++;
-                }
-            });
-            console.log(`✓ ${config.images.gallery.length} gallery images updated`);
-        }
-
-        console.log(`✅ Successfully applied ${imagesApplied} custom images`);
-
-    } catch (error) {
-        console.error('❌ Error applying custom images:', error);
-        alert('Error loading custom images. Please try uploading them again in the admin panel.');
+    if (data.images.location) {
+        const el = document.querySelector('.location-img');
+        if (el) el.src = data.images.location;
+    }
+    if (data.images.gallery) {
+        const imgs = document.querySelectorAll('.gallery-img');
+        data.images.gallery.forEach((item, i) => {
+            if (imgs[i]) { imgs[i].src = item.url; imgs[i].alt = item.alt; }
+        });
     }
 }
 
-function applyAdminData(data) {
-    if (data) {
-        try {
+document.addEventListener('DOMContentLoaded', () => { loadAdminData().catch(console.warn); });
 
-            // Update images
-            if (data.images) {
-                // Hero background
-                if (data.images.hero) {
-                    const heroBg = document.querySelector('.hero-bg-image');
-                    if (heroBg) {
-                        heroBg.style.backgroundImage = `url('${data.images.hero}')`;
-                    }
-                }
+// ── Navigation ────────────────────────────────────────────────
 
-                // Location image
-                if (data.images.location) {
-                    const locationImg = document.querySelector('.location-img');
-                    if (locationImg) {
-                        locationImg.src = data.images.location;
-                    }
-                }
-
-                // Method image
-                if (data.images.method) {
-                    const methodImg = document.querySelector('.method-img');
-                    if (methodImg) {
-                        methodImg.src = data.images.method;
-                    }
-                }
-
-                // Gallery images
-                if (data.images.gallery) {
-                    const galleryImgs = document.querySelectorAll('.gallery-img');
-                    data.images.gallery.forEach((img, index) => {
-                        if (galleryImgs[index]) {
-                            galleryImgs[index].src = img.url;
-                            galleryImgs[index].alt = img.alt;
-                        }
-                    });
-                }
-            }
-
-            // Update content
-            if (data.content) {
-                // News banner
-                if (data.content.news) {
-                    const newsText = document.querySelector('.news-text');
-                    if (newsText) {
-                        newsText.textContent = data.content.news;
-                    }
-                }
-
-                // Hero title
-                if (data.content.heroTitle) {
-                    const heroTitle = document.querySelector('.hero-title');
-                    if (heroTitle) {
-                        heroTitle.textContent = data.content.heroTitle;
-                    }
-                }
-
-                // Hero subtitle
-                if (data.content.heroSubtitle) {
-                    const heroSubtitle = document.querySelector('.hero-subtitle');
-                    if (heroSubtitle) {
-                        heroSubtitle.textContent = data.content.heroSubtitle;
-                    }
-                }
-
-                // Contact info
-                if (data.content.contactPhone) {
-                    const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
-                    phoneLinks.forEach(link => {
-                        link.href = `tel:${data.content.contactPhone}`;
-                        link.textContent = data.content.contactPhone;
-                    });
-                }
-
-                if (data.content.contactEmail) {
-                    const emailLinks = document.querySelectorAll('a[href^="mailto:"]');
-                    emailLinks.forEach(link => {
-                        link.href = `mailto:${data.content.contactEmail}`;
-                        link.textContent = data.content.contactEmail;
-                    });
-                }
-            }
-        } catch (error) {
-            console.error('Error loading admin data:', error);
-        }
-    }
-}
-
-// ===========================
-// NAVIGATION FUNCTIONALITY
-// ===========================
-
-// Initialize navbar scroll functionality when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
     const navbar = document.getElementById('navbar');
-    const menuToggle = document.getElementById('menuToggle');
-    const navMenu = document.getElementById('navMenu');
-    const navLinks = document.querySelectorAll('.nav-menu a');
+    const toggle = document.getElementById('menuToggle');
+    const menu   = document.getElementById('navMenu');
+    if (!navbar) return;
 
-    console.log('🔧 Navbar script initialized');
-    console.log('📍 Navbar element:', navbar ? 'Found' : 'Not found');
-
-    // Check if navbar exists
-    if (!navbar) {
-        console.error('❌ Navbar element not found');
-        return;
-    }
-
-    // Navbar scroll effect with fade on scroll down
-    let lastScroll = 0;
-
+    let last = 0;
     window.addEventListener('scroll', () => {
-        const currentScroll = window.pageYOffset;
+        const y = window.pageYOffset;
+        navbar.classList.toggle('scrolled', y > 40);
+        if (y > last && y > 120) navbar.classList.add('hidden');
+        else if (y < last) navbar.classList.remove('hidden');
+        last = y;
+    }, { passive: true });
 
-        // Add scrolled class for background effect
-        if (currentScroll > 100) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
-
-        // Hide navbar when scrolling down, show when scrolling up
-        if (currentScroll > lastScroll && currentScroll > 150) {
-            // Scrolling down & past threshold
-            navbar.classList.add('hidden');
-            console.log('⬇️ Navbar hidden (scroll down)');
-        } else if (currentScroll < lastScroll) {
-            // Scrolling up
-            navbar.classList.remove('hidden');
-            console.log('⬆️ Navbar visible (scroll up)');
-        }
-
-        lastScroll = currentScroll;
-    });
-
-    console.log('✅ Navbar scroll listener attached');
-
-    // Mobile menu toggle
-    if (menuToggle && navMenu) {
-        menuToggle.addEventListener('click', () => {
-            menuToggle.classList.toggle('active');
-            navMenu.classList.toggle('active');
+    if (toggle && menu) {
+        toggle.addEventListener('click', () => {
+            toggle.classList.toggle('open');
+            menu.classList.toggle('open');
         });
     }
 
-    // Close mobile menu when clicking on a link
-    if (navLinks) {
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                if (menuToggle && navMenu) {
-                    menuToggle.classList.remove('active');
-                    navMenu.classList.remove('active');
-                }
-            });
-        });
-    }
+    document.querySelectorAll('.nav-links a').forEach(a =>
+        a.addEventListener('click', () => {
+            toggle?.classList.remove('open');
+            menu?.classList.remove('open');
+        })
+    );
 
-    // Close mobile menu when clicking outside
-    document.addEventListener('click', (e) => {
+    document.addEventListener('click', e => {
         if (!navbar.contains(e.target)) {
-            if (menuToggle && navMenu) {
-                menuToggle.classList.remove('active');
-                navMenu.classList.remove('active');
-            }
+            toggle?.classList.remove('open');
+            menu?.classList.remove('open');
         }
     });
 });
 
-// ===========================
-// SMOOTH SCROLLING
-// ===========================
+// ── Smooth scroll ─────────────────────────────────────────────
 
-// Smooth scroll for all anchor links
 document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            const href = this.getAttribute('href');
-
-            // Only handle internal links
-            if (href.startsWith('#') && href.length > 1) {
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+            const href = a.getAttribute('href');
+            if (href && href.length > 1) {
                 e.preventDefault();
                 const target = document.querySelector(href);
-
                 if (target) {
-                    const offsetTop = target.offsetTop - 80;
-                    window.scrollTo({
-                        top: offsetTop,
-                        behavior: 'smooth'
-                    });
+                    const navH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 72;
+                    window.scrollTo({ top: target.offsetTop - navH, behavior: 'smooth' });
                 }
             }
         });
     });
 });
 
-// ===========================
-// SCROLL ANIMATIONS
-// ===========================
+// ── Scroll reveal ─────────────────────────────────────────────
 
-const observerOptions = {
-    threshold: 0.15,
-    rootMargin: '0px 0px -100px 0px'
-};
+const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
 
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-        }
-    });
-}, observerOptions);
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-// Observe sections for fade-in animation
-const sections = document.querySelectorAll('section');
-sections.forEach(section => {
-    section.classList.add('fade-in');
-    observer.observe(section);
-});
-
-// Observe individual elements
-const elementsToAnimate = document.querySelectorAll(
-    '.about-content, .location-text, .location-visual, .method-text, .method-visual, ' +
-    '.wholesale-content, .story-content, .eco-hub-content, .contact-info, .contact-actions'
-);
-
-elementsToAnimate.forEach(element => {
-    element.classList.add('fade-in');
-    observer.observe(element);
-});
-
-// ===========================
-// GALLERY INTERACTIONS
-// ===========================
-
-const galleryItems = document.querySelectorAll('.gallery-item');
-
-galleryItems.forEach(item => {
-    item.addEventListener('mouseenter', function() {
-        this.style.zIndex = '10';
-    });
-
-    item.addEventListener('mouseleave', function() {
-        this.style.zIndex = '1';
-    });
-});
-
-// ===========================
-// PARALLAX EFFECT FOR HERO
-// ===========================
+// ── Hero parallax ─────────────────────────────────────────────
 
 window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
     const hero = document.querySelector('.hero');
+    if (!hero) return;
+    const y = window.pageYOffset;
+    if (y > hero.offsetHeight) return;
+    const bg   = hero.querySelector('.hero-bg');
+    const body = hero.querySelector('.hero-content');
+    if (bg)   bg.style.transform   = `translateY(${y * 0.35}px)`;
+    if (body) body.style.opacity   = 1 - (y / hero.offsetHeight) * 0.9;
+}, { passive: true });
 
-    if (hero) {
-        // Parallax for content (subtle fade)
-        const heroContent = hero.querySelector('.hero-content');
-        if (scrolled < hero.offsetHeight) {
-            // Subtle parallax - only slight fade, no transform to keep button accessible
-            const fadeAmount = Math.min(scrolled / (hero.offsetHeight * 1.5), 0.3);
-            heroContent.style.opacity = 1 - fadeAmount;
-        }
-
-        // Parallax for video/background (scrolls down slower for depth effect)
-        const heroVideo = hero.querySelector('.hero-video');
-        const heroBgImage = hero.querySelector('.hero-bg-image');
-
-        if (scrolled < hero.offsetHeight) {
-            // Move background down at 40% of scroll speed for parallax effect
-            const parallaxOffset = scrolled * 0.4;
-
-            if (heroVideo) {
-                heroVideo.style.transform = `translate(-50%, calc(-50% + ${parallaxOffset}px))`;
-            }
-
-            if (heroBgImage) {
-                heroBgImage.style.transform = `translateY(${parallaxOffset}px)`;
-            }
-        }
-    }
-});
-
-// ===========================
-// NEWS BANNER ANIMATION
-// ===========================
-
-const newsBanner = document.querySelector('.news-banner');
-if (newsBanner) {
-    setTimeout(() => {
-        newsBanner.style.opacity = '1';
-    }, 500);
-}
-
-// ===========================
-// LOADING ANIMATION
-// ===========================
-
-window.addEventListener('load', () => {
-    document.body.style.opacity = '0';
-    setTimeout(() => {
-        document.body.style.transition = 'opacity 0.5s ease-in';
-        document.body.style.opacity = '1';
-    }, 100);
-});
-
-// ===========================
-// ACTIVE NAV LINK HIGHLIGHT
-// ===========================
+// ── Active nav section highlight ──────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
-    const sections = document.querySelectorAll('section');
-    const navLinks = document.querySelectorAll('.nav-menu a');
-
-    if (sections.length > 0 && navLinks.length > 0) {
-        window.addEventListener('scroll', () => {
-            let current = '';
-
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-
-                if (window.pageYOffset >= (sectionTop - 150)) {
-                    current = section.getAttribute('id');
-                }
-            });
-
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === `#${current}`) {
-                    link.classList.add('active');
-                }
-            });
-        });
-    }
-});
-
-// ===========================
-// PERFORMANCE OPTIMIZATION
-// ===========================
-
-// Debounce function for scroll events
-function debounce(func, wait = 10, immediate = true) {
-    let timeout;
-    return function() {
-        const context = this;
-        const args = arguments;
-        const later = function() {
-            timeout = null;
-            if (!immediate) func.apply(context, args);
-        };
-        const callNow = immediate && !timeout;
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-        if (callNow) func.apply(context, args);
-    };
-}
-
-// Apply debounce to scroll-heavy operations
-const debouncedScroll = debounce(() => {
-    // Scroll-dependent operations
-}, 15);
-
-window.addEventListener('scroll', debouncedScroll);
-
-// ===========================
-// ACCESSIBILITY ENHANCEMENTS
-// ===========================
-
-// Skip to content link
-const skipLink = document.createElement('a');
-skipLink.href = '#about';
-skipLink.className = 'skip-link';
-skipLink.textContent = 'Skip to content';
-skipLink.style.cssText = `
-    position: absolute;
-    top: -40px;
-    left: 0;
-    background: var(--gold);
-    color: var(--navy-dark);
-    padding: 8px;
-    text-decoration: none;
-    z-index: 100;
-`;
-skipLink.addEventListener('focus', () => {
-    skipLink.style.top = '0';
-});
-skipLink.addEventListener('blur', () => {
-    skipLink.style.top = '-40px';
-});
-document.body.insertBefore(skipLink, document.body.firstChild);
-
-// ===========================
-// CONSOLE MESSAGE
-// ===========================
-
-console.log('%cMediterra Mussel Farm', 'font-size: 24px; font-weight: bold; color: #c9a961;');
-console.log('%cPremium Mediterranean Mussels from Greece', 'font-size: 14px; color: #1c2541;');
-console.log('%cWebsite crafted with precision and care', 'font-size: 12px; color: #666;');
-
-// ===========================
-// FLOATING CTA BUTTON
-// ===========================
-
-const floatingCta = document.getElementById('floatingCta');
-
-if (floatingCta) {
-    // Hide floating CTA initially
-    floatingCta.classList.add('hidden');
-
+    const sections = document.querySelectorAll('section[id]');
+    const links    = document.querySelectorAll('.nav-links a');
+    if (!sections.length || !links.length) return;
     window.addEventListener('scroll', () => {
-        const scrollPosition = window.pageYOffset;
-        const heroHeight = document.querySelector('.hero')?.offsetHeight || 600;
-
-        // Show floating CTA after scrolling past hero section
-        if (scrollPosition > heroHeight) {
-            floatingCta.classList.remove('hidden');
-        } else {
-            floatingCta.classList.add('hidden');
-        }
-    });
-}
+        let cur = '';
+        sections.forEach(s => { if (window.pageYOffset >= s.offsetTop - 130) cur = s.id; });
+        links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === `#${cur}`));
+    }, { passive: true });
+});

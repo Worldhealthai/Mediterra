@@ -358,6 +358,19 @@ ul {
     background: var(--charcoal);
 }
 
+.hero-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: cover;
+    z-index: 0;
+}
+
 .hero-bg-image {
     position: absolute;
     inset: 0;
@@ -365,11 +378,13 @@ ul {
     background-position: center 40%;
     background-repeat: no-repeat;
     will-change: transform;
+    z-index: 1;
 }
 
 .hero-overlay {
     position: absolute;
     inset: 0;
+    z-index: 2;
     background: linear-gradient(
         to bottom,
         rgba(10,10,10,0.55) 0%,
@@ -380,7 +395,7 @@ ul {
 
 .hero-content {
     position: relative;
-    z-index: 2;
+    z-index: 3;
     text-align: center;
     padding: 0 var(--space-md);
     max-width: 860px;
@@ -430,7 +445,7 @@ ul {
     bottom: 2.5rem;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 2;
+    z-index: 3;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1375,6 +1390,39 @@ a.contact-value:hover {
 }
 
 @media (max-width: 480px) {
+    /* Tighter container on very small screens */
+    .container {
+        padding: 0 1.25rem;
+    }
+
+    /* Hero title: prevent overflow on 375px phones */
+    .hero-title {
+        font-size: clamp(2.6rem, 12vw, 4rem);
+    }
+
+    /* Nav inner: less gap so logo + toggle don't crowd */
+    .nav-inner {
+        gap: 0;
+    }
+
+    /* Philosophy stats: wrap to 2 columns */
+    .stat-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+    }
+
+    /* Origin image shorter on tiny screens */
+    .origin-image-wrap {
+        height: 240px;
+    }
+
+    /* Process: tighter padding */
+    .process-step {
+        padding: 1.5rem 0;
+    }
+
+    /* Gallery: single column */
     .gallery-grid {
         grid-template-columns: 1fr;
         grid-template-rows: repeat(6, 220px);
@@ -1386,8 +1434,21 @@ a.contact-value:hover {
         grid-row: span 1;
     }
 
+    /* Contact: tighter spacing */
+    .contact-item {
+        padding: 1.4rem 0;
+    }
+
+    /* Insights stats: 2-column grid */
     .insights-stats-inner {
         grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+    }
+
+    /* Insights hero: tighter */
+    .insights-hero {
+        padding-top: calc(var(--nav-height) + 2.5rem);
+        padding-bottom: 2.5rem;
     }
 }
 

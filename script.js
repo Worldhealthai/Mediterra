@@ -247,8 +247,14 @@ window.addEventListener('scroll', () => {
     const heroContent = hero.querySelector('.hero-content');
 
     if (scrolled < hero.offsetHeight) {
+        const heroVideo = hero.querySelector('.hero-video');
+        const parallaxOffset = scrolled * 0.35;
+
+        if (heroVideo) {
+            heroVideo.style.transform = `translate(-50%, calc(-50% + ${parallaxOffset}px))`;
+        }
         if (heroBgImage) {
-            heroBgImage.style.transform = `translateY(${scrolled * 0.35}px)`;
+            heroBgImage.style.transform = `translateY(${parallaxOffset}px)`;
         }
         if (heroContent) {
             heroContent.style.opacity = 1 - (scrolled / hero.offsetHeight) * 0.8;

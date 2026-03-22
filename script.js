@@ -2,29 +2,21 @@
 // MEDITERRA — Main Script
 // ================================================================
 
-// ---- SUPABASE / ADMIN IMAGE LOADING ----
+// ── Supabase image loading ────────────────────────────────────
 
 function initSupabaseIfReady() {
-    try {
-        if (typeof initSupabase === 'function') initSupabase();
-    } catch (e) {
-        console.warn('Supabase init error:', e);
-    }
+    try { if (typeof initSupabase === 'function') initSupabase(); }
+    catch (e) { console.warn('Supabase init:', e); }
 }
 
 async function loadImagesFromSupabase() {
     if (!supabaseClient) return null;
     try {
         const { data, error } = await supabaseClient
-            .from('site_images')
-            .select('*')
-            .eq('is_active', true);
+            .from('site_images').select('*').eq('is_active', true);
         if (error) throw error;
         return data;
-    } catch (e) {
-        console.warn('Supabase load error:', e);
-        return null;
-    }
+    } catch (e) { console.warn('Supabase load:', e); return null; }
 }
 
 async function loadAdminData() {
@@ -32,73 +24,53 @@ async function loadAdminData() {
         initSupabaseIfReady();
         if (supabaseClient) {
             const rows = await loadImagesFromSupabase();
-            if (rows && rows.length > 0) {
+            if (rows && rows.length) {
                 const cfg = { images: { hero: null, logo: null, location: null, method: null, gallery: [] } };
-                rows.forEach(img => {
-                    if (img.image_type.startsWith('gallery-')) {
-                        cfg.images.gallery.push({ src: img.image_url, alt: img.alt_text });
-                    } else {
-                        cfg.images[img.image_type] = img.image_url;
-                    }
+                rows.forEach(r => {
+                    if (r.image_type.startsWith('gallery-'))
+                        cfg.images.gallery.push({ src: r.image_url, alt: r.alt_text });
+                    else cfg.images[r.image_type] = r.image_url;
                 });
-                applyAdminImages(cfg);
-                return;
+                applyImages(cfg); return;
             }
         }
-    } catch (e) {
-        console.warn('Admin data load error:', e);
-    }
+    } catch (e) { console.warn('loadAdminData:', e); }
 
-    // localStorage fallback
     const stored = localStorage.getItem('mediterra_site_config');
-    if (stored) {
-        try { applyAdminImages(JSON.parse(stored)); return; } catch (_) {}
-    }
+    if (stored) { try { applyImages(JSON.parse(stored)); return; } catch (_) {} }
 
-    // Legacy fallback
     const legacy = localStorage.getItem('mediterraData');
-    if (legacy) {
-        try { applyAdminImagesLegacy(JSON.parse(legacy)); } catch (_) {}
-    }
+    if (legacy) { try { applyLegacy(JSON.parse(legacy)); } catch (_) {} }
 }
 
-function applyAdminImages(cfg) {
-    if (!cfg || !cfg.images) return;
-
+function applyImages(cfg) {
+    if (!cfg?.images) return;
     if (cfg.images.hero) {
-        const el = document.querySelector('.hero-bg-image');
+        const el = document.querySelector('.hero-bg');
         if (el) el.style.backgroundImage = `url('${cfg.images.hero}')`;
     }
-
-    if (cfg.images.logo) {
+    if (cfg.images.logo)
         document.querySelectorAll('.logo-img').forEach(img => { img.src = cfg.images.logo; });
-    }
-
     if (cfg.images.location) {
         const el = document.querySelector('.location-img');
         if (el) el.src = cfg.images.location;
     }
-
     if (cfg.images.method) {
         const el = document.querySelector('.method-img');
         if (el) el.src = cfg.images.method;
     }
-
-    if (cfg.images.gallery && cfg.images.gallery.length) {
+    if (cfg.images.gallery?.length) {
         const imgs = document.querySelectorAll('.gallery-img');
         cfg.images.gallery.forEach((item, i) => {
-            if (imgs[i] && item.src) {
-                imgs[i].src = item.src;
-                if (item.alt) imgs[i].alt = item.alt;
-            }
+            if (imgs[i] && item.src) { imgs[i].src = item.src; if (item.alt) imgs[i].alt = item.alt; }
         });
     }
 }
 
-function applyAdminImagesLegacy(data) {
-    if (!data || !data.images) return;
+function applyLegacy(data) {
+    if (!data?.images) return;
     if (data.images.hero) {
-        const el = document.querySelector('.hero-bg-image');
+        const el = document.querySelector('.hero-bg');
         if (el) el.style.backgroundImage = `url('${data.images.hero}')`;
     }
     if (data.images.location) {
@@ -113,31 +85,23 @@ function applyAdminImagesLegacy(data) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    loadAdminData().catch(console.warn);
-});
+document.addEventListener('DOMContentLoaded', () => { loadAdminData().catch(console.warn); });
 
-// ---- NAVIGATION ----
+// ── Navigation ────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
     const navbar = document.getElementById('navbar');
     const toggle = document.getElementById('menuToggle');
     const menu   = document.getElementById('navMenu');
-    const links  = document.querySelectorAll('.nav-links a');
-
     if (!navbar) return;
 
-    let lastScroll = 0;
-
+    let last = 0;
     window.addEventListener('scroll', () => {
         const y = window.pageYOffset;
-        navbar.classList.toggle('scrolled', y > 50);
-        if (y > lastScroll && y > 140) {
-            navbar.classList.add('hidden');
-        } else if (y < lastScroll) {
-            navbar.classList.remove('hidden');
-        }
-        lastScroll = y;
+        navbar.classList.toggle('scrolled', y > 40);
+        if (y > last && y > 120) navbar.classList.add('hidden');
+        else if (y < last) navbar.classList.remove('hidden');
+        last = y;
     }, { passive: true });
 
     if (toggle && menu) {
@@ -147,22 +111,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    links.forEach(link => {
-        link.addEventListener('click', () => {
-            if (toggle) toggle.classList.remove('open');
-            if (menu)   menu.classList.remove('open');
-        });
-    });
+    document.querySelectorAll('.nav-links a').forEach(a =>
+        a.addEventListener('click', () => {
+            toggle?.classList.remove('open');
+            menu?.classList.remove('open');
+        })
+    );
 
     document.addEventListener('click', e => {
         if (!navbar.contains(e.target)) {
-            if (toggle) toggle.classList.remove('open');
-            if (menu)   menu.classList.remove('open');
+            toggle?.classList.remove('open');
+            menu?.classList.remove('open');
         }
     });
 });
 
-// ---- SMOOTH SCROLL ----
+// ── Smooth scroll ─────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('a[href^="#"]').forEach(a => {
@@ -180,70 +144,36 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// ---- SCROLL REVEAL ----
+// ── Scroll reveal ─────────────────────────────────────────────
 
-const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-        if (e.isIntersecting) {
-            e.target.classList.add('in');
-            revealObserver.unobserve(e.target);
-        }
-    });
-}, { threshold: 0.1, rootMargin: '0px 0px -70px 0px' });
+const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
 
-document.querySelectorAll('.fade-up').forEach(el => revealObserver.observe(el));
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-// ---- HERO PARALLAX ----
+// ── Hero parallax ─────────────────────────────────────────────
 
 window.addEventListener('scroll', () => {
     const hero = document.querySelector('.hero');
     if (!hero) return;
     const y = window.pageYOffset;
     if (y > hero.offsetHeight) return;
-
-    const video   = hero.querySelector('.hero-video');
-    const bgImage = hero.querySelector('.hero-bg-image');
-    const body    = hero.querySelector('.hero-body');
-    const offset  = y * 0.38;
-
-    if (video)   video.style.transform   = `translate(-50%, calc(-50% + ${offset}px))`;
-    if (bgImage) bgImage.style.transform = `translateY(${offset}px)`;
-    if (body)    body.style.opacity      = 1 - (y / hero.offsetHeight) * 0.85;
+    const bg   = hero.querySelector('.hero-bg');
+    const body = hero.querySelector('.hero-content');
+    if (bg)   bg.style.transform   = `translateY(${y * 0.35}px)`;
+    if (body) body.style.opacity   = 1 - (y / hero.offsetHeight) * 0.9;
 }, { passive: true });
 
-// ---- ACTIVE NAV HIGHLIGHT ----
+// ── Active nav section highlight ──────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
     const sections = document.querySelectorAll('section[id]');
     const links    = document.querySelectorAll('.nav-links a');
     if (!sections.length || !links.length) return;
-
     window.addEventListener('scroll', () => {
-        let current = '';
-        sections.forEach(s => {
-            if (window.pageYOffset >= s.offsetTop - 140) current = s.id;
-        });
-        links.forEach(a => {
-            a.classList.toggle('active', a.getAttribute('href') === `#${current}`);
-        });
+        let cur = '';
+        sections.forEach(s => { if (window.pageYOffset >= s.offsetTop - 130) cur = s.id; });
+        links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === `#${cur}`));
     }, { passive: true });
 });
-
-// ---- ACCESSIBILITY SKIP LINK ----
-
-const skip = document.createElement('a');
-skip.href = '#about';
-skip.textContent = 'Skip to content';
-skip.style.cssText = `
-    position: absolute; top: -50px; left: 1rem;
-    background: #C9A84C; color: #030E1A;
-    padding: 0.6rem 1.2rem;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.7rem; font-weight: 600;
-    letter-spacing: 0.12em; text-transform: uppercase;
-    text-decoration: none; z-index: 9999;
-    transition: top 0.2s;
-`;
-skip.addEventListener('focus', () => { skip.style.top = '1rem'; });
-skip.addEventListener('blur',  () => { skip.style.top = '-50px'; });
-document.body.insertBefore(skip, document.body.firstChild);

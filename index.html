@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mediterra — Premium Mediterranean Mussels</title>
-    <meta name="description" content="Premium Mediterranean mussels from the Artemisium Strait, Greece. Wholesale aquaculture for global partners.">
+    <title>Mediterra Mussel Farm — Artemisium Strait, Greece</title>
+    <meta name="description" content="Premium Mediterranean mussels from the Artemisium Strait, North Evia. Wholesale aquaculture for global partners.">
     <link rel="icon" type="image/png" href="logo-transparent.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
     <script src="supabase-config.js" defer></script>
@@ -17,12 +17,12 @@
 <body>
 
 <!-- =====================================================================
-     NAVIGATION
+     NAV — always white, clean
 ===================================================================== -->
 <nav id="navbar">
     <div class="nav-wrap">
-        <a href="#" class="nav-brand">
-            <img src="logo-transparent.png" alt="Mediterra" class="logo-img">
+        <a href="/" class="nav-brand">
+            <img src="logo-transparent.png" alt="Mediterra Mussel Farm" class="logo-img">
         </a>
         <ul class="nav-links" id="navMenu">
             <li><a href="#origin">Origin</a></li>
@@ -30,8 +30,9 @@
             <li><a href="#partnership">Partnership</a></li>
             <li><a href="insights.html">Insights</a></li>
         </ul>
-        <a href="#contact" class="nav-enquire">Wholesale Enquiries</a>
-        <button class="nav-toggle" id="menuToggle" aria-label="Open menu">
+        <a href="#contact" class="nav-cta">Wholesale Enquiries</a>
+        <button class="nav-toggle" id="menuToggle" aria-label="Toggle menu">
+            <span></span>
             <span></span>
             <span></span>
         </button>
@@ -42,86 +43,80 @@
      HERO
 ===================================================================== -->
 <section class="hero" id="hero">
-    <video class="hero-video" autoplay muted loop playsinline>
-        <source src="https://assets.mixkit.co/videos/preview/mixkit-waves-in-the-water-1164-large.mp4" type="video/mp4">
-    </video>
-    <div class="hero-bg-image"></div>
-    <div class="hero-veil"></div>
+    <div class="hero-bg hero-bg-image"></div>
+    <div class="hero-overlay"></div>
 
-    <div class="hero-body">
-        <span class="hero-label">Artemisium Strait &nbsp;&middot;&nbsp; North Evia, Greece</span>
-        <h1 class="hero-heading">Mediterranean<br>Mussels.</h1>
-        <p class="hero-sub">Premium aquaculture &nbsp;&middot;&nbsp; Global wholesale</p>
-        <div class="hero-ctas">
-            <a href="#contact" class="cta-gold">Wholesale Enquiries</a>
-            <a href="#process" class="cta-outline">Our Process</a>
+    <div class="hero-content">
+        <p class="hero-eyebrow">Artemisium Strait &nbsp;&middot;&nbsp; North Evia, Greece</p>
+        <h1 class="hero-heading">
+            Mediterranean<br>
+            <em>Mussels.</em>
+        </h1>
+        <p class="hero-tagline">Premium aquaculture &nbsp;&middot;&nbsp; Global wholesale</p>
+        <div class="hero-actions">
+            <a href="#contact" class="btn-amber">Wholesale Enquiries</a>
+            <a href="#process" class="btn-ghost">Our Process</a>
         </div>
     </div>
 
-    <div class="hero-scroll">
-        <div class="scroll-bar"></div>
+    <div class="hero-wave">
+        <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z" fill="#ffffff"/>
+        </svg>
     </div>
+</section>
 
-    <div class="hero-ticker">
-        <div class="ticker-track">
-            <span>Quality Without Compromise</span>
-            <span class="t-dot">&middot;</span>
-            <span>Mediterranean Heritage</span>
-            <span class="t-dot">&middot;</span>
-            <span>Precision Cultivation</span>
-            <span class="t-dot">&middot;</span>
-            <span>Wholesale Partnership</span>
-            <span class="t-dot">&middot;</span>
-            <span>Artemisium Strait, Greece</span>
-            <span class="t-dot">&middot;</span>
-            <span>300 Tonnes Annual Production</span>
-            <span class="t-dot">&middot;</span>
-            <span>Quality Without Compromise</span>
-            <span class="t-dot">&middot;</span>
-            <span>Mediterranean Heritage</span>
-            <span class="t-dot">&middot;</span>
-            <span>Precision Cultivation</span>
-            <span class="t-dot">&middot;</span>
-            <span>Wholesale Partnership</span>
-            <span class="t-dot">&middot;</span>
-            <span>Artemisium Strait, Greece</span>
-            <span class="t-dot">&middot;</span>
-            <span>300 Tonnes Annual Production</span>
-            <span class="t-dot">&middot;</span>
+<!-- =====================================================================
+     STATS
+===================================================================== -->
+<section class="s-stats">
+    <div class="wrap">
+        <div class="stats-row">
+            <div class="stat-item reveal">
+                <span class="stat-val">300T</span>
+                <span class="stat-key">Annual Production</span>
+            </div>
+            <div class="stat-div"></div>
+            <div class="stat-item reveal" style="--delay:.08s">
+                <span class="stat-val">24H</span>
+                <span class="stat-key">Dispatch to Athens</span>
+            </div>
+            <div class="stat-div"></div>
+            <div class="stat-item reveal" style="--delay:.16s">
+                <span class="stat-val">3+</span>
+                <span class="stat-key">Generations</span>
+            </div>
+            <div class="stat-div"></div>
+            <div class="stat-item reveal" style="--delay:.24s">
+                <span class="stat-val">100%</span>
+                <span class="stat-key">Natural Filtration</span>
+            </div>
         </div>
     </div>
 </section>
 
 <!-- =====================================================================
-     01 — PHILOSOPHY
+     01 — ABOUT
 ===================================================================== -->
 <section class="s-about" id="about">
-    <div class="wrap">
-        <div class="about-grid">
-            <div class="about-index">
-                <span class="s-num">01</span>
-                <div class="s-rule"></div>
-            </div>
-            <div class="about-body fade-up">
-                <h2 class="s-heading">Crafted by nature.<br>Refined by experience.</h2>
-                <p class="s-body">A family-owned aquaculture enterprise rooted in the Artemisium Strait, North Evia — where the sea sets the standard and quality is non-negotiable. Every mussel we produce carries the character of this place: resilient, mineral-rich, unmistakably Mediterranean.</p>
-                <div class="stat-band">
-                    <div class="stat">
-                        <span class="stat-n">300T</span>
-                        <span class="stat-l">Annual Production</span>
-                    </div>
-                    <div class="stat-div"></div>
-                    <div class="stat">
-                        <span class="stat-n">24H</span>
-                        <span class="stat-l">Dispatch to Athens</span>
-                    </div>
-                    <div class="stat-div"></div>
-                    <div class="stat">
-                        <span class="stat-n">3+</span>
-                        <span class="stat-l">Generations</span>
-                    </div>
-                </div>
-            </div>
+    <div class="about-layout">
+        <div class="about-image reveal">
+            <img
+                src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=900&q=80"
+                alt="Premium Mediterranean mussels"
+                class="about-img"
+                loading="lazy">
+            <div class="about-img-caption">Artemisium Strait &middot; North Evia</div>
+        </div>
+        <div class="about-text reveal">
+            <span class="eyebrow">01 &nbsp;&middot;&nbsp; Philosophy</span>
+            <h2 class="section-heading">Crafted by nature.<br>Refined by<br><em>experience.</em></h2>
+            <p class="body-text">A family enterprise rooted in the Artemisium Strait — where relentless currents produce mussels of exceptional character. Three generations of precision, one uncompromising standard.</p>
+            <p class="body-text">We do not produce volume for volume&rsquo;s sake. Every batch is grown slowly, harvested selectively, and delivered within 24 hours.</p>
+            <a href="#partnership" class="link-arrow">
+                <span>Become a Partner</span>
+                <svg width="16" height="10" viewBox="0 0 16 10" fill="none"><path d="M0 5H14M14 5L10 1M14 5L10 9" stroke="currentColor" stroke-width="1.2"/></svg>
+            </a>
         </div>
     </div>
 </section>
@@ -130,26 +125,29 @@
      02 — ORIGIN
 ===================================================================== -->
 <section class="s-origin" id="origin">
-    <div class="origin-grid">
-        <div class="origin-media">
+    <div class="wrap">
+        <div class="origin-header reveal">
+            <span class="eyebrow">02 &nbsp;&middot;&nbsp; Origin</span>
+            <h2 class="section-heading">The Artemisium<br>Strait</h2>
+        </div>
+    </div>
+    <div class="origin-layout">
+        <div class="origin-text reveal">
+            <p class="origin-lead">One of the Mediterranean&rsquo;s most powerful marine corridors. A body of water with its own memory.</p>
+            <p class="body-text">Strong, continuous currents deliver oxygen and minerals directly to our long-line arrays — creating the precise conditions that define our mussels&rsquo; character. This is not a location chosen for convenience.</p>
+            <ul class="trait-list">
+                <li>Continuous natural water renewal</li>
+                <li>Exceptional dissolved oxygen levels</li>
+                <li>Rich mineral and nutrient profile</li>
+                <li>Stable, protected ecosystem</li>
+            </ul>
+        </div>
+        <div class="origin-image reveal">
             <img
                 src="https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=1200&q=80"
-                alt="Artemisium Strait, North Evia, Greece"
-                class="location-img origin-photo"
+                alt="Artemisium Strait aerial view"
+                class="location-img"
                 loading="lazy">
-        </div>
-        <div class="origin-text fade-up">
-            <span class="s-num light">02</span>
-            <div class="s-rule light"></div>
-            <h2 class="s-heading light">The<br>Artemisium Strait</h2>
-            <p class="origin-lead">One of the Mediterranean&rsquo;s most powerful marine corridors.</p>
-            <p class="s-body muted">Strong natural currents renew the water continuously — delivering oxygen, minerals, and the precise conditions that shape our mussels&rsquo; character. This is not a location chosen for convenience. It is a place with its own memory.</p>
-            <ul class="attr-list">
-                <li>Continuous natural water movement</li>
-                <li>High dissolved oxygen levels</li>
-                <li>Rich mineral and nutrient flow</li>
-                <li>Stable, balanced ecosystem</li>
-            </ul>
         </div>
     </div>
 </section>
@@ -159,38 +157,42 @@
 ===================================================================== -->
 <section class="s-process" id="process">
     <div class="wrap">
-        <div class="process-top fade-up">
-            <div class="process-top-left">
-                <span class="s-num">03</span>
-                <div class="s-rule"></div>
-                <h2 class="s-heading">The Method</h2>
-            </div>
-            <p class="process-intro">Sea-crafted precision across every stage — from the water column to your door.</p>
+        <div class="process-header reveal">
+            <span class="eyebrow light">03 &nbsp;&middot;&nbsp; The Method</span>
+            <h2 class="section-heading light">Sea-crafted precision,<br>from water to door.</h2>
         </div>
-        <div class="process-steps">
-            <div class="p-step fade-up">
-                <span class="p-num">I</span>
-                <h3 class="p-title">Long-Line<br>Cultivation</h3>
-                <p class="p-body">Suspended in the strait&rsquo;s moving water column. Natural filtration only — no artificial feeding, no shortcuts.</p>
+        <div class="process-list">
+            <div class="process-row reveal">
+                <span class="p-roman">I</span>
+                <div class="p-line"></div>
+                <h3 class="p-title">Long-Line Cultivation</h3>
+                <div class="p-line"></div>
+                <p class="p-desc">Suspended in the moving water column. Natural filtration only — no artificial feeding, no shortcuts, no compromise.</p>
             </div>
-            <div class="p-step fade-up">
-                <span class="p-num">II</span>
-                <h3 class="p-title">Daily<br>Oversight</h3>
-                <p class="p-body">Water conditions monitored every single day. Temperature, salinity, oxygen — nothing is left to assumption.</p>
+            <div class="process-row reveal">
+                <span class="p-roman">II</span>
+                <div class="p-line"></div>
+                <h3 class="p-title">Daily Oversight</h3>
+                <div class="p-line"></div>
+                <p class="p-desc">Temperature, salinity, and oxygen levels monitored every day. Nothing is left to assumption.</p>
             </div>
-            <div class="p-step fade-up">
-                <span class="p-num">III</span>
-                <h3 class="p-title">Selective<br>Harvest</h3>
-                <p class="p-body">Harvested at peak maturity only. Each batch assessed for size, purity, and shell integrity before leaving the water.</p>
+            <div class="process-row reveal">
+                <span class="p-roman">III</span>
+                <div class="p-line"></div>
+                <h3 class="p-title">Selective Harvest</h3>
+                <div class="p-line"></div>
+                <p class="p-desc">Harvested only at peak maturity. Each batch assessed for size, purity, and shell integrity before leaving the water.</p>
             </div>
-            <div class="p-step fade-up">
-                <span class="p-num">IV</span>
-                <h3 class="p-title">Clean<br>Dispatch</h3>
-                <p class="p-body">Delivered to Athens within 24 hours. Cold chain maintained from strait to market, without exception.</p>
+            <div class="process-row reveal">
+                <span class="p-roman">IV</span>
+                <div class="p-line"></div>
+                <h3 class="p-title">Clean Dispatch</h3>
+                <div class="p-line"></div>
+                <p class="p-desc">Delivered to Athens within 24 hours. Cold chain maintained from strait to door, without exception.</p>
             </div>
         </div>
-        <div class="process-quote fade-up">
-            <blockquote>&ldquo;This is not mass aquaculture. This is sea-crafted precision.&rdquo;</blockquote>
+        <div class="process-quote reveal">
+            <blockquote>&ldquo;Not mass aquaculture &mdash; sea-crafted precision.&rdquo;</blockquote>
         </div>
     </div>
 </section>
@@ -199,25 +201,13 @@
      GALLERY
 ===================================================================== -->
 <section class="s-gallery">
-    <div class="gallery-mosaic">
-        <div class="g-item g-tall">
-            <img class="gallery-img" src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=900&q=80" alt="Premium mussels" loading="lazy">
-        </div>
-        <div class="g-item">
-            <img class="gallery-img" src="https://images.unsplash.com/photo-1583506897994-c2de2a2b5b27?w=700&q=80" alt="Greek coastal dawn" loading="lazy">
-        </div>
-        <div class="g-item">
-            <img class="gallery-img" src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=700&q=80" alt="Mussel close-up" loading="lazy">
-        </div>
-        <div class="g-item g-wide">
-            <img class="gallery-img" src="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=1200&q=80" alt="Mediterranean ocean aerial" loading="lazy">
-        </div>
-        <div class="g-item">
-            <img class="gallery-img" src="https://images.unsplash.com/photo-1580541631950-7282082b53ce?w=700&q=80" alt="Greek strait waters" loading="lazy">
-        </div>
-        <div class="g-item">
-            <img class="gallery-img" src="https://images.unsplash.com/photo-1566024287286-457247b70310?w=700&q=80" alt="Mediterranean sunset" loading="lazy">
-        </div>
+    <div class="gallery-strip">
+        <div class="g-cell"><img class="gallery-img" src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&q=80" alt="Mussels close-up" loading="lazy"></div>
+        <div class="g-cell"><img class="gallery-img" src="https://images.unsplash.com/photo-1583506897994-c2de2a2b5b27?w=800&q=80" alt="Greek coastal dawn" loading="lazy"></div>
+        <div class="g-cell"><img class="gallery-img" src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80" alt="Premium mussels" loading="lazy"></div>
+        <div class="g-cell"><img class="gallery-img" src="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=800&q=80" alt="Mediterranean ocean" loading="lazy"></div>
+        <div class="g-cell"><img class="gallery-img" src="https://images.unsplash.com/photo-1580541631950-7282082b53ce?w=800&q=80" alt="Greek waters" loading="lazy"></div>
+        <div class="g-cell"><img class="gallery-img" src="https://images.unsplash.com/photo-1566024287286-457247b70310?w=800&q=80" alt="Mediterranean sunset" loading="lazy"></div>
     </div>
 </section>
 
@@ -226,46 +216,35 @@
 ===================================================================== -->
 <section class="s-partner" id="partnership">
     <div class="wrap">
+        <div class="partner-intro reveal">
+            <span class="eyebrow">04 &nbsp;&middot;&nbsp; Wholesale Partnership</span>
+            <h2 class="section-heading">Built on consistency.<br>Grounded in respect.</h2>
+            <p class="body-text intro-body">We supply distributors, seafood markets, hotels, and fine dining establishments across Greece and internationally. Our partnerships are long-term commitments — not transactions.</p>
+        </div>
         <div class="partner-grid">
-            <div class="partner-left fade-up">
-                <span class="s-num light">04</span>
-                <div class="s-rule light"></div>
-                <h2 class="s-heading light">Wholesale<br>Partnership</h2>
-                <p class="s-body muted">We supply distributors, seafood markets, hotels and fine dining across Greece and beyond. Our partnerships are built on consistency, transparency, and long-term mutual respect &mdash; not transaction.</p>
-                <a href="#contact" class="cta-gold">Begin a Conversation</a>
+            <div class="partner-card reveal">
+                <span class="card-num">01</span>
+                <h4 class="card-title">Consistent Volume</h4>
+                <p class="card-body">~300 tonnes per annum with seasonal supply forecasting and planning for all wholesale partners.</p>
             </div>
-            <div class="partner-right">
-                <div class="criteria">
-                    <div class="c-item fade-up">
-                        <div class="c-top">
-                            <span class="c-dash">&mdash;</span>
-                            <h4 class="c-title">Consistent Volume</h4>
-                        </div>
-                        <p class="c-body">~300 tonnes per annum with seasonal planning and supply forecasting for partners.</p>
-                    </div>
-                    <div class="c-item fade-up">
-                        <div class="c-top">
-                            <span class="c-dash">&mdash;</span>
-                            <h4 class="c-title">Quality Standards</h4>
-                        </div>
-                        <p class="c-body">Every batch assessed. Uniform size, pristine shell, uncompromised freshness at delivery.</p>
-                    </div>
-                    <div class="c-item fade-up">
-                        <div class="c-top">
-                            <span class="c-dash">&mdash;</span>
-                            <h4 class="c-title">Direct Communication</h4>
-                        </div>
-                        <p class="c-body">You speak directly with the producers. No intermediaries, no ambiguity.</p>
-                    </div>
-                    <div class="c-item fade-up">
-                        <div class="c-top">
-                            <span class="c-dash">&mdash;</span>
-                            <h4 class="c-title">Sustainable Practice</h4>
-                        </div>
-                        <p class="c-body">Regenerative aquaculture that actively improves the local marine ecosystem.</p>
-                    </div>
-                </div>
+            <div class="partner-card reveal" style="--delay:.1s">
+                <span class="card-num">02</span>
+                <h4 class="card-title">Quality Standards</h4>
+                <p class="card-body">Every batch assessed for size, shell integrity, and freshness. Uniform, premium product — every delivery.</p>
             </div>
+            <div class="partner-card reveal" style="--delay:.2s">
+                <span class="card-num">03</span>
+                <h4 class="card-title">Direct Access</h4>
+                <p class="card-body">You deal directly with the producers. No agents, no intermediaries, no ambiguity. Clear expectations.</p>
+            </div>
+            <div class="partner-card reveal" style="--delay:.3s">
+                <span class="card-num">04</span>
+                <h4 class="card-title">Sustainable Origin</h4>
+                <p class="card-body">Regenerative long-line aquaculture that actively benefits the local marine ecosystem of the Artemisium Strait.</p>
+            </div>
+        </div>
+        <div class="partner-cta reveal">
+            <a href="#contact" class="btn-amber">Begin a Conversation</a>
         </div>
     </div>
 </section>
@@ -275,26 +254,23 @@
 ===================================================================== -->
 <section class="s-contact" id="contact">
     <div class="wrap">
-        <div class="contact-grid fade-up">
-            <div class="contact-left">
-                <span class="s-num">05</span>
-                <div class="s-rule"></div>
-                <h2 class="s-heading">Make<br>Contact</h2>
-                <p class="s-body">For wholesale enquiries, partnership discussions, or to learn more about our operation and supply capabilities.</p>
-            </div>
-            <div class="contact-right">
-                <a href="tel:+306984092007" class="c-line">
-                    <span class="c-label">Telephone</span>
-                    <span class="c-value">+30 698 409 2007</span>
-                </a>
-                <a href="mailto:mediterramf@gmail.com" class="c-line">
-                    <span class="c-label">Email</span>
-                    <span class="c-value">mediterramf@gmail.com</span>
-                </a>
-                <div class="c-line">
-                    <span class="c-label">Location</span>
-                    <span class="c-value">Artemisium Strait, North Evia, Greece</span>
-                </div>
+        <div class="contact-head reveal">
+            <span class="eyebrow">05 &nbsp;&middot;&nbsp; Contact</span>
+            <h2 class="section-heading">Make Contact</h2>
+            <p class="body-text">For wholesale enquiries, partnership discussions, or to learn more about our operation.</p>
+        </div>
+        <div class="contact-cols reveal">
+            <a href="tel:+306984092007" class="contact-item">
+                <span class="ci-label">Telephone</span>
+                <span class="ci-value">+30 698 409 2007</span>
+            </a>
+            <a href="mailto:mediterramf@gmail.com" class="contact-item">
+                <span class="ci-label">Email</span>
+                <span class="ci-value">mediterramf@gmail.com</span>
+            </a>
+            <div class="contact-item">
+                <span class="ci-label">Location</span>
+                <span class="ci-value">Artemisium Strait,<br>North Evia, Greece</span>
             </div>
         </div>
     </div>
@@ -305,7 +281,7 @@
 ===================================================================== -->
 <footer class="site-footer">
     <div class="wrap">
-        <div class="footer-top">
+        <div class="footer-inner">
             <div class="footer-brand">
                 <img src="logo-transparent.png" alt="Mediterra" class="footer-logo logo-img">
                 <p>Premium Mediterranean mussels.<br>Since the first generation.</p>
@@ -320,10 +296,10 @@
             <div class="footer-contact">
                 <a href="tel:+306984092007">+30 698 409 2007</a>
                 <a href="mailto:mediterramf@gmail.com">mediterramf@gmail.com</a>
-                <a href="/admin" class="footer-admin">Admin</a>
+                <a href="/admin" class="footer-admin-link">Admin</a>
             </div>
         </div>
-        <div class="footer-bottom">
+        <div class="footer-base">
             <span>&copy; 2026 Mediterra Mussel Farm, Greece</span>
             <span>Artemisium Strait &middot; North Evia</span>
         </div>

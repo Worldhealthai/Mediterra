@@ -522,11 +522,6 @@ a.contact-item:hover .ci-value{color:var(--white)}
 }
 .footer-nav a:hover,.footer-contact a:hover{color:var(--white)}
 
-.footer-admin-link{
-  margin-top:.4rem;font-size:.6rem !important;
-  color:rgba(255,255,255,.12) !important;letter-spacing:.12em;text-transform:uppercase;
-}
-
 .footer-base{
   display:flex;align-items:center;justify-content:space-between;
   font-size:.68rem;font-weight:300;

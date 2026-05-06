@@ -56,9 +56,13 @@ function applyImages(cfg) {
         if (el) el.src = cfg.images.location;
     }
     if (cfg.images.gallery?.length) {
-        const cells = document.querySelectorAll('.g-img');
+        const cells = document.querySelectorAll('.g-cell');
         cfg.images.gallery.forEach((item, i) => {
-            if (cells[i] && item.src) { cells[i].src = item.src; if (item.alt) cells[i].alt = item.alt; }
+            if (!cells[i]) return;
+            const img     = cells[i].querySelector('.g-img');
+            const caption = cells[i].querySelector('.g-overlay span');
+            if (img && item.src) { img.src = item.src; if (item.alt) img.alt = item.alt; }
+            if (caption && item.alt) caption.textContent = item.alt;
         });
     }
 }
@@ -74,9 +78,13 @@ function applyLegacy(data) {
         if (el) el.src = data.images.location;
     }
     if (data.images.gallery) {
-        const cells = document.querySelectorAll('.g-img');
+        const cells = document.querySelectorAll('.g-cell');
         data.images.gallery.forEach((item, i) => {
-            if (cells[i]) { cells[i].src = item.url; cells[i].alt = item.alt; }
+            if (!cells[i]) return;
+            const img     = cells[i].querySelector('.g-img');
+            const caption = cells[i].querySelector('.g-overlay span');
+            if (img) { img.src = item.url || item.src || img.src; if (item.alt) img.alt = item.alt; }
+            if (caption && item.alt) caption.textContent = item.alt;
         });
     }
 }

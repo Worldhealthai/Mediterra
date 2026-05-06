@@ -289,8 +289,22 @@ function updateGalleryPreviews() {
         label.className = 'gallery-item-label';
         label.textContent = `Image ${index + 1}`;
 
+        // Editable caption input — value shown as hover overlay on the main site
+        const captionInput = document.createElement('input');
+        captionInput.type = 'text';
+        captionInput.className = 'gallery-caption-input';
+        captionInput.placeholder = 'Hover caption (e.g. Artemisium Strait)…';
+        // Populate with existing alt, but skip the generic default
+        const existingAlt = img.alt || '';
+        captionInput.value = existingAlt.startsWith('Gallery image') ? '' : existingAlt;
+        captionInput.addEventListener('input', (e) => {
+            imageData.gallery[index].alt = e.target.value;
+            showSaveButton();
+        });
+
         div.appendChild(imgEl);
         div.appendChild(label);
+        div.appendChild(captionInput);
         container.appendChild(div);
     });
 }

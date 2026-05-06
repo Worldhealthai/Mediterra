@@ -163,11 +163,13 @@ window.addEventListener('scroll', () => {
     if (!hero) return;
     const y = window.pageYOffset;
     if (y > hero.offsetHeight) return;
-    const bg   = hero.querySelector('.hero-img');
-    const body = hero.querySelector('.hero-body');
-    if (bg)   bg.style.transform  = `translateY(${y * 0.32}px)`;
-    if (body) body.style.transform = `translateY(${y * 0.12}px)`;
-    if (body) body.style.opacity   = Math.max(0, 1 - (y / (hero.offsetHeight * 0.65)));
+    const bg = hero.querySelector('.hero-img');
+    if (bg) bg.style.transform = `translateY(${y * 0.28}px)`;
+    // Fade the left panel body on scroll (desktop split-screen only)
+    if (window.innerWidth > 900) {
+        const body = hero.querySelector('.hero-body');
+        if (body) body.style.opacity = Math.max(0, 1 - (y / (hero.offsetHeight * 0.6)));
+    }
 }, { passive: true });
 
 // ── Stat count-up ─────────────────────────────────────────────

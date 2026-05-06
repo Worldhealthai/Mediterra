@@ -1,8 +1,8 @@
 // ================================================================
-// MEDITERRA — Main Script
+// MEDITERRA — Dark Luxury Site Script
 // ================================================================
 
-// ── Supabase image loading ────────────────────────────────────
+// ── Supabase / Admin data ─────────────────────────────────────
 
 function initSupabaseIfReady() {
     try { if (typeof initSupabase === 'function') initSupabase(); }
@@ -10,7 +10,7 @@ function initSupabaseIfReady() {
 }
 
 async function loadImagesFromSupabase() {
-    if (!supabaseClient) return null;
+    if (!window.supabaseClient) return null;
     try {
         const { data, error } = await supabaseClient
             .from('site_images').select('*').eq('is_active', true);
@@ -22,10 +22,10 @@ async function loadImagesFromSupabase() {
 async function loadAdminData() {
     try {
         initSupabaseIfReady();
-        if (supabaseClient) {
+        if (window.supabaseClient) {
             const rows = await loadImagesFromSupabase();
             if (rows && rows.length) {
-                const cfg = { images: { hero: null, logo: null, location: null, method: null, gallery: [] } };
+                const cfg = { images: { hero: null, logo: null, location: null, gallery: [] } };
                 rows.forEach(r => {
                     if (r.image_type.startsWith('gallery-'))
                         cfg.images.gallery.push({ src: r.image_url, alt: r.alt_text });
@@ -46,7 +46,7 @@ async function loadAdminData() {
 function applyImages(cfg) {
     if (!cfg?.images) return;
     if (cfg.images.hero) {
-        const el = document.querySelector('.hero-bg');
+        const el = document.querySelector('.hero-img');
         if (el) el.style.backgroundImage = `url('${cfg.images.hero}')`;
     }
     if (cfg.images.logo)
@@ -55,14 +55,10 @@ function applyImages(cfg) {
         const el = document.querySelector('.location-img');
         if (el) el.src = cfg.images.location;
     }
-    if (cfg.images.method) {
-        const el = document.querySelector('.method-img');
-        if (el) el.src = cfg.images.method;
-    }
     if (cfg.images.gallery?.length) {
-        const imgs = document.querySelectorAll('.gallery-img');
+        const cells = document.querySelectorAll('.g-img');
         cfg.images.gallery.forEach((item, i) => {
-            if (imgs[i] && item.src) { imgs[i].src = item.src; if (item.alt) imgs[i].alt = item.alt; }
+            if (cells[i] && item.src) { cells[i].src = item.src; if (item.alt) cells[i].alt = item.alt; }
         });
     }
 }
@@ -70,7 +66,7 @@ function applyImages(cfg) {
 function applyLegacy(data) {
     if (!data?.images) return;
     if (data.images.hero) {
-        const el = document.querySelector('.hero-bg');
+        const el = document.querySelector('.hero-img');
         if (el) el.style.backgroundImage = `url('${data.images.hero}')`;
     }
     if (data.images.location) {
@@ -78,9 +74,9 @@ function applyLegacy(data) {
         if (el) el.src = data.images.location;
     }
     if (data.images.gallery) {
-        const imgs = document.querySelectorAll('.gallery-img');
+        const cells = document.querySelectorAll('.g-img');
         data.images.gallery.forEach((item, i) => {
-            if (imgs[i]) { imgs[i].src = item.url; imgs[i].alt = item.alt; }
+            if (cells[i]) { cells[i].src = item.url; cells[i].alt = item.alt; }
         });
     }
 }
@@ -90,38 +86,39 @@ document.addEventListener('DOMContentLoaded', () => { loadAdminData().catch(cons
 // ── Navigation ────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
-    const navbar = document.getElementById('navbar');
-    const toggle = document.getElementById('menuToggle');
-    const menu   = document.getElementById('navMenu');
-    if (!navbar) return;
+    const nav    = document.getElementById('nav');
+    const burger = document.getElementById('navBurger');
+    const links  = document.getElementById('navLinks');
+    if (!nav) return;
 
-    let last = 0;
+    let lastY = 0;
+
     window.addEventListener('scroll', () => {
         const y = window.pageYOffset;
-        navbar.classList.toggle('scrolled', y > 40);
-        if (y > last && y > 120) navbar.classList.add('hidden');
-        else if (y < last) navbar.classList.remove('hidden');
-        last = y;
+        nav.classList.toggle('scrolled', y > 60);
+        if (y > lastY && y > 120) nav.classList.add('hidden');
+        else if (y < lastY)       nav.classList.remove('hidden');
+        lastY = y;
     }, { passive: true });
 
-    if (toggle && menu) {
-        toggle.addEventListener('click', () => {
-            toggle.classList.toggle('open');
-            menu.classList.toggle('open');
+    if (burger && links) {
+        burger.addEventListener('click', () => {
+            burger.classList.toggle('open');
+            links.classList.toggle('open');
         });
     }
 
-    document.querySelectorAll('.nav-links a').forEach(a =>
+    document.querySelectorAll('.nav-links a, .nav-cta').forEach(a =>
         a.addEventListener('click', () => {
-            toggle?.classList.remove('open');
-            menu?.classList.remove('open');
+            burger?.classList.remove('open');
+            links?.classList.remove('open');
         })
     );
 
     document.addEventListener('click', e => {
-        if (!navbar.contains(e.target)) {
-            toggle?.classList.remove('open');
-            menu?.classList.remove('open');
+        if (nav && !nav.contains(e.target)) {
+            burger?.classList.remove('open');
+            links?.classList.remove('open');
         }
     });
 });
@@ -133,10 +130,12 @@ document.addEventListener('DOMContentLoaded', () => {
         a.addEventListener('click', e => {
             const href = a.getAttribute('href');
             if (href && href.length > 1) {
-                e.preventDefault();
                 const target = document.querySelector(href);
                 if (target) {
-                    const navH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 72;
+                    e.preventDefault();
+                    const navH = parseInt(
+                        getComputedStyle(document.documentElement).getPropertyValue('--nav-h')
+                    ) || 80;
                     window.scrollTo({ top: target.offsetTop - navH, behavior: 'smooth' });
                 }
             }
@@ -146,11 +145,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ── Scroll reveal ─────────────────────────────────────────────
 
-const io = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-}, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+const revealIO = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+        if (e.isIntersecting) {
+            e.target.classList.add('in');
+            revealIO.unobserve(e.target);
+        }
+    });
+}, { threshold: 0.1, rootMargin: '0px 0px -56px 0px' });
 
-document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+document.querySelectorAll('.reveal').forEach(el => revealIO.observe(el));
 
 // ── Hero parallax ─────────────────────────────────────────────
 
@@ -159,21 +163,59 @@ window.addEventListener('scroll', () => {
     if (!hero) return;
     const y = window.pageYOffset;
     if (y > hero.offsetHeight) return;
-    const bg   = hero.querySelector('.hero-bg');
-    const body = hero.querySelector('.hero-content');
-    if (bg)   bg.style.transform   = `translateY(${y * 0.35}px)`;
-    if (body) body.style.opacity   = 1 - (y / hero.offsetHeight) * 0.9;
+    const bg   = hero.querySelector('.hero-img');
+    const body = hero.querySelector('.hero-body');
+    if (bg)   bg.style.transform  = `translateY(${y * 0.32}px)`;
+    if (body) body.style.transform = `translateY(${y * 0.12}px)`;
+    if (body) body.style.opacity   = Math.max(0, 1 - (y / (hero.offsetHeight * 0.65)));
 }, { passive: true });
 
-// ── Active nav section highlight ──────────────────────────────
+// ── Stat count-up ─────────────────────────────────────────────
+
+function animateCount(el) {
+    const target = parseInt(el.dataset.target, 10);
+    if (isNaN(target)) return;
+    const duration = 1800;
+    const start = performance.now();
+
+    function step(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+        el.textContent = Math.round(eased * target);
+        if (progress < 1) requestAnimationFrame(step);
+        else el.textContent = target;
+    }
+    requestAnimationFrame(step);
+}
+
+const statIO = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+        if (e.isIntersecting) {
+            animateCount(e.target);
+            statIO.unobserve(e.target);
+        }
+    });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.stat-n[data-target]').forEach(el => statIO.observe(el));
+
+// ── Active nav link on scroll ─────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
     const sections = document.querySelectorAll('section[id]');
-    const links    = document.querySelectorAll('.nav-links a');
-    if (!sections.length || !links.length) return;
+    const navItems = document.querySelectorAll('.nav-links a');
+    if (!sections.length || !navItems.length) return;
+
     window.addEventListener('scroll', () => {
-        let cur = '';
-        sections.forEach(s => { if (window.pageYOffset >= s.offsetTop - 130) cur = s.id; });
-        links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === `#${cur}`));
+        const navH = parseInt(
+            getComputedStyle(document.documentElement).getPropertyValue('--nav-h')
+        ) || 80;
+        let current = '';
+        sections.forEach(s => {
+            if (window.pageYOffset >= s.offsetTop - navH - 60) current = s.id;
+        });
+        navItems.forEach(a =>
+            a.classList.toggle('active', a.getAttribute('href') === `#${current}`)
+        );
     }, { passive: true });
 });

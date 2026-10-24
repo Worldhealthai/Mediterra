@@ -3,445 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Insights — Mediterra Mussel Farm</title>
-    <meta name="description" content="Market intelligence and operational knowledge from Mediterra — premium Mediterranean mussels, Artemisium Strait, Greece.">
+    <title>Insights | Mediterra Mussel Farm</title>
+    <meta name="description" content="Market intelligence and operational knowledge on Mediterranean mussels and aquaculture, from Mediterra in the Artemisium Strait.">
+    <meta name="theme-color" content="#05080D">
     <link rel="icon" type="image/png" href="logo-transparent.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <style>
-        /* ── Insights-specific overrides ────────────────────── */
-        body { padding-top: var(--nav-h); }
-
-        #nav {
-            background: rgba(9,9,13,.92);
-            border-color: var(--b-gold);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-        }
-
-        /* Hero */
-        .ins-hero {
-            background: var(--bg-alt);
-            padding: 7rem 0 6rem;
-            border-bottom: 1px solid var(--b-gold);
-            position: relative;
-            overflow: hidden;
-        }
-        .ins-hero::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(ellipse at 72% 44%, rgba(201,168,76,.08) 0%, transparent 60%);
-            pointer-events: none;
-        }
-        .ins-hero-inner { max-width: var(--max-w); margin: 0 auto; padding: 0 3rem; position: relative; z-index: 1; }
-
-        .ins-title {
-            font-family: var(--serif);
-            font-weight: 300;
-            font-size: clamp(4rem, 10vw, 9rem);
-            line-height: .9;
-            letter-spacing: -.02em;
-            color: var(--white);
-            margin: .8rem 0 1.6rem;
-        }
-        .ins-title em { font-style: italic; color: var(--gold); text-shadow: 0 0 80px rgba(201,168,76,.2); }
-
-        .ins-sub {
-            font-size: .88rem;
-            font-weight: 300;
-            color: var(--muted);
-            max-width: 480px;
-            line-height: 2;
-        }
-
-        /* Stats bar */
-        .ins-stats {
-            background: var(--bg);
-            border-bottom: 1px solid var(--b-gold);
-        }
-        .ins-stats-inner {
-            max-width: var(--max-w);
-            margin: 0 auto;
-            padding: 0 3rem;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-        }
-        .is-item {
-            padding: 2.6rem 0 2.6rem 3rem;
-            border-right: 1px solid var(--b-gold);
-        }
-        .is-item:first-child { padding-left: 0; }
-        .is-item:last-child { border-right: none; }
-        .is-val {
-            display: block;
-            font-family: var(--serif);
-            font-size: 2.8rem;
-            font-weight: 300;
-            color: var(--gold);
-            line-height: 1;
-            margin-bottom: .4rem;
-        }
-        .is-lbl {
-            font-size: .55rem;
-            font-weight: 400;
-            letter-spacing: .2em;
-            text-transform: uppercase;
-            color: var(--muted);
-        }
-
-        /* Content sections */
-        .ins-body { padding: 7rem 0; background: var(--bg); }
-        .ins-body.alt { background: var(--bg-alt); border-top: 1px solid var(--b-gold); }
-        .ins-body-inner { max-width: var(--max-w); margin: 0 auto; padding: 0 3rem; }
-
-        .ins-sec-label {
-            font-size: .57rem;
-            font-weight: 500;
-            letter-spacing: .3em;
-            text-transform: uppercase;
-            color: var(--gold);
-            display: flex;
-            align-items: center;
-            gap: 1.2rem;
-            margin-bottom: 3.5rem;
-            padding-bottom: 1.6rem;
-            border-bottom: 1px solid var(--b-gold);
-        }
-        .ins-sec-label::before {
-            content: '';
-            display: block;
-            width: 20px;
-            height: 1px;
-            background: var(--gold);
-            flex-shrink: 0;
-        }
-
-        /* Article grid */
-        .art-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1px;
-            background: var(--b-gold);
-        }
-        .art-card {
-            background: var(--bg);
-            padding: 2.8rem;
-            border-top: 2px solid transparent;
-            transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease);
-        }
-        .ins-body.alt .art-card { background: var(--bg-alt); }
-        .art-card:hover { border-color: var(--gold); background: var(--bg-card); }
-
-        .art-cat {
-            font-size: .55rem;
-            font-weight: 500;
-            letter-spacing: .24em;
-            text-transform: uppercase;
-            color: var(--gold);
-            margin-bottom: 1.1rem;
-        }
-        .art-title {
-            font-family: var(--serif);
-            font-size: 1.4rem;
-            font-weight: 300;
-            color: var(--white);
-            line-height: 1.24;
-            margin-bottom: 1rem;
-        }
-        .art-excerpt {
-            font-size: .83rem;
-            font-weight: 300;
-            color: var(--muted);
-            line-height: 2;
-            margin-bottom: 1.6rem;
-        }
-        .art-meta {
-            font-size: .57rem;
-            font-weight: 400;
-            letter-spacing: .14em;
-            color: rgba(201,168,76,.5);
-            text-transform: uppercase;
-        }
-
-        /* Guide grid */
-        .guide-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            border-top: 1px solid var(--b-gold);
-        }
-        .guide-card {
-            padding: 3.5rem 2.8rem 3.5rem 0;
-            border-right: 1px solid var(--b-gold);
-            transition: background var(--dur) var(--ease);
-        }
-        .guide-card:first-child { padding-left: 0; }
-        .guide-card:last-child { border-right: none; }
-        .guide-card:hover { background: rgba(201,168,76,.03); }
-
-        .guide-num {
-            display: block;
-            font-family: var(--serif);
-            font-size: .9rem;
-            color: var(--gold);
-            margin-bottom: 2rem;
-            letter-spacing: .06em;
-        }
-        .guide-title {
-            font-family: var(--serif);
-            font-size: 1.4rem;
-            font-weight: 300;
-            color: var(--white);
-            margin-bottom: 1rem;
-            line-height: 1.2;
-        }
-        .guide-body {
-            font-size: .83rem;
-            font-weight: 300;
-            color: var(--muted);
-            line-height: 2;
-        }
-
-        /* CTA */
-        .ins-cta {
-            padding: 8rem 0;
-            background: var(--bg-alt);
-            text-align: center;
-            border-top: 1px solid var(--b-gold);
-        }
-        .ins-cta-inner { max-width: var(--max-w); margin: 0 auto; padding: 0 3rem; }
-        .ins-cta-title {
-            font-family: var(--serif);
-            font-weight: 300;
-            font-size: clamp(2.5rem,6vw,5.5rem);
-            color: var(--white);
-            line-height: 1.04;
-            margin-bottom: 1rem;
-        }
-        .ins-cta-title em { font-style: italic; color: var(--gold); }
-        .ins-cta-sub {
-            font-size: .88rem;
-            font-weight: 300;
-            color: var(--muted);
-            margin-bottom: 3rem;
-            line-height: 2;
-        }
-
-        /* Responsive */
-        @media(max-width:900px){
-            .ins-stats-inner { grid-template-columns: repeat(2,1fr); }
-            .is-item { padding-left: 0; border-right: none; border-bottom: 1px solid var(--b-gold); }
-            .is-item:nth-child(3),.is-item:last-child { border-bottom: none; }
-            .art-grid { grid-template-columns: repeat(2,1fr); }
-            .guide-grid { grid-template-columns: repeat(2,1fr); }
-            .guide-card { border-right: none; border-bottom: 1px solid var(--b-gold); padding: 2.5rem 0; }
-            .guide-card:last-child { border-bottom: none; }
-        }
-        @media(max-width:640px){
-            .ins-hero { padding: 5rem 0 4rem; }
-            .ins-hero-inner,.ins-body-inner,.ins-cta-inner { padding: 0 1.8rem; }
-            .ins-stats-inner { padding: 0 1.8rem; grid-template-columns: 1fr 1fr; }
-            .art-grid { grid-template-columns: 1fr; }
-            .guide-grid { grid-template-columns: 1fr; }
-            .ins-body,.ins-body.alt { padding: 5rem 0; }
-            .ins-cta { padding: 6rem 0; }
-        }
-    </style>
+    <script>document.documentElement.classList.add('js');</script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="supabase-config.js" defer></script>
+    <script src="script.js" defer></script>
 </head>
-<body>
+<body class="is-ready">
 
-<nav id="nav">
-    <div class="nav-inner">
-        <a href="index.html" class="nav-brand">
-            <img src="logo-transparent.png" alt="Mediterra" class="logo-img">
-        </a>
-        <ul class="nav-links" id="navLinks">
-            <li><a href="index.html#origin">Origin</a></li>
-            <li><a href="index.html#process">Process</a></li>
-            <li><a href="index.html#partnership">Partnership</a></li>
-            <li><a href="insights.html" class="active">Insights</a></li>
-        </ul>
-        <a href="index.html#contact" class="nav-cta">Wholesale Enquiries</a>
-        <button class="nav-burger" id="navBurger" aria-label="Menu">
-            <span></span><span></span>
-        </button>
-    </div>
-</nav>
+<div class="cursor" id="cursor" aria-hidden="true"><span class="cursor-label" id="cursorLabel"></span></div>
+<div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
 
-<!-- HERO -->
-<header class="ins-hero">
-    <div class="ins-hero-inner">
-        <span class="label-g">Market Intelligence</span>
-        <h1 class="ins-title">Industry<br><em>Insights.</em></h1>
-        <p class="ins-sub">Research, market data, and operational knowledge from the aquaculture sector and the global Mediterranean seafood industry.</p>
-    </div>
+<header class="nav is-solid" id="nav">
+    <a href="index.html" class="nav-brand" aria-label="Mediterra, home">
+        <img src="logo-transparent.png" alt="Mediterra" class="logo-img">
+    </a>
+    <nav class="nav-links" aria-label="Main">
+        <a href="index.html#story">Story</a>
+        <a href="index.html#origin">Origin</a>
+        <a href="index.html#descent">Method</a>
+        <a href="index.html#harvest">Harvest</a>
+        <a href="insights.html" class="is-active">Insights</a>
+    </nav>
+    <a href="index.html#partnership" class="nav-cta magnetic">Enquire</a>
+    <button class="nav-burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
+        <span></span><span></span>
+    </button>
 </header>
 
-<!-- STATS -->
-<div class="ins-stats">
-    <div class="ins-stats-inner">
-        <div class="is-item">
-            <span class="is-val">$5.83B</span>
-            <span class="is-lbl">Global market value by 2034</span>
-        </div>
-        <div class="is-item">
-            <span class="is-val">5.0%</span>
-            <span class="is-lbl">Annual sector growth rate</span>
-        </div>
-        <div class="is-item">
-            <span class="is-val">&euro;93M</span>
-            <span class="is-lbl">EU Blue Revolution Fund</span>
-        </div>
-        <div class="is-item">
-            <span class="is-val">70+</span>
-            <span class="is-lbl">Aquaculture investment deals</span>
-        </div>
+<div class="menu" id="menu" aria-hidden="true">
+    <nav class="menu-links" aria-label="Mobile">
+        <a href="index.html#story">Story</a>
+        <a href="index.html#origin">Origin</a>
+        <a href="index.html#descent">Method</a>
+        <a href="index.html#harvest">Harvest</a>
+        <a href="index.html#partnership">Partnership</a>
+        <a href="insights.html">Insights</a>
+    </nav>
+    <div class="menu-foot mono">
+        <a href="mailto:mediterramf@gmail.com">mediterramf@gmail.com</a>
+        <a href="tel:+306984092007">+30 698 409 2007</a>
     </div>
 </div>
 
-<!-- MARKET INTELLIGENCE -->
-<section class="ins-body">
-    <div class="ins-body-inner">
-        <div class="ins-sec-label">Market Intelligence</div>
-        <div class="art-grid">
-
-            <article class="art-card reveal">
-                <div class="art-cat">Investment</div>
-                <h3 class="art-title">Aquaculture Investment Opportunities in the Mediterranean Basin</h3>
-                <p class="art-excerpt">Institutional investors are increasingly viewing Mediterranean aquaculture as a stable, ESG-aligned asset class. Shellfish operations offer low input costs, strong yield, and growing demand from premium foodservice channels.</p>
-                <span class="art-meta">Market Analysis &middot; 2026</span>
-            </article>
-
-            <article class="art-card reveal" style="--delay:.08s">
-                <div class="art-cat">Funding</div>
-                <h3 class="art-title">EU Blue Revolution Fund: What It Means for Greek Producers</h3>
-                <p class="art-excerpt">The &euro;93M Blue Revolution Fund represents the largest single EU commitment to sustainable aquaculture. Greek mussel farmers stand to benefit from infrastructure grants and sustainability certification programmes.</p>
-                <span class="art-meta">Policy Update &middot; 2025</span>
-            </article>
-
-            <article class="art-card reveal" style="--delay:.16s">
-                <div class="art-cat">Technology</div>
-                <h3 class="art-title">Precision Monitoring in Shellfish Aquaculture</h3>
-                <p class="art-excerpt">IoT water quality sensors and real-time satellite monitoring are transforming cultivation management. Early adoption yields measurable improvements in shell-fill rate, batch consistency, and mortality reduction.</p>
-                <span class="art-meta">Technology Review &middot; 2025</span>
-            </article>
-
-            <article class="art-card reveal">
-                <div class="art-cat">Sustainability</div>
-                <h3 class="art-title">Mussels as a Carbon Sequestration Vehicle</h3>
-                <p class="art-excerpt">New research confirms that mussel aquaculture actively removes CO&sub2; from seawater through shell calcification. Large-scale producers are beginning to quantify and monetise this benefit via carbon credit markets.</p>
-                <span class="art-meta">Research &middot; 2025</span>
-            </article>
-
-            <article class="art-card reveal" style="--delay:.08s">
-                <div class="art-cat">Innovation</div>
-                <h3 class="art-title">Shell Waste Valorisation: From Byproduct to Premium Ingredient</h3>
-                <p class="art-excerpt">Mussel shells are finding applications in construction aggregates, calcium supplements, and high-end cosmetics. The circular economy case for shellfish is now commercially validated at scale.</p>
-                <span class="art-meta">Circular Economy &middot; 2025</span>
-            </article>
-
-            <article class="art-card reveal" style="--delay:.16s">
-                <div class="art-cat">Market Trends</div>
-                <h3 class="art-title">Premium Protein: The Repositioning of Mussels in Global Food Markets</h3>
-                <p class="art-excerpt">Driven by Michelin-starred kitchens and sustainability-conscious consumers, mussels are being repositioned from commodity to premium product. Origin transparency is now a key purchase driver.</p>
-                <span class="art-meta">Consumer Trends &middot; 2026</span>
-            </article>
-
+<main>
+    <section class="ins-hero">
+        <div class="wrap">
+            <p class="kicker mono rv">Market intelligence</p>
+            <h1 class="ins-title rv">Industry<br><em>insights.</em></h1>
+            <p class="lead rv">Market news on mussels and Mediterranean aquaculture, plus notes on handling what we deliver.</p>
         </div>
+    </section>
+
+    <div class="ins-stats">
+        <div class="ins-stat rv"><b>$5.83B</b><span class="mono">Market value by 2034</span></div>
+        <div class="ins-stat rv" style="--d:.06s"><b>5.0%</b><span class="mono">Annual growth rate</span></div>
+        <div class="ins-stat rv" style="--d:.12s"><b>&euro;93M</b><span class="mono">Blue Revolution Fund</span></div>
+        <div class="ins-stat rv" style="--d:.18s"><b>70+</b><span class="mono">Aquaculture deals</span></div>
     </div>
-</section>
 
-<!-- OPERATIONAL KNOWLEDGE -->
-<section class="ins-body alt">
-    <div class="ins-body-inner">
-        <div class="ins-sec-label">Operational Knowledge</div>
-        <div class="guide-grid">
-
-            <div class="guide-card reveal">
-                <span class="guide-num">I</span>
-                <h3 class="guide-title">Preparation &amp; Cleaning</h3>
-                <p class="guide-body">Rinse under cold running water. Remove beards by pulling toward the hinge. Discard shells that remain open after tapping. Use within 24 hours of delivery for optimal flavour.</p>
+    <section class="ins-body">
+        <div class="wrap">
+            <div class="filters" id="filters" role="group" aria-label="Filter articles">
+                <button class="is-on" data-filter="all">All</button>
+                <button data-filter="market">Markets</button>
+                <button data-filter="sustainability">Sustainability</button>
+                <button data-filter="innovation">Innovation</button>
             </div>
-
-            <div class="guide-card reveal" style="--delay:.08s">
-                <span class="guide-num">II</span>
-                <h3 class="guide-title">Cooking Techniques</h3>
-                <p class="guide-body">3 to 5 minutes in a covered pan with white wine, garlic, and herbs. Done the moment the shells open. Overcooking ruins texture — remove from heat immediately.</p>
+            <div class="art-grid">
+                <article class="art rv" data-cat="market">
+                    <span class="mono">Investment</span>
+                    <h3>Aquaculture investment in the Mediterranean basin</h3>
+                    <p>Institutional investors increasingly see Mediterranean aquaculture as a stable, ESG-aligned asset class. Shellfish offer low input costs, strong yield and rising premium demand.</p>
+                    <span class="mono meta">Market analysis &middot; 2026</span>
+                </article>
+                <article class="art rv" data-cat="market" style="--d:.06s">
+                    <span class="mono">Funding</span>
+                    <h3>The EU Blue Revolution Fund and Greek producers</h3>
+                    <p>The &euro;93M fund is a major EU commitment to sustainable aquaculture, with infrastructure grants and certification support relevant to Greek mussel farms.</p>
+                    <span class="mono meta">Policy &middot; 2025</span>
+                </article>
+                <article class="art rv" data-cat="innovation" style="--d:.12s">
+                    <span class="mono">Technology</span>
+                    <h3>Precision monitoring in shellfish farming</h3>
+                    <p>Water-quality sensors and satellite monitoring are changing how cultivation is managed, improving batch consistency and reducing losses.</p>
+                    <span class="mono meta">Technology &middot; 2025</span>
+                </article>
+                <article class="art rv" data-cat="sustainability">
+                    <span class="mono">Sustainability</span>
+                    <h3>Mussels and carbon in the sea</h3>
+                    <p>Research into shell formation is examining how mussel farming interacts with carbon in seawater, and whether that benefit can be measured.</p>
+                    <span class="mono meta">Research &middot; 2025</span>
+                </article>
+                <article class="art rv" data-cat="innovation" style="--d:.06s">
+                    <span class="mono">Circular economy</span>
+                    <h3>Shell waste, from byproduct to resource</h3>
+                    <p>Mussel shells are finding uses in construction aggregates, calcium supplements and cosmetics, turning processing waste into value.</p>
+                    <span class="mono meta">Innovation &middot; 2025</span>
+                </article>
+                <article class="art rv" data-cat="market" style="--d:.12s">
+                    <span class="mono">Consumer trends</span>
+                    <h3>Mussels as a premium protein</h3>
+                    <p>Chefs and sustainability-minded diners are repositioning mussels from commodity to premium. Origin and method now drive purchase decisions.</p>
+                    <span class="mono meta">Trends &middot; 2026</span>
+                </article>
             </div>
-
-            <div class="guide-card reveal" style="--delay:.16s">
-                <span class="guide-num">III</span>
-                <h3 class="guide-title">Nutritional Profile</h3>
-                <p class="guide-body">100g delivers 24g protein, omega-3 fatty acids, vitamin B12, zinc, and iron. Among animal proteins, mussels carry the lowest carbon footprint per gram &mdash; by a significant margin.</p>
-            </div>
-
-            <div class="guide-card reveal" style="--delay:.24s">
-                <span class="guide-num">IV</span>
-                <h3 class="guide-title">Storage &amp; Cold Chain</h3>
-                <p class="guide-body">Store live mussels covered with a damp cloth &mdash; never sealed airtight. They need air circulation. Consume within 2&ndash;3 days of delivery. Keep in coldest part of refrigerator.</p>
-            </div>
-
         </div>
+    </section>
+
+    <section class="ins-body alt">
+        <div class="wrap">
+            <p class="kicker mono rv">Handling guide</p>
+            <h2 class="h2 rv" style="margin-bottom:3rem">From delivery<br><em>to the plate.</em></h2>
+            <div class="guide">
+                <div class="rv"><span class="mono">I</span><h3>Preparation</h3><p>Rinse under cold running water. Pull beards firmly toward the hinge. Discard any shell that stays open when tapped.</p></div>
+                <div class="rv" style="--d:.06s"><span class="mono">II</span><h3>Cooking</h3><p>Three to five minutes, covered, with white wine, garlic and herbs. They are done the moment the shells open.</p></div>
+                <div class="rv" style="--d:.12s"><span class="mono">III</span><h3>Nutrition</h3><p>High in protein, omega-3, vitamin B12, zinc and iron. Mussels also have one of the lowest footprints of any animal protein.</p></div>
+                <div class="rv" style="--d:.18s"><span class="mono">IV</span><h3>Storage</h3><p>Keep live mussels cold under a damp cloth, never airtight; they need air. Use within two to three days of delivery.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="ins-cta">
+        <div class="wrap">
+            <h2 class="h2 rv">Want to talk<br><em>about supply?</em></h2>
+            <a href="index.html#partnership" class="btn btn-amber magnetic rv">Build your brief</a>
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    <div class="wrap footer-top">
+        <div class="footer-brand">
+            <img src="logo-transparent.png" alt="Mediterra" class="footer-logo logo-img">
+            <p>Mussels from the Artemisium Strait,<br>North Evia, Greece.</p>
+        </div>
+        <nav class="footer-nav mono" aria-label="Footer">
+            <a href="index.html#story">Story</a><a href="index.html#origin">Origin</a><a href="index.html#descent">Method</a>
+            <a href="index.html#harvest">Harvest</a><a href="index.html#partnership">Partnership</a><a href="insights.html">Insights</a>
+        </nav>
+        <a href="index.html" class="to-top mono magnetic">Home &uarr;</a>
     </div>
-</section>
-
-<!-- CTA -->
-<section class="ins-cta">
-    <div class="ins-cta-inner">
-        <h2 class="ins-cta-title">Ready to discuss<br><em>a partnership?</em></h2>
-        <p class="ins-cta-sub">We work with distributors, seafood markets, hotels, and fine dining.<br>Consistent volume. Direct communication. No intermediaries.</p>
-        <a href="index.html#contact" class="btn-gold">Begin a Conversation</a>
-    </div>
-</section>
-
-<!-- FOOTER -->
-<footer class="site-footer">
-    <div class="wrap">
-        <div class="ft-inner">
-            <div class="ft-brand">
-                <img src="logo-transparent.png" alt="Mediterra" class="ft-logo logo-img">
-                <p>Premium Mediterranean mussels.<br>Since the first generation.</p>
-            </div>
-            <nav class="ft-nav">
-                <a href="index.html#origin">Origin</a>
-                <a href="index.html#process">Process</a>
-                <a href="index.html#partnership">Partnership</a>
-                <a href="insights.html">Insights</a>
-            </nav>
-            <div class="ft-contact">
-                <a href="tel:+306984092007">+30 698 409 2007</a>
-                <a href="mailto:mediterramf@gmail.com">mediterramf@gmail.com</a>
-            </div>
-        </div>
-        <div class="ft-base">
-            <span>&copy; 2026 Mediterra Mussel Farm, Greece</span>
-            <span>Artemisium Strait &middot; North Evia</span>
-        </div>
+    <div class="footer-word" aria-hidden="true">Mediterra</div>
+    <div class="wrap footer-base mono">
+        <span>&copy; 2026 Mediterra Mussel Farm, Greece</span>
+        <span>Artemisium Strait &middot; North Evia</span>
     </div>
 </footer>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const nav    = document.getElementById('nav');
-    const burger = document.getElementById('navBurger');
-    const links  = document.getElementById('navLinks');
-
-    if (burger && links) {
-        burger.addEventListener('click', () => {
-            burger.classList.toggle('open');
-            links.classList.toggle('open');
-        });
-    }
-
-    const io = new IntersectionObserver(entries =>
-        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }),
-        { threshold: .1, rootMargin: '0px 0px -56px 0px' }
-    );
-    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-});
-</script>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 </body>
 </html>

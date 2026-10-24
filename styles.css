@@ -44,8 +44,7 @@ body.is-locked { overflow: hidden; }
 /* ── Primitives ────────────────────────────────────────────── */
 .wrap { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
 .mono { font-family: var(--mono); font-size: .68rem; font-weight: 400; letter-spacing: .14em; text-transform: uppercase; }
-.kicker { color: var(--amber); margin-bottom: 1.8rem; display: flex; align-items: center; gap: .9rem; }
-.kicker::before { content: ''; width: 28px; height: 1px; background: currentColor; }
+.kicker { color: var(--amber); margin-bottom: 1.8rem; }
 .eyebrow { color: var(--foam); }
 .h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(2.8rem, 6.4vw, 6.4rem); line-height: .95; letter-spacing: -.02em; }
 .h2 em, .hero-title em, .contact-title em, .cf-head em { font-style: italic; color: var(--amber); }
@@ -145,8 +144,7 @@ body.is-locked { overflow: hidden; }
 }
 .menu.is-open { clip-path: circle(150% at calc(100% - 44px) 42px); visibility: visible; }
 .menu-links { display: grid; gap: .4rem; }
-.menu-links a { display: flex; align-items: baseline; gap: 1.2rem; font-family: var(--serif); font-size: clamp(2.6rem, 11vw, 4.4rem); line-height: 1.05; border-bottom: 1px solid var(--line); padding: .4rem 0; }
-.menu-links a .mono { color: var(--amber); }
+.menu-links a { display: block; font-family: var(--serif); font-size: clamp(2.6rem, 11vw, 4.4rem); line-height: 1.05; border-bottom: 1px solid var(--line); padding: .4rem 0; }
 .menu-foot { display: grid; gap: .6rem; color: var(--mist); }
 
 /* Chapter rail */

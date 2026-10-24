@@ -255,7 +255,7 @@ function initReveal() {
 function initStory() {
     const el = $('#storyText');
     if (!el) return null;
-    const accent = /^(not|naturally,|bend\.)$/;
+    const accent = /^(three|nothing\.)$/;
     el.innerHTML = el.textContent.trim().split(/\s+/)
         .map(w => `<span class="w${accent.test(w) ? ' accent' : ''}">${w}</span>`).join(' ');
     const words = $$('.w', el);
@@ -495,7 +495,7 @@ function initComposer() {
         prev = Object.fromEntries(rows);
 
         const text = rows.map(([k, val]) => `${k}: ${val}`).join('\n');
-        const subject = `Wholesale enquiry — ${fd.get('type')}, ${fmtVol(v)}/week`;
+        const subject = `Wholesale enquiry: ${fd.get('type')}, ${fmtVol(v)}/week`;
         const body = `Hello Mediterra,\n\nI'd like to discuss a wholesale supply of mussels.\n\n${text}\n\nKind regards,\n${fd.get('name').trim() || ''}`;
         mail.href = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
         return `${subject}\n\n${text}`;
@@ -505,7 +505,7 @@ function initComposer() {
     form.addEventListener('change', build);
     form.addEventListener('submit', e => e.preventDefault());
     $('#briefCopy')?.addEventListener('click', async () => {
-        toast(await copyText(build()) ? 'Brief copied' : 'Copy failed — select and copy manually');
+        toast(await copyText(build()) ? 'Brief copied' : 'Copy failed. Select the text and copy it manually.');
     });
     build();
 }
